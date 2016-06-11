@@ -9,8 +9,8 @@
 package com.sarangi.audioTools;
 
 import javax.sound.sampled.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.*;
 
 
 /**
@@ -24,11 +24,14 @@ import java.io.IOException;
  *
  * <p>Includes methods for accessing samples as a whole.
  *
+ * <p>Includes methods for accesing the AudioFormat of given audio signal.
+ *
+ *
  * @author  Mahendra Thapa
  *
  */
 
-public class AudioSamples{
+public class AudioSample{
 
         /* FIELDS **************************************************/
 
@@ -76,10 +79,10 @@ public class AudioSamples{
          *
          */
 
-        public AudioSamples(File audioFile) throws Exception{
+        public AudioSample(File audioFile) throws Exception{
 
                 if(!audioFile.exists())
-                        throw new Expcetion("File " + audioFile.getName() + "does not exist.");
+                        throw new Exception("File " + audioFile.getName() + "does not exist.");
 
                 if(!audioFile.exists())
                         throw new Exception("File " + audioFile.getName() + " does not exist.");
@@ -115,7 +118,7 @@ public class AudioSamples{
 
         }
 
-               /**
+         /**
          * Returns an AudioFormat with the same sampling rate and number of channels as the passed AudioFormat.
          * If the bit depth is something other than 8 or 16 bits, then it is converted to 16 bits. The returned
          * AudioFormat, also, will use big-endian signed linear PCM encoding, regardless of the passed format.
