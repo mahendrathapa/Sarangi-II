@@ -49,10 +49,9 @@ public class Intensity{
 
         public Intensity(double[] audioSamples, AudioFormat audioFormat){
 
-                double maxSampleValue = Math.pow(2,audioFormat.getSampleSizeInBits()-1);
+                double maxSampleValue = Math.pow(2,audioFormat.getSampleSizeInBits()-1.0);
 
                 for(double temp:audioSamples){
-                        temp = temp * maxSampleValue;
                         rms += temp*temp;
                 }
 

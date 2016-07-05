@@ -16,6 +16,7 @@ import com.google.gson.reflect.*;
 import java.lang.reflect.Type;
 
 import java.io.*;
+import java.util.logging.*;
 import java.util.*;
 
 /**
@@ -31,8 +32,9 @@ import java.util.*;
 
 public class JSONFormat{
 
-        /**
-         * First the given arraylist is converted into json format and then stored
+        /* FILEDS **************************************************/
+
+        /** First the given arraylist is converted into json format and then stored
          * in the text file.
          *
          * @param   song            A reference to the array list of an audio features of the audio samples.    
@@ -42,7 +44,7 @@ public class JSONFormat{
          * @throws  IOException     Throws an IOException if any error occurs.
          */
 
-        public void convertArrayToJSON(ArrayList<Song> song, String fileName) throws IOException{
+        public void convertArrayToJSON(List<Song> song, String fileName){
 
                 Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
                 String json = gson.toJson(song);
@@ -54,7 +56,7 @@ public class JSONFormat{
                         bufferedWriter.close();
 
                 }catch(IOException ex){
-                        throw new IOException(ex);
+                        ex.printStackTrace();
                 }
 
         }
@@ -66,28 +68,32 @@ public class JSONFormat{
          *
          * @param   fileName        A referece to the file in which the features vector is stored in json format.
          *
-         * @throws Exception        Throw an exception if any exception occurs.
+         * @throws  IOException     Throw an exception if any exception occurs.
          *
          */
 
-        public ArrayList<Song> convertJSONtoArray(String fileName)throws Exception{
+        public List<Song> convertJSONtoArray(String fileName){
 
                 Gson gson = new Gson();
 
-                ArrayList<Song> allSongs;
 
                 try{
+
+                        File file = new File(fileName);
+
+                        if(file.length() == 0)
+                                return new ArrayList<>();
+
                         JsonReader json = new JsonReader(new FileReader(fileName));
 
-                        Type listType = new TypeToken<ArrayList<Song>>(){}.getType();
-                        allSongs = gson.fromJson(json,listType);
+                        Type listType = new TypeToken<List<Song>>(){}.getType();
 
-                }catch(Exception ex){
-                        throw new Exception(ex);
+                        return gson.fromJson(json,listType);
 
+                }catch(IOException ex){
+
+                        return new ArrayList<>();
                 }
-
-                return allSongs;
 
         }
 

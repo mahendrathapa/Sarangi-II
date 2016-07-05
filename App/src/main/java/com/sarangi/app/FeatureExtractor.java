@@ -41,18 +41,13 @@ public class FeatureExtractor{
         public void extractFeature(String fileName, String folderName){
 
                 JSONFormat jsonFormat = new JSONFormat();
-                ArrayList<Song> song = new ArrayList<Song>();
+                List<Song> song = new ArrayList<Song>();
 
                 try{
 
                         File file = new File(fileName);
 
-                        ArrayList<Song> tempSong = new ArrayList<Song>();
-
-                        if(file.exists()){
-
-                                tempSong = jsonFormat.convertJSONtoArray(fileName);
-                        }
+                        List<Song> tempSong = jsonFormat.convertJSONtoArray(fileName);
 
                         File folder = new File(folderName);
 
@@ -99,16 +94,14 @@ public class FeatureExtractor{
                                         }
 
                                 }catch(Exception ex){
-                                        System.out.println(ex);
+                                        ex.printStackTrace();
                                 }
                         }
 
                         jsonFormat.convertArrayToJSON(song,fileName);
 
                 }catch(Exception ex){
-
-                        System.out.println(ex);
-
+                        ex.printStackTrace();
                 }
         }
 

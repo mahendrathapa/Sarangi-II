@@ -89,36 +89,36 @@ public class AudioSample{
                 if(audioFile.isDirectory())
                         throw new Exception("File " + audioFile.getName() + " is a directory.");
 
-                AudioInputStream audioInputStream = null;
 
                 try{
-                        audioInputStream = AudioSystem.getAudioInputStream(audioFile); 
+                        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile); 
+
+                        AudioFormat originalAudioFormat = audioInputStream.getFormat();
+                        audioFormat = getConvertedAudioFormat(originalAudioFormat);
+
+
+                        if(!audioFormat.matches(originalAudioFormat)){
+
+                                audioInputStream = AudioSystem.getAudioInputStream(audioFormat,audioInputStream);
+                                audioFormat = audioInputStream.getFormat();
+                        }
+
+                        channelSamples = extractSampleValues(audioInputStream);
+
+                        samples = getSamplesMixedDownIntoOneChannel(channelSamples);
+
+                        audioInputStream.close();
+
+
                 } catch(UnsupportedAudioFileException ex){
                         throw new Exception("File " + audioFile.getName() + " has an unsupported audio format.");
                 } catch(IOException ex){
                         throw new Exception("File " + audioFile.getName() + " is not readable.");
                 }
 
-                AudioFormat originalAudioFormat = audioInputStream.getFormat();
-                audioFormat = getConvertedAudioFormat(originalAudioFormat);
-
-
-                if(!audioFormat.matches(originalAudioFormat)){
-
-                        audioInputStream = AudioSystem.getAudioInputStream(audioFormat,audioInputStream);
-                        audioFormat = audioInputStream.getFormat();
-                }
-
-                channelSamples = extractSampleValues(audioInputStream);
-
-                samples = getSamplesMixedDownIntoOneChannel(channelSamples);
-
-                audioInputStream.close();
-
-
         }
 
-         /**
+        /**
          * Returns an AudioFormat with the same sampling rate and number of channels as the passed AudioFormat.
          * If the bit depth is something other than 8 or 16 bits, then it is converted to 16 bits. The returned
          * AudioFormat, also, will use big-endian signed linear PCM encoding, regardless of the passed format.
@@ -181,7 +181,7 @@ public class AudioSample{
 
 
                 //Find the maximum possible value that a sample may have with the given bit depth
-                double maxSampleValue = Math.pow(2,audioFormat.getSampleSizeInBits()-1);
+                double maxSampleValue = Math.pow(2,audioFormat.getSampleSizeInBits()-1.0);
 
                 double[][] sampleValue = new double[numberOfChannels][numberSamples];
 

@@ -8,6 +8,8 @@
 
 package com.sarangi.app;
 
+import java.util.logging.*;
+
 /**
  * A main class for interfacing all the other sub-classes.
  *
@@ -24,11 +26,11 @@ public class App
 
         public static void main( String[] args )
         {
-       
-              FeatureExtractor featureExtractor = new FeatureExtractor();
-              
-              featureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
-              featureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
+
+                FeatureExtractor featureExtractor = new FeatureExtractor();
+
+                featureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
+                featureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
 
         }
 }

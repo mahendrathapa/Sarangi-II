@@ -1,71 +1,71 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.sarangi</groupId>
-  <artifactId>App</artifactId>
-  <version>2.0</version>
-  <packaging>jar</packaging>
+        <groupId>com.sarangi</groupId>
+        <artifactId>App</artifactId>
+        <version>2.0</version>
+        <packaging>jar</packaging>
 
-  <name>App</name>
-  <url>http://maven.apache.org</url>
+        <name>App</name>
+        <url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-  
-<build>
-  <pluginManagement>
-    <plugins>
-      <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>2.7.1</version>
-      </plugin>
-    </plugins>
-  </pluginManagement>
-  
-   <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>sonar-maven-plugin</artifactId>
-        <version>2.7.1</version>
-      </plugin>
-    </plugins>
+        <properties>
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        </properties>
 
-</build>
+        <build>
+                <pluginManagement>
+                        <plugins>
+                                <plugin>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>sonar-maven-plugin</artifactId>
+                                        <version>2.7.1</version>
+                                </plugin>
+                        </plugins>
+                </pluginManagement>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
+                <plugins>
+                        <plugin>
+                                <groupId>org.codehaus.mojo</groupId>
+                                <artifactId>sonar-maven-plugin</artifactId>
+                                <version>2.7.1</version>
+                        </plugin>
+                </plugins>
 
-    <!-- Gson: Java to Json conversion -->
-    <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.5</version>
-            <scope>compile</scope>
-    </dependency>
+        </build>
 
-  </dependencies>
+        <dependencies>
+                <dependency>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                        <version>3.8.1</version>
+                        <scope>test</scope>
+                </dependency>
 
-  <reporting>
-          <plugins>
-                  <plugin>
-                          <groupId>org.apache.maven.plugins</groupId>
-                          <artifactId>maven-javadoc-plugin</artifactId>
-                          <version>2.10.3</version>
-                 </plugin>
+                <!-- Gson: Java to Json conversion -->
+                <dependency>
+                        <groupId>com.google.code.gson</groupId>
+                        <artifactId>gson</artifactId>
+                        <version>2.5</version>
+                        <scope>compile</scope>
+                </dependency>
 
-                 <plugin>
-                         <groupId>org.apache.maven.plugins</groupId>
-                         <artifactId>maven-project-info-reports-plugin</artifactId>
-                         <version>2.8</version>
-                 </plugin>
-         </plugins>
- </reporting>
+        </dependencies>
+
+        <reporting>
+                <plugins>
+                        <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-javadoc-plugin</artifactId>
+                                <version>2.10.3</version>
+                        </plugin>
+
+                        <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-project-info-reports-plugin</artifactId>
+                                <version>2.8</version>
+                        </plugin>
+                </plugins>
+        </reporting>
 </project>
