@@ -7,14 +7,14 @@
  *
  */
 
-
+/*
 package com.sarangi.audioFeatures;
 
 import java.util.*;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-
+*/
 /**
  * A class for calculating the rhythm features of the given audio samples.
  *
@@ -26,8 +26,8 @@ import javax.sound.sampled.AudioSystem;
  * @author  Mahendra Thapa
  *
  */
-
+/*
 public class Rhythm{
-
 }
 
+*/

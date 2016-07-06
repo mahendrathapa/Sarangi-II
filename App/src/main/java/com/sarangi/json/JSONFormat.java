@@ -16,12 +16,12 @@ import com.google.gson.reflect.*;
 import java.lang.reflect.Type;
 
 import java.io.*;
-import java.util.logging.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  * A class for converting the json format into Array List and vice versa. The features are stored
- * in json format for their standariztion. 
+ * in json format for their standariztion.
  *
  * <p>Includes methods for converting the json file into array list.
  *
@@ -33,6 +33,27 @@ import java.util.*;
 public class JSONFormat{
 
         /* FILEDS **************************************************/
+
+
+        /**
+         * Logger is used to maintain the log of the program. The log contain the error message generated during the
+         * execution of the program, warning messages to the user and information about the status of the program
+         * to the user. The log is also beneficial during program debugging.
+         */
+        private Logger logger = Logger.getLogger("JSONFormat");
+
+
+        /* CONSTRUCTORS *******************************************/
+
+        /**
+         * Set the level of the log according to the status in which the program is used.
+         * The log levels are SEVERS, WARNING and INFO mainly.
+         */
+
+        public JSONFormat(){
+
+                logger.setLevel(Level.SEVERE);
+        }
 
         /** First the given arraylist is converted into json format and then stored
          * in the text file.
@@ -56,7 +77,9 @@ public class JSONFormat{
                         bufferedWriter.close();
 
                 }catch(IOException ex){
-                        ex.printStackTrace();
+                        logger.log(Level.SEVERE,ex.toString(),ex);
+                        System.out.println("Program Terminating");
+                        System.exit(0);
                 }
 
         }
@@ -82,7 +105,7 @@ public class JSONFormat{
                         File file = new File(fileName);
 
                         if(file.length() == 0)
-                                return new ArrayList<>();
+                                return new ArrayList<Song>();
 
                         JsonReader json = new JsonReader(new FileReader(fileName));
 
@@ -92,7 +115,7 @@ public class JSONFormat{
 
                 }catch(IOException ex){
 
-                        return new ArrayList<>();
+                        return new ArrayList<Song>();
                 }
 
         }

@@ -8,8 +8,6 @@
 
 package com.sarangi.app;
 
-import java.util.logging.*;
-
 /**
  * A main class for interfacing all the other sub-classes.
  *
@@ -23,6 +21,12 @@ import java.util.logging.*;
 
 public class App 
 {
+
+        /*CONSTRUCTORS **********************************************/
+
+        private App(){
+
+        }
 
         public static void main( String[] args )
         {

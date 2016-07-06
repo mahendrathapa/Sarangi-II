@@ -23,12 +23,12 @@ public class Song{
         /**
          * Name of the song from which features is extracted.
          */
-        public String songName;
+        protected String songName;
 
         /**
          * Intensity features of the given song.
          */
-        public double intensity;
+        protected double intensity;
 
         /* CONSTRUCTORS *****************************************/
 
@@ -46,6 +46,26 @@ public class Song{
                 this.intensity = intensity;
 
         }
+
+        /**
+         * Return the songName of the song.
+         *
+         * @return      The song name of the song.
+         */
+
+        public String getSongName(){
+                return songName;
+        }
+
+        /**
+         * Return the intensity features of the song.
+         *
+         * @return      Intensity features of the song.
+         */
+        public double getIntensity(){
+                return intensity;
+        }
+
 
 }
 
