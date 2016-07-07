@@ -51,6 +51,14 @@
                         <scope>compile</scope>
                 </dependency>
 
+                <!-- Jtransform: Use for FFT and IFFT -->
+
+                <dependency>
+                        <groupId>net.sourceforge.jtransforms</groupId>
+                        <artifactId>jtransforms</artifactId>
+                        <version>2.4.0</version>
+                </dependency>
+
         </dependencies>
 
         <reporting>

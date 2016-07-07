@@ -23,7 +23,9 @@ import javax.sound.sampled.*;
  * The audio features extracted at once for one song and the features.txt file is updated when
  * the new song is added. 
  *
- * <p>Include method ot extract the audio feature form audio songs and store in file in json format.
+ * <p>Include constructor for setting the level of logger.
+ *
+ * <p>Include method to extract the audio feature form audio songs and store in file in json format.
  *
  * @author  Mahendra Thapa
  */

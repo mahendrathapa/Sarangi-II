@@ -28,6 +28,14 @@ public class App
 
         }
 
+        /**
+         * Extract the features from the training and testing sets of data and stores in the 
+         * training.txt and testing.txt.
+         *
+         * @param   args    Take an argument from the command line terminal if any.
+         *
+         */
+
         public static void main( String[] args )
         {
 

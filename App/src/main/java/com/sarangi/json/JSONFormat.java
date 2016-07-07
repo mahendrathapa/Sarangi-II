@@ -23,6 +23,8 @@ import java.util.logging.*;
  * A class for converting the json format into Array List and vice versa. The features are stored
  * in json format for their standariztion.
  *
+ * <p>Includes constructor for setting the level of logger.
+ *
  * <p>Includes methods for converting the json file into array list.
  *
  * <p>Includes methods for converting the array list into json file.

@@ -13,6 +13,10 @@ package com.sarangi.structures;
  *
  * <p>Includes constructures for storing the song name and its audio features in corresponding fields.
  *
+ * <p>Includes methods for accessing the song name.
+ *
+ * <p>Includes methods for accessing the intensity of the song.
+ *
  * @author  Mahendra Thapa
  */
 
