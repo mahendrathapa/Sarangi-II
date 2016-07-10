@@ -51,6 +51,12 @@
                         <scope>compile</scope>
                 </dependency>
 
+                <dependency>
+                        <groupId>com.github.haifengl</groupId>
+                        <artifactId>smile-core</artifactId>
+                        <version>1.1.0</version>
+                </dependency>
+
         </dependencies>
 
         <reporting>
