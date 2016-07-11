@@ -33,6 +33,7 @@ public class Song{
          * Intensity features of the given song.
          */
         protected double intensity;
+        protected float[] mCoeff;
 
         /* CONSTRUCTORS *****************************************/
 
@@ -40,15 +41,15 @@ public class Song{
          * Store the given audio features into the respected field.
          *
          * @param   songName        A reference to the name of the song.
-         * 
+         *
          * @param   intensity       A reference to the intensity features of the song.
          */
 
-        public Song(String songName, double intensity){
+        public Song(String songName, double intensity,float[] melcoeff){
 
                 this.songName = songName;
                 this.intensity = intensity;
-
+                mCoeff=melcoeff;
         }
 
         /**
@@ -69,7 +70,8 @@ public class Song{
         public double getIntensity(){
                 return intensity;
         }
-
+        public float[] getMelcoeff(){
+          return mCoeff;
+        }
 
 }
-

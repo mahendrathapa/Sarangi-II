@@ -59,6 +59,14 @@
                         <version>2.4.0</version>
                 </dependency>
 
+                <dependency>
+                        <groupId>TarsosDSP-latest</groupId>
+                        <artifactId>TarsosDSP-latest</artifactId>
+                        <scope>system</scope>
+                        <version>2.3</version>
+                        <systemPath>${basedir}\src\lib\TarsosDSP-latest.jar</systemPath>
+                </dependency>
+
         </dependencies>
 
         <reporting>

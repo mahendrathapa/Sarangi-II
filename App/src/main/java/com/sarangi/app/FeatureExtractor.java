@@ -21,7 +21,7 @@ import javax.sound.sampled.*;
  * A class for extracting the features of the audio songs. The audio songs is stored
  * in resources folder. The audio features is extract in json format and stores in feature.txt file.
  * The audio features extracted at once for one song and the features.txt file is updated when
- * the new song is added. 
+ * the new song is added.
  *
  * <p>Include constructor for setting the level of logger.
  *
@@ -113,14 +113,17 @@ public class FeatureExtractor{
                                         Intensity intensity = new Intensity(samples,audioFormat);
                                         double intensityFeatures = intensity.getIntensityFeatures();
 
-                                        song.add(new Song(songName,intensityFeatures));
+                                        Melfreq melfreq = new Melfreq(samples);
+                                        float[] melcoeff = melfreq.getCoefficients();
+
+                                        song.add(new Song(songName,intensityFeatures,melcoeff));
 
                                 }
 
                         } catch(UnsupportedAudioFileException ex){
                                 logger.log(Level.SEVERE,ex.toString(),ex);
                                 continue;
-                        
+
                         } catch(IOException ex){
                                 logger.log(Level.SEVERE,ex.toString(),ex);
                                 continue;
@@ -137,4 +140,3 @@ public class FeatureExtractor{
 
 
 }
-
