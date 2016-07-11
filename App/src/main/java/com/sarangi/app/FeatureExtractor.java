@@ -114,7 +114,7 @@ public class FeatureExtractor{
                                         double intensityFeatures = intensity.getIntensityFeatures();
 
                                         Melfreq melfreq = new Melfreq(samples);
-                                        float[] melcoeff = melfreq.getCoefficients();
+                                        float[] melcoeff = melfreq.getMfccFeatures();
 
                                         song.add(new Song(songName,intensityFeatures,melcoeff));
 

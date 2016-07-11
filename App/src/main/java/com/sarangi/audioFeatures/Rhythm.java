@@ -21,7 +21,7 @@ import javax.sound.sampled.AudioSystem;
  * <p> Include constructor in which the different methods are integrated to calcuate
  * the rhythmic features of the audio input signal.
  *
- * <p> Include method for accessing rhythmic features fo the given audio sample 
+ * <p> Include method for accessing rhythmic features of the given audio sample 
  *
  * @author  Mahendra Thapa
  *

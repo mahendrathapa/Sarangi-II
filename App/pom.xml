@@ -59,6 +59,7 @@
                         <version>2.4.0</version>
                 </dependency>
 
+                <!-- TarsoDSP: Use for finding the features of the song -->
                 <dependency>
                         <groupId>TarsosDSP-latest</groupId>
                         <artifactId>TarsosDSP-latest</artifactId>

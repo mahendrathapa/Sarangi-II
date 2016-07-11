@@ -18,7 +18,7 @@ package com.sarangi.app;
  * @author  Mahendra Thapa
  *
  */
-//java -cp .;target/jlayer-1.0.1-1.jar;target/jorbis-0.0.17-2.jar;target/vorbisspi-1.0.3-1.jar;target/tritonus-share-0.3.7-2.jar;target/mp3spi-1.9.5-1.jar;target/gson-2.5.jar;target/App-2.0.jar;target/jtransforms-2.4.0.jar;src/lib/TarsosDSP-latest.jar com.sarangi.app.App
+
 public class App
 {
 
