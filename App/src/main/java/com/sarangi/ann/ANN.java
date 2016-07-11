@@ -1,4 +1,4 @@
-package com.mycompany.ann; 
+package com.sarangi.ann; 
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -13,9 +13,9 @@ import java.util.List;
 
 import java.lang.reflect.Type;
 
-import com.mycompany.kmeans.*;
+import com.sarangi.kmeans.*;
 
-import com.mycompany.structures.Song;
+import com.sarangi.structures.Song;
 
 import smile.classification.SVM;
 import smile.classification.NeuralNetwork;

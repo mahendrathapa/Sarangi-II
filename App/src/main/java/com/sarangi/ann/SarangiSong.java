@@ -1,10 +1,10 @@
-package com.mycompany.kmeans;
+package com.sarangi.ann;
 
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.Math.*;
-import com.mycompany.structures.Song;
+import com.sarangi.structures.Song;
 
 /**
  *

@@ -1,13 +1,13 @@
-package com.mycompany.kmeans;
+package com.sarangi.ann;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Collections;
 
-import com.mycompany.kmeans.*;
+import com.sarangi.ann.*;
 
-import com.mycompany.structures.Song;
+import com.sarangi.structures.Song;
 
 public class Analyzer {
 

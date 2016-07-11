@@ -1,4 +1,4 @@
-package com.mycompany.kmeans;
+package com.sarangi.ann;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -17,9 +17,9 @@ import java.util.Collections;
 
 import java.lang.reflect.Type;
 
-import com.mycompany.kmeans.*;
+import com.sarangi.ann.*;
 
-import com.mycompany.structures.Song;
+import com.sarangi.structures.Song;
 
 public class Kmeans {
 
