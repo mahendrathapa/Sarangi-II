@@ -13,8 +13,6 @@ import java.util.List;
 
 import java.lang.reflect.Type;
 
-import com.sarangi.kmeans.*;
-
 import com.sarangi.structures.Song;
 
 import smile.classification.SVM;
@@ -125,75 +123,6 @@ public class ANN {
                 catch (Exception ex){
                         System.err.println(ex);
                 }
-        }
-
-        public void runANN() throws IOException,FileNotFoundException{
-                //done for the testing the efficiency of code
-                double train_data[][] = new double[200][2];
-                int train_ans[] = new int[200];
-                double test_data[][] = new double[20000][2];
-                int test_ans[] = new int[20000];
-                FileReader trainfile = new FileReader("src/resources/SongFeatures/ann-train.txt");
-                Scanner train_scan = new Scanner(trainfile);
-                int train_index=0;
-                while(train_scan.hasNextLine()){
-                        String train_s = train_scan.nextLine();
-                        if(!train_s.isEmpty()){
-                                        Scanner train_linescan = new Scanner(train_s);
-                                        while(train_linescan.hasNextDouble()){
-                                                train_ans[train_index] = (int)train_linescan.nextDouble();
-                                                train_data[train_index][0] = train_linescan.nextDouble();
-                                                train_data[train_index][1] = train_linescan.nextDouble();
-                                                train_index++;
-                                        }
-                                        train_linescan.close();
-                                }
-                        else{
-                                continue;
-                        }
-                }
-                train_scan.close();
-                trainfile.close();
-                FileReader testfile = new FileReader("src/resources/SongFeatures/ann-test.txt");
-                Scanner test_scan = new Scanner(testfile);
-                int test_index=0;
-                while(test_scan.hasNextLine()){
-                        String test_s = test_scan.nextLine();
-                        if(!test_s.isEmpty()){
-                                        Scanner test_linescan = new Scanner(test_s);
-                                        while(test_linescan.hasNextDouble()){
-                                                test_ans[test_index] = (int)test_linescan.nextDouble();
-                                                test_data[test_index][0] = test_linescan.nextDouble();
-                                                test_data[test_index][1] = test_linescan.nextDouble();
-                                                test_index++;
-                                        }
-                                        test_linescan.close();
-                                }
-                        else{
-                                continue;
-                        }
-                }
-                test_scan.close();
-                testfile.close();
-
-
-
-                NeuralNetwork ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.CROSS_ENTROPY,NeuralNetwork.ActivationFunction.SOFTMAX,1,20);
-                for (int i=0;i<150;i++)
-                ann.learn(training_dataset,training_genre);
-                int error = 0;
-                for (int i = 0; i < test_dataset.length; i++){
-                        
-                        if (ann.predict(test_dataset[i]) != test_genre[i]){
-                                System.out.println(ann.predict(test_dataset[i]));
-                                System.out.println(ann.predict(test_dataset[i]));
-                                error++;
-                        }
-                }
-                System.out.format("Error rate = %.2f%%\n...........",100.0*error/test_dataset.length);
-
-//need to do something
-
         }
 
 }

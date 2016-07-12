@@ -21,10 +21,6 @@
                                         <groupId>org.codehaus.mojo</groupId>
                                         <artifactId>sonar-maven-plugin</artifactId>
                                         <version>2.7.1</version>
-                                        <configuration>
-                                                <source>1.6</source>
-                                                <target>1.6</target>
-                                        </configuration>
                                 </plugin>
                         </plugins>
                 </pluginManagement>
@@ -55,6 +51,15 @@
                         <scope>compile</scope>
                 </dependency>
 
+                <!-- Jtransform: Use for FFT and IFFT -->
+
+                <dependency>
+                        <groupId>net.sourceforge.jtransforms</groupId>
+                        <artifactId>jtransforms</artifactId>
+                        <version>2.4.0</version>
+                </dependency>
+
+                <!-- Smile: Used for machine learning -->
                 <dependency>
                         <groupId>com.github.haifengl</groupId>
                         <artifactId>smile-core</artifactId>
