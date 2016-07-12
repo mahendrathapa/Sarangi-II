@@ -7,6 +7,7 @@
  */
 
 package com.sarangi.structures;
+import java.util.*;
 
 /**
  * A class for simple data structure to hold information related to a song.
@@ -32,8 +33,13 @@ public class Song{
         /**
          * Intensity features of the given song.
          */
-        protected double intensity;
-        protected float[] mCoeff;
+        protected List<Float> intensity = new ArrayList<Float>();
+
+
+        /**
+         * MFCC features of the given song.
+         */
+        protected List<float[]> mfcc = new ArrayList<float[]>();
 
         /* CONSTRUCTORS *****************************************/
 
@@ -43,13 +49,15 @@ public class Song{
          * @param   songName        A reference to the name of the song.
          *
          * @param   intensity       A reference to the intensity features of the song.
+         *
+         * @param   mfcc            A reference to the mfcc features of the song.
          */
 
-        public Song(String songName, double intensity,float[] melcoeff){
+        public Song(String songName, List<Float> intensity, List<float[]> mfcc){
 
                 this.songName = songName;
-                this.intensity = intensity;
-                mCoeff=melcoeff;
+                this.intensity.addAll(intensity);
+                this.mfcc.addAll(mfcc);
         }
 
         /**
@@ -67,11 +75,17 @@ public class Song{
          *
          * @return      Intensity features of the song.
          */
-        public double getIntensity(){
+        public List<Float> getIntensity(){
                 return intensity;
         }
-        public float[] getMelcoeff(){
-          return mCoeff;
+
+        /**
+         * Return the mfcc features of the song.
+         *
+         * @return      MFCC features of the song.
+         */
+        public List<float[]> getMelcoeff(){
+                return mfcc;
         }
 
 }

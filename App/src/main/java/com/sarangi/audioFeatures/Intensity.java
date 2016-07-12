@@ -33,9 +33,9 @@ public class Intensity{
          * Rms values of the audio samples. The rms value used to give the 
          * intensity features of the audio samples.
          */
-        protected double rms = 0.0;
+        protected List<Float> rms = new ArrayList<Float>();
 
-       
+
         /*CONSTRUCTORS ****************************************/
 
         /**
@@ -47,16 +47,25 @@ public class Intensity{
          *
          */
 
-        public Intensity(double[] audioSamples, AudioFormat audioFormat){
+        public Intensity(List<float[]> audioSamples, AudioFormat audioFormat){
 
                 //double maxSampleValue = Math.pow(2,audioFormat.getSampleSizeInBits()-1.0);
 
-                for(double temp:audioSamples){
-                        rms += temp*temp;
-                }
+                for(float[] frame:audioSamples){
 
-                rms /= audioSamples.length;
-                rms = Math.sqrt(rms);
+                        float result = (float)0.0;
+
+                        for(float temp:frame){
+
+                                result += temp*temp;
+                        }
+
+                        result /= frame.length;
+                        result = (float)Math.sqrt(result);
+
+                        rms.add(result);
+
+                }
         }
 
         /**
@@ -66,11 +75,9 @@ public class Intensity{
          *
          */
 
-        public double getIntensityFeatures(){
+        public List<Float> getIntensityFeatures(){
                 return rms;
 
         }
-
-    
 }
 

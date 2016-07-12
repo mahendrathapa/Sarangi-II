@@ -43,10 +43,10 @@ public class Melfreq{
         private Logger logger = Logger.getLogger("Melfreq");
 
         /**
-         * An array for storing the mel frequency coefficients which is extracted from the given song.
+         * A List for storing the mel frequency coefficients which is extracted from the given song.
          *
          */
-        private float[] Mfcc = new float[30];
+        private List<float[]> mfccFeatures = new ArrayList<float[]>();
 
         /*CONSTRUCTORS **********************************************************/
 
@@ -57,32 +57,37 @@ public class Melfreq{
          *
          * @param   audioSamples        Storing the audio sample of the song.
          *
+         * @param   audioFormat         The audio format which is associated with given audio samples.
+         *
          * @throws  Exception           Throw an exception if any occur.
          *
          */
 
-        public Melfreq(double[] audioSamples)
+        public Melfreq(List<float[]> audioFrame,AudioFormat audioFormat)
         {
 
                 logger.setLevel(Level.SEVERE);
 
-                float[] floatArray = new float[audioSamples.length];
-                
-                for (int i = 0 ; i < audioSamples.length; i++)
-                {
-                        floatArray[i] = (float) audioSamples[i];
-                }
+                int sampleFrequency = (int)audioFormat.getSampleRate();
 
-                try{
-                        AudioDispatcher audioDispatcher = AudioDispatcherFactory.fromFloatArray(floatArray,44100,1024,512);
-                        MFCC mfcc = new MFCC(1024,44100);
-                        audioDispatcher.addAudioProcessor(mfcc);
-                        audioDispatcher.run();
-                        Mfcc= mfcc.getMFCC();
-                }
-                catch(Exception ex)
-                {
-                        logger.log(Level.SEVERE,ex.toString(),ex);
+                for(float[] frame : audioFrame){
+
+                        try{
+                                AudioDispatcher audioDispatcher = AudioDispatcherFactory.fromFloatArray(frame,sampleFrequency,frame.length,0);
+                                MFCC mfcc = new MFCC(frame.length, sampleFrequency);
+                                audioDispatcher.addAudioProcessor(mfcc);
+                                audioDispatcher.run();
+
+                                float[] result = mfcc.getMFCC();
+
+                                mfccFeatures.add(result);
+
+                        }
+                        catch(Exception ex)
+                        {
+                                logger.log(Level.SEVERE,ex.toString(),ex);
+                        }
+
                 }
         }
 
@@ -93,8 +98,8 @@ public class Melfreq{
          *
          */
 
-        public float[] getMfccFeatures()
+        public List<float[]> getMfccFeatures()
         {
-                return Mfcc;
+                return mfccFeatures;
         }
 }

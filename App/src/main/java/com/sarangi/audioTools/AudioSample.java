@@ -40,7 +40,7 @@ public class AudioSample{
          * audio is multi-channel, all channels are mixed down into this one channel.
          *
          */
-        protected double[]  samples;
+        protected float[]  samples;
 
         /**
          * Audio samples, with a minimum value of -1 and a maximum value of +1. Is 
@@ -49,7 +49,7 @@ public class AudioSample{
          *
          */
 
-        protected double[][]    channelSamples;
+        protected float[][]    channelSamples;
 
         /**
          * The AudioFormat used to encode the samples field. Will always involve
@@ -160,7 +160,7 @@ public class AudioSample{
          *                              provided.
          */
 
-        public double[][] extractSampleValues(AudioInputStream audioInputStream) throws IOException{
+        public float[][] extractSampleValues(AudioInputStream audioInputStream) throws IOException{
 
                 //Converts the contents of audioInputStream into an array of bytes
 
@@ -181,9 +181,9 @@ public class AudioSample{
 
 
                 //Find the maximum possible value that a sample may have with the given bit depth
-                double maxSampleValue = Math.pow(2,audioFormat.getSampleSizeInBits()-1.0);
+                float maxSampleValue = (float)Math.pow(2,audioFormat.getSampleSizeInBits()-1.0);
 
-                double[][] sampleValue = new double[numberOfChannels][numberSamples];
+                float[][] sampleValue = new float[numberOfChannels][numberSamples];
 
                 //Convert the bytes to double samples
                 ByteBuffer byteBuffer = ByteBuffer.wrap(audioBytes);
@@ -192,7 +192,7 @@ public class AudioSample{
 
                         for (int samp = 0; samp < numberSamples; ++samp)
                                 for(int chan = 0; chan <numberOfChannels; ++chan)
-                                        sampleValue[chan][samp] = (double)byteBuffer.get()/maxSampleValue;
+                                        sampleValue[chan][samp] = (float)byteBuffer.get()/maxSampleValue;
 
                 }else if(bitDepth == 16){
 
@@ -200,7 +200,7 @@ public class AudioSample{
 
                         for (int samp = 0; samp < numberSamples; ++samp)
                                 for(int chan = 0; chan <numberOfChannels; ++chan)
-                                        sampleValue[chan][samp] = (double)shortBuffer.get()/maxSampleValue;
+                                        sampleValue[chan][samp] = (float)shortBuffer.get()/maxSampleValue;
                 }
 
                 return sampleValue;
@@ -280,18 +280,19 @@ public class AudioSample{
          *
          */
 
-        public double[] getSamplesMixedDownIntoOneChannel(double[][] audioSamples){
+        public float[] getSamplesMixedDownIntoOneChannel(float[][] audioSamples){
 
                 if(audioSamples.length == 1)
                         return audioSamples[0];
 
-                double numberChannels = (double)audioSamples.length;
+                int numberChannels = audioSamples.length;
                 int numberSamples = audioSamples[0].length;
 
-                double[] samplesMixedDown = new double[numberSamples];
+                float[] samplesMixedDown = new float[numberSamples];
 
                 for(int samp=0; samp < numberSamples; ++samp){
-                        double totalSoFar = 0.0;
+                        
+                        float totalSoFar = (float)0.0;
                         for(int chan = 0; chan < numberChannels; ++chan){
                                 totalSoFar += audioSamples[chan][samp];
                         }
@@ -318,10 +319,9 @@ public class AudioSample{
          *
          * @return  The audios samples of the given audio signal.
          */
-        public double[] getAudioSamples(){
+        public float[] getAudioSamples(){
                 return samples;
         }
-
 
 }
 

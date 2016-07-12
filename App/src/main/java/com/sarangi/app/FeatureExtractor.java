@@ -41,17 +41,27 @@ public class FeatureExtractor{
          */
         private Logger logger = Logger.getLogger("FeatureExtractor");
 
+        /**
+         * AudioPreprocessing is used to pre process the audio sample. The pre-processing involves the framing of audio sample.
+         */
+        private AudioPreprocessing audioPreprocessing;
+
 
         /* CONSTRUCTORS *******************************************/
 
         /**
          * Set the level of the log according to the status in which the program is used.
          * The log levels are SEVERS, WARNING and INFO mainly.
+         *
+         * Also, Define the AudioPreprocessing.
          */
 
         public FeatureExtractor(){
 
-                logger.setLevel(Level.SEVERE);
+                logger.setLevel(Level.INFO);
+
+                audioPreprocessing = new AudioPreprocessing();
+
         }
 
 
@@ -106,15 +116,17 @@ public class FeatureExtractor{
 
                                         AudioSample audioSample = new AudioSample(singleFileName);
 
-                                        double[] samples = audioSample.getAudioSamples();
+                                        float[] samples = audioSample.getAudioSamples();
 
                                         AudioFormat audioFormat = audioSample.getAudioFormat();
 
-                                        Intensity intensity = new Intensity(samples,audioFormat);
-                                        double intensityFeatures = intensity.getIntensityFeatures();
+                                        List<float[]> audioFrame = audioPreprocessing.getAudioFrame(samples, 1024);
 
-                                        Melfreq melfreq = new Melfreq(samples);
-                                        float[] melcoeff = melfreq.getMfccFeatures();
+                                        Intensity intensity = new Intensity(audioFrame,audioFormat);
+                                        List<Float> intensityFeatures = intensity.getIntensityFeatures();
+
+                                        Melfreq melfreq = new Melfreq(audioFrame,audioFormat);
+                                        List<float[]> melcoeff = melfreq.getMfccFeatures();
 
                                         song.add(new Song(songName,intensityFeatures,melcoeff));
 
