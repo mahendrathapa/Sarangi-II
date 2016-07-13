@@ -1,4 +1,4 @@
-package com.sarangi.ann;
+package com.sarangi.learningmodel.kmeans;
 
 import java.util.ArrayList;
 import java.util.List;

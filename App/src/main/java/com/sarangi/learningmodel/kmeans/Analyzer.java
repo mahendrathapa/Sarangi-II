@@ -1,11 +1,11 @@
-package com.sarangi.ann;
+package com.sarangi.learningmodel.kmeans;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Collections;
 
-import com.sarangi.ann.*;
+import com.sarangi.learningmodel.kmeans.*;
 
 import com.sarangi.structures.Song;
 

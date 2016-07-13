@@ -1,4 +1,4 @@
-package com.sarangi.ann;
+package com.sarangi.learningmodel.kmeans;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -17,7 +17,7 @@ import java.util.Collections;
 
 import java.lang.reflect.Type;
 
-import com.sarangi.kmeans.*;
+import com.sarangi.learningmodel.kmeans.*;
 
 import com.sarangi.structures.Song;
 

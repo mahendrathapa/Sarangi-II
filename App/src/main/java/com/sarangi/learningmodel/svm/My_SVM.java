@@ -1,4 +1,4 @@
-package com.sarangi.ann; 
+package com.sarangi.learningmodel.svm; 
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -21,14 +21,14 @@ import smile.math.kernel.GaussianKernel;
 import smile.math.Math;
 import java.lang.Math.*;
 
-public class ANN {
+public class My_SVM {
 
         double training_dataset[][];
         int training_genre[];
         double test_dataset[][];
         int test_genre[];
 
-        public ANN(){
+        public My_SVM(){
                 training_dataset = new double[450][1];
                 training_genre = new int[450];
                 test_dataset = new double[50][1];
