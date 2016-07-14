@@ -1,4 +1,4 @@
-package com.sarangi.learningmodel.svm; 
+package com.sarangi.svm; 
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;

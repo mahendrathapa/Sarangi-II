@@ -13,7 +13,7 @@ import java.util.List;
 
 import java.lang.reflect.Type;
 
-import com.sarangi.structures.Song;
+import com.sarangi.structures.*;
 
 import smile.classification.SVM;
 import smile.classification.NeuralNetwork;
