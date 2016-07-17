@@ -14,6 +14,12 @@ import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 /**
  * A class for calculating the inverse fast fourier transform of the audio single.
  *
+ * <p> Includes constructor for calculating the inverse fast fourier transform of the input audio frequency domain samples.
+ *
+ * <p> Includes method to get the real output obtained by the IFFT of the audio samples.
+ *
+ * <p> Includes method to get the imaginary output obtained by the IFFT of the audio samples.
+ *
  * @author  Mahendra Thapa
  *
  */

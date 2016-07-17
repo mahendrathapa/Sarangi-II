@@ -70,6 +70,7 @@ public class JSONFormat{
         public void convertArrayToJSON(List<Song> song, String fileName){
 
                 Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
+
                 String json = gson.toJson(song);
 
                 try{
@@ -83,7 +84,7 @@ public class JSONFormat{
                         System.out.println("Program Terminating");
                         System.exit(0);
                 }
-
+        
         }
 
 

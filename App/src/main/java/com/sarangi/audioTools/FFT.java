@@ -14,6 +14,11 @@ import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 /**
  * A class for calculating the fast fourier transform of the audio single.
  *
+ * <p> Includes constructor for calculating the fast fourier transform of the input audio samples.
+ *
+ * <p> Includes method to get the real output obtained by the FFT of the audio samples.
+ *
+ * <p> Includes method to get the imaginary output obtained by the FFT of the audio samples.
  *
  * @author Mahendra Thapa
  */

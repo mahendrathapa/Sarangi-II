@@ -33,7 +33,7 @@ public class Intensity{
          * Rms values of the audio samples. The rms value used to give the 
          * intensity features of the audio samples.
          */
-        protected double rms = 0.0;
+        protected List<Float> rms = new ArrayList<Float>();
 
        
         /*CONSTRUCTORS ****************************************/
@@ -41,22 +41,29 @@ public class Intensity{
         /**
          * Store the given audio sample as intensity features of the corresponding audio sample.
          *
-         * @param   audioSamples    The audio samples from which the intensity features is extracted.
+         * @param   audioFrame    The audio samples from which the intensity features is extracted.
          *
          * @param   audioFormat     The audio format which is associated with given audio samples.
          *
          */
 
-        public Intensity(double[] audioSamples, AudioFormat audioFormat){
+        public Intensity(List<float[]> audioFrame, AudioFormat audioFormat){
 
-                //double maxSampleValue = Math.pow(2,audioFormat.getSampleSizeInBits()-1.0);
+                int frameLength = audioFrame.get(0).length;
+                
+                for(float[] singleFrame : audioFrame){
 
-                for(double temp:audioSamples){
-                        rms += temp*temp;
+                        float tempRms = (float)0.0;
+
+                        for(float temp : singleFrame){
+                                tempRms += temp*temp;
+                        }
+
+                        tempRms /=frameLength;
+                        tempRms = (float)Math.sqrt(tempRms);
+
+                        rms.add(tempRms);
                 }
-
-                rms /= audioSamples.length;
-                rms = Math.sqrt(rms);
         }
 
         /**
@@ -66,11 +73,10 @@ public class Intensity{
          *
          */
 
-        public double getIntensityFeatures(){
+        public List<Float> getIntensityFeatures(){
                 return rms;
 
         }
-
     
 }
 
