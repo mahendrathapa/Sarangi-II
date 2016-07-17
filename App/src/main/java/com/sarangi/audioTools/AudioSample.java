@@ -292,13 +292,13 @@ public class AudioSample{
                 float[] samplesMixedDown = new float[numberSamples];
 
                 for(int samp=0; samp < numberSamples; ++samp){
-                  
+
                         float totalSoFar = (float)0.0;
-                       
+
                         for(int chan = 0; chan < numberChannels; ++chan){
                                 totalSoFar += audioSamples[chan][samp];
                         }
-                       
+
                         samplesMixedDown[samp] = (float)totalSoFar / numberChannels;
                 }
 
@@ -324,7 +324,6 @@ public class AudioSample{
         public float[] getAudioSamples(){
                 return samples;
         }
-
 
 }
 

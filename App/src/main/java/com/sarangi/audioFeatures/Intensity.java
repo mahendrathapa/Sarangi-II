@@ -35,7 +35,6 @@ public class Intensity{
          */
         protected List<Float> rms = new ArrayList<Float>();
 
-       
         /*CONSTRUCTORS ****************************************/
 
         /**
@@ -50,7 +49,7 @@ public class Intensity{
         public Intensity(List<float[]> audioFrame, AudioFormat audioFormat){
 
                 int frameLength = audioFrame.get(0).length;
-                
+
                 for(float[] singleFrame : audioFrame){
 
                         float tempRms = (float)0.0;
@@ -63,6 +62,7 @@ public class Intensity{
                         tempRms = (float)Math.sqrt(tempRms);
 
                         rms.add(tempRms);
+
                 }
         }
 
@@ -77,6 +77,5 @@ public class Intensity{
                 return rms;
 
         }
-    
 }
 

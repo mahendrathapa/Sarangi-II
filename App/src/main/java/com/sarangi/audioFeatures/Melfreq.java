@@ -43,7 +43,7 @@ public class Melfreq{
         private Logger logger = Logger.getLogger("Melfreq");
 
         /**
-         * An array for storing the mel frequency coefficients which is extracted from the given song.
+         * A List for storing the mel frequency coefficients which is extracted from the given song.
          *
          */
         private List<float[]> mfccFeatures = new ArrayList<float[]>();
@@ -58,7 +58,7 @@ public class Melfreq{
          * @param   audioFrame          A reference to the audio frame of the song.
          *
          * @param   audioFormat         The audio format which is associated with given audio samples.
-         
+         * 
          * @throws  Exception           Throw an exception if any occur.
          *
          */
@@ -86,17 +86,17 @@ public class Melfreq{
                         }
                 }
 
-       }
+                /**
+                 * Returns the MFCC features of the song.
+                 *
+                 * @return      Mfcc features of the song.
+                 *
+                 */
 
-        /**
-         * Returns the MFCC features of the song.
-         *
-         * @return      Mfcc features of the song.
-         *
-         */
-
-        public List<float[]> getMfccFeatures()
-        {
+                
+        }
+        
+        public List<float[]> getMfccFeatures(){
                 return mfccFeatures;
         }
 }

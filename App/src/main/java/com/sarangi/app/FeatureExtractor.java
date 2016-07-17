@@ -58,17 +58,19 @@ public class FeatureExtractor{
          */
         private final int overLapSize = 0;
 
-
         /* CONSTRUCTORS *******************************************/
 
         /**
          * Set the level of the log according to the status in which the program is used.
          * The log levels are SEVERS, WARNING and INFO mainly.
+         *
+         * Also, Define the AudioPreprocessing.
          */
 
         public FeatureExtractor(){
 
                 logger.setLevel(Level.INFO);
+
         }
 
 
@@ -128,7 +130,7 @@ public class FeatureExtractor{
                                         AudioFormat audioFormat = audioSample.getAudioFormat();
 
                                         List<float[]> audioFrame = audioPreProcessor.getAudioFrame(samples,frameSize,overLapSize);
-
+                                        
                                         Intensity intensity = new Intensity(audioFrame,audioFormat);
                                         List<Float> intensityFeatures = intensity.getIntensityFeatures();
 

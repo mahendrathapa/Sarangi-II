@@ -42,7 +42,6 @@ public class Song{
          */
         protected List<float[]> mfcc = new ArrayList<float[]>();
 
-
         /* CONSTRUCTORS *****************************************/
 
         /**
@@ -87,6 +86,7 @@ public class Song{
          * @return      MFCC features of the song.
          *
          */
+
         public List<float[]> getMelcoeff(){
                 return mfcc;
         }
