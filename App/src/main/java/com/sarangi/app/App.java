@@ -8,10 +8,6 @@
 
 package com.sarangi.app;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.*;
-
 /**
  * A main class for interfacing all the other sub-classes.
  *
@@ -23,10 +19,24 @@ import java.util.logging.*;
  *
  */
 
-public class App 
+public class App
 {
 
-        public static void main( String[] args ) throws FileNotFoundException, IOException 
+        /*CONSTRUCTORS **********************************************/
+
+        private App(){
+
+        }
+
+        /**
+         * Extract the features from the training and testing sets of data and stores in the
+         * training.txt and testing.txt.
+         *
+         * @param   args    Take an argument from the command line terminal if any.
+         *
+         */
+
+        public static void main( String[] args )
         {
 
                 FeatureExtractor featureExtractor = new FeatureExtractor();
@@ -36,5 +46,3 @@ public class App
 
         }
 }
-
-

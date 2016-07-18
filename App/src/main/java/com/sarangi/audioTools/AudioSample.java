@@ -40,7 +40,7 @@ public class AudioSample{
          * audio is multi-channel, all channels are mixed down into this one channel.
          *
          */
-        protected double[]  samples;
+        protected float[] samples;
 
         /**
          * Audio samples, with a minimum value of -1 and a maximum value of +1. Is 
@@ -49,7 +49,7 @@ public class AudioSample{
          *
          */
 
-        protected double[][]    channelSamples;
+        protected float[][] channelSamples;
 
         /**
          * The AudioFormat used to encode the samples field. Will always involve
@@ -71,24 +71,24 @@ public class AudioSample{
          * Sampling rate and number of channels is maintained, but bit depth will be changed to 16 bits if it
          * not either 8 or 16 bits.
          *
-         * @param   audioFile       A reference to an audio file from which to extract 
-         *                          and store samples as double values.
+         * @param   audioFile                        A reference to an audio file from which to extract 
+         *                                           and store samples as double values.
          *
-         * @throws  EXception       Throws an information exception if the samples cannot be 
-         *                          extracted from the file.
+         * @throws  IllegalArgumentException         Throws an exception when the audioFile is not exist or audioFile is a directory.
+         *
+         * @throws  UnsupportedAudioFileException    Throws an exception when the audioFile is not supported.
+         *
+         * @throws  IOException                      Throws an exception when the problem is arise while decoding the audiofile.
          *
          */
 
-        public AudioSample(File audioFile) throws Exception{
+        public AudioSample(File audioFile) throws UnsupportedAudioFileException,IllegalArgumentException,IOException{
 
                 if(!audioFile.exists())
-                        throw new Exception("File " + audioFile.getName() + "does not exist.");
+                        throw new IllegalArgumentException("File " + audioFile.getName() + "does not exist.");
 
-                if(!audioFile.exists())
-                        throw new Exception("File " + audioFile.getName() + " does not exist.");
                 if(audioFile.isDirectory())
-                        throw new Exception("File " + audioFile.getName() + " is a directory.");
-
+                        throw new IllegalArgumentException("File " + audioFile.getName() + " is a directory.");
 
                 try{
                         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile); 
@@ -111,9 +111,9 @@ public class AudioSample{
 
 
                 } catch(UnsupportedAudioFileException ex){
-                        throw new Exception("File " + audioFile.getName() + " has an unsupported audio format.");
+                        throw ex;
                 } catch(IOException ex){
-                        throw new Exception("File " + audioFile.getName() + " is not readable.");
+                        throw ex;
                 }
 
         }
@@ -156,11 +156,11 @@ public class AudioSample{
          *                              In stereo, indice 0 corresponds to left and 1 to right.
          *                              All samples should fall between -1 and +1.
          *
-         * @throws  Exception           Throws an informative exception if an invalid parameter is
+         * @throws  IOException           Throws an informative exception if an invalid parameter is
          *                              provided.
          */
 
-        public double[][] extractSampleValues(AudioInputStream audioInputStream) throws Exception{
+        public float[][] extractSampleValues(AudioInputStream audioInputStream) throws IOException{
 
                 //Converts the contents of audioInputStream into an array of bytes
 
@@ -181,9 +181,9 @@ public class AudioSample{
 
 
                 //Find the maximum possible value that a sample may have with the given bit depth
-                double maxSampleValue = Math.pow(2,audioFormat.getSampleSizeInBits()-1.0);
+                float maxSampleValue = (float)Math.pow(2,audioFormat.getSampleSizeInBits()-1.0);
 
-                double[][] sampleValue = new double[numberOfChannels][numberSamples];
+                float[][] sampleValue = new float[numberOfChannels][numberSamples];
 
                 //Convert the bytes to double samples
                 ByteBuffer byteBuffer = ByteBuffer.wrap(audioBytes);
@@ -192,7 +192,7 @@ public class AudioSample{
 
                         for (int samp = 0; samp < numberSamples; ++samp)
                                 for(int chan = 0; chan <numberOfChannels; ++chan)
-                                        sampleValue[chan][samp] = (double)byteBuffer.get()/maxSampleValue;
+                                        sampleValue[chan][samp] = (float)byteBuffer.get()/maxSampleValue;
 
                 }else if(bitDepth == 16){
 
@@ -200,7 +200,7 @@ public class AudioSample{
 
                         for (int samp = 0; samp < numberSamples; ++samp)
                                 for(int chan = 0; chan <numberOfChannels; ++chan)
-                                        sampleValue[chan][samp] = (double)shortBuffer.get()/maxSampleValue;
+                                        sampleValue[chan][samp] = (float)shortBuffer.get()/maxSampleValue;
                 }
 
                 return sampleValue;
@@ -214,10 +214,10 @@ public class AudioSample{
          * @return                      The audio bytes extracted from the AudioInputStream.
          *                              Has the same AudioFileFormat as the specified AudioInputStream.
          *
-         * @throws  Exception           Throws an expcetion if a problem occurs.
+         * @throws  IOException           Throws an expcetion if a problem occurs.
          */
 
-        public byte[] getBytesFromAudioInputStream(AudioInputStream audioInputStream) throws Exception{
+        public byte[] getBytesFromAudioInputStream(AudioInputStream audioInputStream) throws IOException{
 
                 //Calculate the buffer size to use
                 float bufferDurationInSeconds = 0.25F;
@@ -241,10 +241,10 @@ public class AudioSample{
 
                 try{
                         byteArrayOutputStream.close();
-                }catch(IOException e){
 
-                        System.out.println(e);
-                        System.exit(0);
+                }catch(IOException ex){
+                        throw ex;
+
                 }
 
                 return results;
@@ -280,26 +280,29 @@ public class AudioSample{
          *
          */
 
-        public double[] getSamplesMixedDownIntoOneChannel(double[][] audioSamples){
+        public float[] getSamplesMixedDownIntoOneChannel(float[][] audioSamples){
 
                 if(audioSamples.length == 1)
                         return audioSamples[0];
 
-                double numberChannels = (double)audioSamples.length;
+                int numberChannels = audioSamples.length;
+
                 int numberSamples = audioSamples[0].length;
 
-                double[] samplesMixedDown = new double[numberSamples];
+                float[] samplesMixedDown = new float[numberSamples];
 
                 for(int samp=0; samp < numberSamples; ++samp){
-                        double totalSoFar = 0.0;
+
+                        float totalSoFar = (float)0.0;
+
                         for(int chan = 0; chan < numberChannels; ++chan){
                                 totalSoFar += audioSamples[chan][samp];
                         }
-                        samplesMixedDown[samp] = totalSoFar / numberChannels;
+
+                        samplesMixedDown[samp] = (float)totalSoFar / numberChannels;
                 }
 
                 return samplesMixedDown;
-
         }
 
         /**
@@ -318,10 +321,9 @@ public class AudioSample{
          *
          * @return  The audios samples of the given audio signal.
          */
-        public double[] getAudioSamples(){
+        public float[] getAudioSamples(){
                 return samples;
         }
-
 
 }
 

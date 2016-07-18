@@ -14,21 +14,65 @@ import com.sarangi.json.*;
 import com.sarangi.structures.*;
 import java.io.*;
 import java.util.*;
-
+import java.util.logging.*;
 import javax.sound.sampled.*;
 
 /**
  * A class for extracting the features of the audio songs. The audio songs is stored
  * in resources folder. The audio features is extract in json format and stores in feature.txt file.
  * The audio features extracted at once for one song and the features.txt file is updated when
- * the new song is added. 
+ * the new song is added.
  *
- * <p>Include method ot extract the audio feature form audio songs and store in file in json format.
+ * <p>Include constructor for setting the level of logger.
+ *
+ * <p>Include method to extract the audio feature form audio songs and store in file in json format.
  *
  * @author  Mahendra Thapa
  */
 
 public class FeatureExtractor{
+
+        /* FILEDS **************************************************/
+
+        /**
+         * Logger is used to maintain the log of the program. The log contain the error message generated during the
+         * execution of the program, warning messages to the user and information about the status of the program
+         * to the user. The log is also beneficial during program debugging.
+         */
+        private Logger logger = Logger.getLogger("FeatureExtractor");
+
+        /**
+         * AudioPreProcessor is used for pre-processing of the audio signal.
+         */
+
+        private AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
+
+        /**
+         * A reference to the frame size;
+         *
+         */
+        private final int frameSize = 1024;
+
+        /**
+         * A reference to the overlapping of the audio signal.
+         */
+        private final int overLapSize = 0;
+
+        /* CONSTRUCTORS *******************************************/
+
+        /**
+         * Set the level of the log according to the status in which the program is used.
+         * The log levels are SEVERS, WARNING and INFO mainly.
+         *
+         * Also, Define the AudioPreprocessing.
+         */
+
+        public FeatureExtractor(){
+
+                logger.setLevel(Level.INFO);
+
+        }
+
 
         /**
          * Extract the feature of song present in given folder Name and stores the features vector in given file name is json format.
@@ -36,75 +80,86 @@ public class FeatureExtractor{
          * @param   fileName        A reference to file name in which the features in json format is stored.
          *
          * @param   folderName      A reference to folder name which contain the songs.
+         *
+         * @throws  Exception       Throws an Exception if any error occurs.
          */
 
         public void extractFeature(String fileName, String folderName){
 
                 JSONFormat jsonFormat = new JSONFormat();
+
                 List<Song> song = new ArrayList<Song>();
 
-                try{
+                List<Song> tempSong = jsonFormat.convertJSONtoArray(fileName);
 
-                        File file = new File(fileName);
+                File folder = new File(folderName);
 
-                        List<Song> tempSong = jsonFormat.convertJSONtoArray(fileName);
+                File[] listOfFiles = folder.listFiles();
 
-                        File folder = new File(folderName);
+                Arrays.sort(listOfFiles);
 
-                        File[] listOfFiles = folder.listFiles();
-                        
-                        Arrays.sort(listOfFiles);
+                int numOfFiles = listOfFiles.length;
 
-                        int numOfFiles = listOfFiles.length;
+                for(int i=0; i<numOfFiles; ++i){
 
-                        for(int i=0; i<numOfFiles; ++i){
+                        boolean flag = false;
+                        String songName = listOfFiles[i].getName();
 
-                                boolean flag = false;
-                                String songName = listOfFiles[i].getName();
-
-                                for(Song singleSong : tempSong){
-                                        if(singleSong.songName.equals(songName)){
-                                                song.add(singleSong);
-                                                flag = true;
-                                                tempSong.remove(singleSong);
-                                                break;
-
-                                        }
+                        for(Song singleSong : tempSong){
+                                if(singleSong.getSongName().equals(songName)){
+                                        song.add(singleSong);
+                                        flag = true;
+                                        tempSong.remove(singleSong);
+                                        break;
 
                                 }
 
-                                try{
-                                        if(!flag){
-
-                                                File singleFileName = new File(folderName+"/"+songName);
-
-                                                System.out.println(singleFileName);
-
-                                                AudioSample audioSample = new AudioSample(singleFileName);
-
-                                                double[] samples = audioSample.getAudioSamples();
-
-                                                AudioFormat audioFormat = audioSample.getAudioFormat();
-
-                                                Intensity intensity = new Intensity(samples,audioFormat);
-                                                double intensityFeatures = intensity.getIntensityFeatures();
-
-                                                song.add(new Song(songName,intensityFeatures));
-
-                                        }
-
-                                }catch(Exception ex){
-                                        ex.printStackTrace();
-                                }
                         }
 
-                        jsonFormat.convertArrayToJSON(song,fileName);
+                        try{
+                                if(!flag){
 
-                }catch(Exception ex){
-                        ex.printStackTrace();
+                                        File singleFileName = new File(folderName+"/"+songName);
+
+                                        logger.info(singleFileName.toString());
+
+                                        AudioSample audioSample = new AudioSample(singleFileName);
+
+                                        float[] samples = audioSample.getAudioSamples();
+
+                                        AudioFormat audioFormat = audioSample.getAudioFormat();
+
+                                        List<float[]> audioFrame = audioPreProcessor.getAudioFrame(samples,frameSize,overLapSize);
+                                        
+                                        Intensity intensity = new Intensity(audioFrame,audioFormat);
+                                        List<Float> intensityFeatures = intensity.getIntensityFeatures();
+
+                                        Melfreq melfreq = new Melfreq(audioFrame,audioFormat);
+                                        List<float[]> mfccFeatures = melfreq.getMfccFeatures();
+
+                                        Pitch pitch = new Pitch(audioFrame,audioFormat);
+                                        List<Float> pitchFeatures = pitch.getPitchFeatures();
+
+                                        song.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures));
+                                }
+
+                        } catch(UnsupportedAudioFileException ex){
+                                logger.log(Level.SEVERE,ex.toString(),ex);
+                                continue;
+
+                        } catch(IOException ex){
+                                logger.log(Level.SEVERE,ex.toString(),ex);
+                                continue;
+
+                        } catch(IllegalArgumentException ex){
+                                logger.log(Level.SEVERE,ex.toString(),ex);
+                                continue;
+                        }
                 }
+
+                jsonFormat.convertArrayToJSON(song,fileName);
+
         }
 
 
 }
-
