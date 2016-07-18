@@ -10,6 +10,10 @@
         <name>App</name>
         <url>http://maven.apache.org</url>
 
+        <properties>
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        </properties>
+
         <build>
                 <pluginManagement>
                         <plugins>
@@ -26,10 +30,6 @@
                         </plugins>
                 </pluginManagement>
         </build>
-
-        <properties>
-                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        </properties>
 
         <dependencies>
                 <dependency>
