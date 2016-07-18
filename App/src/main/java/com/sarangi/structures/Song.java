@@ -42,6 +42,11 @@ public class Song{
          */
         protected List<float[]> mfcc = new ArrayList<float[]>();
 
+        /**
+         * Pitch features of the given song.
+         */
+        protected List<Float> pitch = new ArrayList<Float>();
+
         /* CONSTRUCTORS *****************************************/
 
         /**
@@ -52,13 +57,16 @@ public class Song{
          * @param   intensity       A reference to the intensity features of the song.
          *
          * @param   mfcc            A reference to the mfcc features of the song.
+         *
+         * @param   pitch           A reference to the pitch features of the song.
          */
 
-        public Song(String songName, List<Float> intensity, List<float[]> mfcc){
-
+        public Song(String songName, List<Float> intensity, List<float[]> mfcc, List<Float> pitch){
+                
                 this.songName = songName;
                 this.intensity.addAll(intensity);
                 this.mfcc.addAll(mfcc);
+                this.pitch.addAll(pitch);
         }
 
         /**
@@ -89,6 +97,16 @@ public class Song{
 
         public List<float[]> getMelcoeff(){
                 return mfcc;
+        }
+
+        /**
+         * Return the pitch features of the song.
+         *
+         * @return      Pitch features of the song.
+         */
+
+        public List<Float> getPitch(){
+                return pitch;
         }
 
 }

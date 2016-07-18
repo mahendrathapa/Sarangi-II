@@ -192,7 +192,7 @@ public class AudioSample{
 
                         for (int samp = 0; samp < numberSamples; ++samp)
                                 for(int chan = 0; chan <numberOfChannels; ++chan)
-                                        sampleValue[chan][samp] = (float)byteBuffer.get();
+                                        sampleValue[chan][samp] = (float)byteBuffer.get()/maxSampleValue;
 
                 }else if(bitDepth == 16){
 
@@ -200,7 +200,7 @@ public class AudioSample{
 
                         for (int samp = 0; samp < numberSamples; ++samp)
                                 for(int chan = 0; chan <numberOfChannels; ++chan)
-                                        sampleValue[chan][samp] = (float)shortBuffer.get();
+                                        sampleValue[chan][samp] = (float)shortBuffer.get()/maxSampleValue;
                 }
 
                 return sampleValue;

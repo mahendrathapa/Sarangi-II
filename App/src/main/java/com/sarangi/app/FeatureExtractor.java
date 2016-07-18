@@ -137,8 +137,10 @@ public class FeatureExtractor{
                                         Melfreq melfreq = new Melfreq(audioFrame,audioFormat);
                                         List<float[]> mfccFeatures = melfreq.getMfccFeatures();
 
-                                        song.add(new Song(songName,intensityFeatures,mfccFeatures));
+                                        Pitch pitch = new Pitch(audioFrame,audioFormat);
+                                        List<Float> pitchFeatures = pitch.getPitchFeatures();
 
+                                        song.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures));
                                 }
 
                         } catch(UnsupportedAudioFileException ex){

@@ -25,9 +25,9 @@ public class MelFreqTest extends TestCase{
 
                         AudioFormat audioFormat = audioSample.getAudioFormat();
 
-                        AudioPreprocessing audioPreprocessing = new AudioPreprocessing();
+                        AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
 
-                        List<float[]> input = audioPreprocessing.getAudioFrame(sample,1024);
+                        List<float[]> input = audioPreProcessor.getAudioFrame(sample,1024,0);
 
                         Melfreq melfreq = new Melfreq(input,audioFormat);
 

@@ -24,7 +24,7 @@ import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
  *
  * <p> Include constructor in which the logger is defined and Mel-Frequency Cepstral coefficients is calcuated.
  *
- * <p> Include method for accesing the mfcc features of the given audio sample.
+ * <p> Include method for accessing the mfcc features of the given audio sample.
  *
  *
  * @author Ayush Shakya
@@ -79,9 +79,7 @@ public class Melfreq{
                                 audioDispatcher.addAudioProcessor(mfcc);
                                 audioDispatcher.run();
                                 mfccFeatures.add(mfcc.getMFCC());
-                        }
-                        catch(Exception ex)
-                        {
+                        }catch(Exception ex){
                                 logger.log(Level.SEVERE,ex.toString(),ex);
                         }
                 }
