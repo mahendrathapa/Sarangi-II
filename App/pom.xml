@@ -60,6 +60,8 @@
                         <groupId>com.github.haifengl</groupId>
                         <artifactId>smile-core</artifactId>
                         <version>1.1.0</version>
+                </dependency>
+
                 <!-- TarsoDSP: Use for finding the features of the song -->
                 <dependency>
                         <groupId>TarsosDSP-latest</groupId>
