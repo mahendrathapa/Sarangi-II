@@ -25,7 +25,7 @@ public class PitchTest extends TestCase{
 
                         AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
 
-                        List<float[]> audioFrame = audioPreProcessor.getAudioFrame(sample,1024,0);
+                        List<float[]> audioFrame = audioPreProcessor.getAudioFrame(sample,1024,512);
 
                         System.out.println(audioFrame.size());
 

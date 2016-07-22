@@ -85,10 +85,8 @@ public class Pitch{
 
                                                 float pitch = pitchDetectionResult.getPitch();
                                         
-                                                if(pitch != -1)
+                                                if(Math.abs(pitch + 1) > 0.1)
                                                         pitchFeature.add(pitch);
-                                                else
-                                                        pitchFeature.add((float)0.0);
                                         }
                                 };
 

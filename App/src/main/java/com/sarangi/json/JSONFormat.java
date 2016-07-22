@@ -71,12 +71,16 @@ public class JSONFormat{
 
                 Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
 
-                String json = gson.toJson(song);
-
                 try{
-                        FileWriter fileWriter = new FileWriter(fileName);
+                        FileWriter fileWriter = new FileWriter(fileName,true);
                         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                        bufferedWriter.write(json);
+
+                        for(Song singleSong : song){
+
+                                String json = gson.toJson(singleSong);
+                                bufferedWriter.write(json + '\n');
+                        }
+
                         bufferedWriter.close();
 
                 }catch(IOException ex){
@@ -84,7 +88,7 @@ public class JSONFormat{
                         System.out.println("Program Terminating");
                         System.exit(0);
                 }
-        
+
         }
 
 
@@ -102,25 +106,26 @@ public class JSONFormat{
 
                 Gson gson = new Gson();
 
+                List<Song> output = new ArrayList<Song>();
 
                 try{
-
                         File file = new File(fileName);
 
                         if(file.length() == 0)
                                 return new ArrayList<Song>();
 
-                        JsonReader json = new JsonReader(new FileReader(fileName));
+                        BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
 
-                        Type listType = new TypeToken<List<Song>>(){}.getType();
+                        for(String line; (line = bufferedReader.readLine()) != null;){
+                                output.add(gson.fromJson(line,Song.class));
+                        }
 
-                        return gson.fromJson(json,listType);
+                        return output;
 
-                }catch(IOException ex){
+                } catch(IOException ex){
 
                         return new ArrayList<Song>();
                 }
-
         }
 
 }
