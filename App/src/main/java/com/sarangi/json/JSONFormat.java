@@ -72,10 +72,12 @@ public class JSONFormat{
                 Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
 
                 try{
+
                         FileWriter fileWriter = new FileWriter(fileName,true);
                         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
                         for(Song singleSong : song){
+
 
                                 String json = gson.toJson(singleSong);
                                 bufferedWriter.write(json + '\n');
@@ -83,12 +85,12 @@ public class JSONFormat{
 
                         bufferedWriter.close();
 
-                }catch(IOException ex){
+                } catch(IOException ex){
+
                         logger.log(Level.SEVERE,ex.toString(),ex);
                         System.out.println("Program Terminating");
                         System.exit(0);
                 }
-
         }
 
 
@@ -109,6 +111,7 @@ public class JSONFormat{
                 List<Song> output = new ArrayList<Song>();
 
                 try{
+
                         File file = new File(fileName);
 
                         if(file.length() == 0)
@@ -117,12 +120,14 @@ public class JSONFormat{
                         BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
 
                         for(String line; (line = bufferedReader.readLine()) != null;){
+
                                 output.add(gson.fromJson(line,Song.class));
                         }
 
                         return output;
 
                 } catch(IOException ex){
+
 
                         return new ArrayList<Song>();
                 }

@@ -17,7 +17,7 @@ public class PitchTest extends TestCase{
 
                 try{
 
-                        AudioSample audioSample = new AudioSample(new File("src/resources/song/training/jazz.00001.au"));
+                        AudioSample audioSample = new AudioSample(new File("src/resources/song/training/classical.00001.au"));
 
                         float[] sample = audioSample.getAudioSamples();
 
@@ -33,8 +33,9 @@ public class PitchTest extends TestCase{
 
                         List<Float> pitchOutput = pitch.getPitchFeatures();
 
-                        for(float temp: pitchOutput)
-                                System.out.print(temp + " ");
+                        int[] pitchGraph = pitch.getPitchGraph();
+
+                        System.out.println(Arrays.toString(pitchGraph));
 
                 }catch(UnsupportedAudioFileException ex){
                         System.out.println(ex);

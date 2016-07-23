@@ -138,7 +138,7 @@ public class FeatureExtractor{
                                         List<float[]> mfccFeatures = melfreq.getMfccFeatures();
 
                                         Pitch pitch = new Pitch(audioFrame,audioFormat);
-                                        List<Float> pitchFeatures = pitch.getPitchFeatures();
+                                        int[] pitchFeatures = pitch.getPitchGraph();
 
                                         song.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures));
                                 }
