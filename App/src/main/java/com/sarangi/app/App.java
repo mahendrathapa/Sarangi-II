@@ -11,8 +11,8 @@ package com.sarangi.app;
 import java.io.*;
 import java.util.*;
 
-import com.sarangi.learningmodel.ann.My_ANN;
-import com.sarangi.learningmodel.svm.My_SVM;
+//import com.sarangi.learningmodel.ann.MyANN;
+import com.sarangi.learningmodel.svm.MySVM;
 
 /**
  * A main class for interfacing all the other sub-classes.
@@ -46,22 +46,23 @@ public class App
                 throws FileNotFoundException, IOException
         {
 
-                String training_filename = "src/resources/song/songFeatures/features.txt";
-                String test_filename = "src/resources/song/songFeatures/test.txt";
-                My_ANN ann = new My_ANN();
-                ann.readAllSongs(training_filename,test_filename);
-                ann.runANN();
+                String trainingFilename = "src/resources/song/songFeatures/features.txt";
+                String testFilename = "src/resources/song/songFeatures/test.txt";
+               //My_ANN ann = new My_ANN();
+               // ann.readAllSongs(training_filename,test_filename);
+               // ann.runANN();
 
-               /* 
-                My_SVM svm = new My_SVM();
-                svm.readAllSongs(training_filename,test_filename);
+                
+                MySVM svm = new MySVM();
+                svm.readAllSongs(trainingFilename,testFilename);
                 svm.runSVM();
-*/
 
-              //  FeatureExtractor featureExtractor = new FeatureExtractor();
+/*
+                FeatureExtractor featureExtractor = new FeatureExtractor();
 
- //               featureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
-              //  featureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
+                featureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
+                featureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
+                */
 
         }
 }
