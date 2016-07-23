@@ -106,8 +106,9 @@ public class FeatureExtractor{
                         String songName = listOfFiles[i].getName();
 
                         for(Song singleSong : tempSong){
+
                                 if(singleSong.getSongName().equals(songName)){
-                                        song.add(singleSong);
+                                        
                                         flag = true;
                                         tempSong.remove(singleSong);
                                         break;

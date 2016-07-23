@@ -78,7 +78,6 @@ public class JSONFormat{
 
                         for(Song singleSong : song){
 
-
                                 String json = gson.toJson(singleSong);
                                 bufferedWriter.write(json + '\n');
                         }
