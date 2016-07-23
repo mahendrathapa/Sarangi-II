@@ -56,7 +56,7 @@ public class FeatureExtractor{
         /**
          * A reference to the overlapping of the audio signal.
          */
-        private final int overLapSize = 0;
+        private final int overLapSize = 512;
 
         /* CONSTRUCTORS *******************************************/
 
@@ -138,7 +138,7 @@ public class FeatureExtractor{
                                         List<float[]> mfccFeatures = melfreq.getMfccFeatures();
 
                                         Pitch pitch = new Pitch(audioFrame,audioFormat);
-                                        List<Float> pitchFeatures = pitch.getPitchFeatures();
+                                        int[] pitchFeatures = pitch.getPitchGraph();
 
                                         song.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures));
                                 }

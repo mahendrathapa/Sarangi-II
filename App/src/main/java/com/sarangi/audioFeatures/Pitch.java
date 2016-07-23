@@ -44,10 +44,28 @@ public class Pitch{
         private Logger logger = Logger.getLogger("Pitch");
 
         /**
-         * A List for storing the mel frequency coefficients which is extracted from the given song.
+         * A List for storing the  pitch features as time series which is extracted for the given song.
          *
          */
         private List<Float> pitchFeature = new ArrayList<Float>();
+
+        /**
+         * An array for the storing the pitch features as a graph between the strength vs pitch for the given song.
+         */
+
+        private int[] pitchGraph;
+
+        /**
+         * Range of the pitch
+         */
+        private final int range = 30;
+
+
+        /**
+         * The gap of the pitch
+         */
+
+        private final int gap = 50;
 
 
         /*CONSTRUCTORS **********************************************************/
@@ -68,6 +86,8 @@ public class Pitch{
         public Pitch(List<float[]> audioFrame, AudioFormat audioFormat)
 
         {
+                pitchGraph = new int[range];
+
                 int samplingFrequency = (int)audioFormat.getSampleRate();
                 int length = audioFrame.get(0).length;
 
@@ -85,15 +105,21 @@ public class Pitch{
 
                                                 float pitch = pitchDetectionResult.getPitch();
                                         
-                                                if(pitch != -1)
+                                                if(Math.abs(pitch + 1) > 0.1)
                                                         pitchFeature.add(pitch);
-                                                else
-                                                        pitchFeature.add((float)0.0);
+
                                         }
                                 };
 
                                 audioDispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN,samplingFrequency,length,pitchDetectionHandler));
                                 audioDispatcher.run();
+                        }
+
+                        for(float singlePitch : pitchFeature){
+                                int index = (int)singlePitch/gap;
+
+                                if(index<range)
+                                        ++pitchGraph[(int)singlePitch/gap];
                         }
 
                 } catch(UnsupportedAudioFileException ex){
@@ -109,6 +135,16 @@ public class Pitch{
 
         public List<Float> getPitchFeatures(){
                 return pitchFeature;
+        }
+
+        /**
+         * A method for getting the pitch graph of the audio sample.
+         *
+         * @return      Pitch graph of the audio sample.
+         */
+
+        public int[] getPitchGraph(){
+                return pitchGraph;
         }
 }
 
