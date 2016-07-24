@@ -1,7 +1,8 @@
 package com.sarangi.learningmodel.svm; 
 
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader; import com.google.gson.reflect.*;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.reflect.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -61,12 +62,6 @@ public class MySVM {
                 trainingSongsGenre = new int[450];
                 testingSongsFeaturesDataset = new double[50][30];
                 testingSongsGenre = new int[50];
-                        /*
-                   training_dataset = new double[450][1];
-                   training_genre = new int[450];
-                   testing_dataset = new double[50][1];
-                   testing_genre = new int[50];
-                   */
         }
 
 
