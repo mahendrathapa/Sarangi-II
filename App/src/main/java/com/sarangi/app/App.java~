@@ -45,13 +45,14 @@ public class App
         public static void main( String[] args )
                 throws FileNotFoundException, IOException
         {
-                String trainingFilename = "src/resources/song/songFeatures/features.txt";
-                String testFilename = "src/resources/song/songFeatures/test.txt";
-
+/*
                 FeatureExtractor featureExtractor = new FeatureExtractor();
+
                 featureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
                 featureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
-
+                */
+                String trainingFilename = "src/resources/song/songFeatures/features.txt";
+                String testFilename = "src/resources/song/songFeatures/test.txt";
                //My_ANN ann = new My_ANN();
                // ann.readAllSongs(training_filename,test_filename);
                // ann.runANN();
@@ -61,7 +62,12 @@ public class App
                 svm.readAllSongs(trainingFilename,testFilename);
                 svm.runSVM();
 
+/*
+                FeatureExtractor featureExtractor = new FeatureExtractor();
 
+                featureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
+                featureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
+                */
 
         }
 }
