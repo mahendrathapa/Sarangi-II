@@ -1,6 +1,13 @@
+/*
+ * @(#) Song.java   2.0     June 9, 2016.
+ *
+ * Mahendra Thapa
+ *
+ * Institute of Engineering
+ */
+
 package com.sarangi.structures;
 import java.util.*;
-
 
 /**
  * A class for simple data structure to hold information related to a song.
@@ -38,6 +45,7 @@ public class Song{
         /**
          * Pitch features of the given song.
          */
+        //protected List<Float> pitch = new ArrayList<Float>();
         protected int[] pitch;
 
         /* CONSTRUCTORS *****************************************/
@@ -59,6 +67,7 @@ public class Song{
                 this.songName = songName;
                 this.intensity.addAll(intensity);
                 this.mfcc.addAll(mfcc);
+                //this.pitch.addAll(pitch);
                 this.pitch = pitch.clone();
         }
 
@@ -87,6 +96,7 @@ public class Song{
          * @return      MFCC features of the song.
          *
          */
+
         public List<float[]> getMelcoeff(){
                 return mfcc;
         }
@@ -96,6 +106,7 @@ public class Song{
          *
          * @return      Pitch features of the song.
          */
+
         public int[] getPitch(){
                 return pitch;
         }

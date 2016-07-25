@@ -11,7 +11,7 @@ package com.sarangi.app;
 import java.io.*;
 import java.util.*;
 
-//import com.sarangi.learningmodel.ann.MyANN;
+import com.sarangi.learningmodel.ann.MyANN;
 import com.sarangi.learningmodel.svm.MySVM;
 
 /**
@@ -48,19 +48,19 @@ public class App
                 String trainingFilename = "src/resources/song/songFeatures/features.txt";
                 String testFilename = "src/resources/song/songFeatures/test.txt";
 
-                FeatureExtractor featureExtractor = new FeatureExtractor();
-                featureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
+               FeatureExtractor featureExtractor = new FeatureExtractor();
+               featureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
                 featureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
 
-               //My_ANN ann = new My_ANN();
-               // ann.readAllSongs(training_filename,test_filename);
-               // ann.runANN();
+               MyANN ann = new MyANN();
+               ann.readAllSongs(trainingFilename,testFilename);
+               ann.runANN();
 
-                
+               /* 
                 MySVM svm = new MySVM();
                 svm.readAllSongs(trainingFilename,testFilename);
                 svm.runSVM();
-
+*/
 
 
         }

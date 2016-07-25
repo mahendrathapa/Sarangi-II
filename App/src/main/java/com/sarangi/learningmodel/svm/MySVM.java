@@ -20,7 +20,6 @@ import com.sarangi.json.*;
 import smile.classification.SVM;
 import smile.classification.NeuralNetwork;
 import smile.math.kernel.GaussianKernel;
-import smile.math.kernel.LinearKernel;
 import smile.math.Math;
 import java.lang.Math.*;
 
@@ -85,7 +84,6 @@ public class MySVM {
                         }
 
                         //Assigning genre to each frame
-
                                 if ( item.getSongName().contains("classic"))
                                         trainingSongsGenre[i] = 1;
                                 else if (item.getSongName().contains("jazz"))
