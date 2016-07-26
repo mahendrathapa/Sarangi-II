@@ -48,19 +48,19 @@ public class App
                 String trainingFilename = "src/resources/song/songFeatures/features.txt";
                 String testFilename = "src/resources/song/songFeatures/test.txt";
 
-         //       FeatureExtractor featureExtractor = new FeatureExtractor();
-           //     featureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
-             //   featureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
-
+               FeatureExtractor featureExtractor = new FeatureExtractor();
+               featureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
+                featureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
+/*
                MyANN ann = new MyANN();
                ann.readAllSongs(trainingFilename,testFilename);
                ann.runANN();
-
-               /* 
+*/
+                
                 MySVM svm = new MySVM();
                 svm.readAllSongs(trainingFilename,testFilename);
                 svm.runSVM();
-*/
+
 
 
         }

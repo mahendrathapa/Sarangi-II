@@ -7,7 +7,6 @@ import com.google.gson.reflect.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
@@ -93,13 +92,13 @@ public class MyANN {
 
                                 if ( item.getSongName().contains("classic"))
                                         trainingGenreList.add(1);
-                                else if (item.getSongName().contains("jazz"))
+                                else if (item.getSongName().contains("hiphop"))
                                         trainingGenreList.add(2);
-                                else if (item.getSongName().contains("rock"))
+                                else if (item.getSongName().contains("jazz"))
                                         trainingGenreList.add(3);
                                 else if (item.getSongName().contains("pop"))
                                         trainingGenreList.add(4);
-                                else            //for hiphop  
+                                else            //for rock  
                                         trainingGenreList.add(5);
 
                         }
@@ -111,7 +110,7 @@ public class MyANN {
 
                 for(int frameCount = 0; frameCount < trainingSongsFeaturesList.size(); frameCount++){
                         trainingSongsFeaturesDataset[frameCount][0] = allIntensityList.get(frameCount).doubleValue();
-                        for(int mfccCount = 1; mfccCount < 31; mfccCount++){
+                        for(int mfccCount = 1; mfccCount <= 30; mfccCount++){
                         trainingSongsFeaturesDataset[frameCount][mfccCount] = (double)trainingSongsFeaturesList.get(frameCount)[mfccCount-1];
                         }
                         trainingSongsGenre[frameCount] = trainingGenreList.get(frameCount).intValue();
@@ -135,13 +134,13 @@ public class MyANN {
                         for(float[] frameValue : eachSongFeaturesList){
                                 if ( item.getSongName().contains("classic"))
                                         testingGenreList.add(1);
-                                else if (item.getSongName().contains("jazz"))
+                                else if (item.getSongName().contains("hiphop"))
                                         testingGenreList.add(2);
-                                else if (item.getSongName().contains("rock"))
+                                else if (item.getSongName().contains("jazz"))
                                         testingGenreList.add(3);
                                 else if (item.getSongName().contains("pop"))
                                         testingGenreList.add(4);
-                                else       //for hiphop
+                                else       //for rock
                                         testingGenreList.add(5);
                         }
                 }
@@ -152,7 +151,7 @@ public class MyANN {
 
                 for(int frameCount = 0; frameCount < testingSongsFeaturesList.size(); frameCount++){
                         testingSongsFeaturesDataset[frameCount][0] = testAllIntensityList.get(frameCount).doubleValue();
-                        for(int mfccCount = 1; mfccCount < 31; mfccCount++){
+                        for(int mfccCount = 1; mfccCount <= 30; mfccCount++){
                         testingSongsFeaturesDataset[frameCount][mfccCount] = testingSongsFeaturesList.get(frameCount)[mfccCount-1];
                         }
                         testingSongsGenre[frameCount] = testingGenreList.get(frameCount).intValue();
@@ -168,7 +167,7 @@ public class MyANN {
         public void runANN() throws IOException,FileNotFoundException{
 
              
-                NeuralNetwork ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,31,25,15);
+                NeuralNetwork ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,31,15,15);
                 int loop = 1;
                 for(int i = 0;i < loop; i++)
                         ann.learn(trainingSongsFeaturesDataset,trainingSongsGenre);
@@ -179,6 +178,11 @@ public class MyANN {
                 int errorFrame = 0; //no vote for a song
                 int startFrame = 0;
                 int endFrame = songsTotalFrameList.get(0);
+                int cSongError = 0;
+                int hSongError = 0;
+                int jSongError = 0;
+                int pSongError = 0;
+                int rSongError = 0;
                 for(int testSongsCount = 1; testSongsCount <= songsTotalFrameList.size(); testSongsCount++){
                         errorFrame = 0;
                         correctFrame = 0;
@@ -195,15 +199,35 @@ public class MyANN {
                           //      System.out.println("'''''''" );
                            //     System.out.println("correct Frame"+correctFrame );
                             //    System.out.println("error Frame"+errorFrame);
-                        if(errorFrame > correctFrame)
+                        if(errorFrame > correctFrame){
                                 errorSongsCount++;
+                                if(testSongsCount > 0 && testSongsCount <= 10){
+                                        cSongError++;
+                                }
+                                else if(testSongsCount > 10 && testSongsCount <= 20){
+                                        hSongError++;
+                                }
+                                else if(testSongsCount > 20 && testSongsCount <= 30){
+                                        jSongError++;
+                                }
+                                else if(testSongsCount > 30 && testSongsCount <= 40){
+                                        pSongError++;
+                                }
+                                else if(testSongsCount > 40 && testSongsCount <= 50){
+                                        rSongError++;
+                                }
+                        }
 
 
                         if(testSongsCount <= 49){
                         endFrame = endFrame +songsTotalFrameList.get(testSongsCount);
                         }
                 }
-                System.out.println(songsTotalFrameList.get(0));
+                System.out.println("The model classical error is "+cSongError);
+                System.out.println("The model hiphop error is "+hSongError);
+                System.out.println("The model jazz error is "+jSongError);
+                System.out.println("The model pop error is "+pSongError);
+                System.out.println("The model rock error is "+rSongError);
                 System.out.println("Number of errors : "+ errorSongsCount);
                 System.out.format("Accuracy rate = %.2f%%\n...........",(100-100.0*errorSongsCount/50.0));
 

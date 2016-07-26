@@ -86,13 +86,13 @@ public class MySVM {
                         //Assigning genre to each frame
                                 if ( item.getSongName().contains("classic"))
                                         trainingSongsGenre[i] = 1;
-                                else if (item.getSongName().contains("jazz"))
+                                else if (item.getSongName().contains("hiphop"))
                                         trainingSongsGenre[i] = 2;
-                                else if (item.getSongName().contains("rock"))
+                                else if (item.getSongName().contains("jazz"))
                                         trainingSongsGenre[i] = 3;
                                 else if (item.getSongName().contains("pop"))
                                         trainingSongsGenre[i] = 4;
-                                else            //for hiphop  
+                                else            //for rock  
                                         trainingSongsGenre[i] = 5;
 
                                 i++;
@@ -104,16 +104,21 @@ public class MySVM {
                        testingSongsFeaturesDataset[i][j] = (double)temp[j]; 
                         }
                         //Assigning genre to each frame
-                                if ( item.getSongName().contains("classic"))
+                                if ( item.getSongName().contains("classic")){
                                         testingSongsGenre[i] = 1;
-                                else if (item.getSongName().contains("jazz"))
+                                }
+                                else if (item.getSongName().contains("hiphop")){
                                         testingSongsGenre[i] = 2;
-                                else if (item.getSongName().contains("rock"))
+                                }
+                                else if (item.getSongName().contains("jazz")){
                                         testingSongsGenre[i] = 3;
-                                else if (item.getSongName().contains("pop"))
+                                }
+                                else if (item.getSongName().contains("pop")){
                                         testingSongsGenre[i] = 4;
-                                else       //for hiphop
+                                }
+                                else {      //for rock 
                                         testingSongsGenre[i] = 5;
+                                }
                                 i++;
                         }
 
@@ -129,13 +134,43 @@ public class MySVM {
                         SVM svm = new SVM(new GaussianKernel(60.0d), 8.0d, Math.max(trainingSongsGenre)+1, SVM.Multiclass.ONE_VS_ONE);
                         svm.learn(trainingSongsFeaturesDataset,trainingSongsGenre);
                         svm.finish();
+                        int classicalError = 0;
+                        int hiphopError = 0;
+                        int jazzError = 0;
+                        int popError = 0;
+                        int rockError = 0;
 
                         int error = 0;
                         for (int i = 0; i < testingSongsFeaturesDataset.length; i++){
                                 if (svm.predict(testingSongsFeaturesDataset[i]) != testingSongsGenre[i]){
                                         error++;
+                                        if(testingSongsGenre[i]==1)
+                                        {
+                                                classicalError++;
+                                        }
+                                        else if(testingSongsGenre[i]==2)
+                                        {
+                                                hiphopError++;
+                                        }
+                                        else if(testingSongsGenre[i]==3)
+                                        {
+                                                jazzError++;
+                                        }
+                                        else if(testingSongsGenre[i]==4)
+                                        {
+                                                popError++;
+                                        }
+                                        else if(testingSongsGenre[i]==4)
+                                        {
+                                                rockError++;
+                                        }
                                 }
                         }
+                        System.out.println("Error for classical "+classicalError);
+                        System.out.println("Error for hiphop "+hiphopError);
+                        System.out.println("Error for jazz "+jazzError);
+                        System.out.println("Error for pop "+popError);
+                        System.out.println("Error for rock "+rockError);
                         System.out.format("Accuracy rate = %.2f%%\n...........",(100-100.0*error/testingSongsFeaturesDataset.length));
 
 
