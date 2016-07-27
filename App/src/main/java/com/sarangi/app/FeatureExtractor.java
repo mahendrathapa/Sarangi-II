@@ -39,24 +39,24 @@ public class FeatureExtractor{
          * execution of the program, warning messages to the user and information about the status of the program
          * to the user. The log is also beneficial during program debugging.
          */
-        private Logger logger = Logger.getLogger("FeatureExtractor");
+        private static Logger logger = Logger.getLogger("FeatureExtractor");
 
         /**
          * AudioPreProcessor is used for pre-processing of the audio signal.
          */
 
-        private AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
+        //private AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
 
         /**
          * A reference to the frame size;
          *
          */
-        private final int frameSize = 1024;
+        private static final int frameSize = 1024;
 
         /**
          * A reference to the overlapping of the audio signal.
          */
-        private final int overLapSize = 512;
+        private static final int overLapSize = 0;
 
         /* CONSTRUCTORS *******************************************/
 
@@ -84,13 +84,12 @@ public class FeatureExtractor{
          * @throws  Exception       Throws an Exception if any error occurs.
          */
 
-        public void extractFeature(String fileName, String folderName){
+        public static void extractFeature(String fileName, String folderName){
 
-                JSONFormat jsonFormat = new JSONFormat();
-
+                AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
                 List<Song> song = new ArrayList<Song>();
 
-                List<Song> tempSong = jsonFormat.convertJSONtoArray(fileName);
+                List<Song> tempSong = JSONFormat.convertJSONtoArray(fileName);
 
                 File folder = new File(folderName);
 
@@ -158,7 +157,7 @@ public class FeatureExtractor{
                         }
                 }
 
-                jsonFormat.convertArrayToJSON(song,fileName);
+                JSONFormat.convertArrayToJSON(song,fileName);
 
         }
 

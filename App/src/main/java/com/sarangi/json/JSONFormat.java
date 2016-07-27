@@ -34,7 +34,7 @@ import java.util.logging.*;
 
 public class JSONFormat{
 
-        /* FILEDS **************************************************/
+        /* FIELDS  **************************************************/
 
 
         /**
@@ -42,7 +42,7 @@ public class JSONFormat{
          * execution of the program, warning messages to the user and information about the status of the program
          * to the user. The log is also beneficial during program debugging.
          */
-        private Logger logger = Logger.getLogger("JSONFormat");
+        private static Logger logger = Logger.getLogger("JSONFormat");
 
 
         /* CONSTRUCTORS *******************************************/
@@ -67,7 +67,7 @@ public class JSONFormat{
          * @throws  IOException     Throws an IOException if any error occurs.
          */
 
-        public void convertArrayToJSON(List<Song> song, String fileName){
+        public static void convertArrayToJSON(List<Song> song, String fileName){
 
                 Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
 
@@ -103,7 +103,7 @@ public class JSONFormat{
          *
          */
 
-        public List<Song> convertJSONtoArray(String fileName){
+        public static List<Song> convertJSONtoArray(String fileName){
 
                 Gson gson = new Gson();
 
