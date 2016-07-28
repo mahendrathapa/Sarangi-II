@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.lang.reflect.Type;
 
 import com.sarangi.structures.*;
-import com.sarangi.json.JSONFormat;
+import com.sarangi.json.SongHandler;
 
 import smile.classification.NeuralNetwork;
 import smile.math.Math;
@@ -69,9 +69,11 @@ public class MyANN {
 
                 //Extraction of data from the json fileformat
 
-                JSONFormat json = new JSONFormat();
-                List<Song> trainingSongs = json.convertJSONtoArray(trainingFilename);
-                List<Song> testSongs = json.convertJSONtoArray(testFilename);
+                SongHandler trainingSongHandler = new SongHandler(trainingFilename);
+                List<Song> trainingSongs = trainingSongHandler.loadSongs();
+
+                SongHandler testSongHandler = new SongHandler(testFilename);
+                List<Song> testSongs = testSongHandler.loadSongs();
 
                 //features extraction to suitable array form for training
                 List<float[]> trainingSongsFeaturesList = new ArrayList<float[]>();

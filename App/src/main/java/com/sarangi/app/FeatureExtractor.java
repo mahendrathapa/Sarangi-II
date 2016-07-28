@@ -32,31 +32,31 @@ import javax.sound.sampled.*;
 
 public class FeatureExtractor{
 
-        /* FILEDS **************************************************/
+        /* FIELDS **************************************************/
 
         /**
          * Logger is used to maintain the log of the program. The log contain the error message generated during the
          * execution of the program, warning messages to the user and information about the status of the program
          * to the user. The log is also beneficial during program debugging.
          */
-        private Logger logger = Logger.getLogger("FeatureExtractor");
+        private static Logger logger = Logger.getLogger("FeatureExtractor");
 
         /**
          * AudioPreProcessor is used for pre-processing of the audio signal.
          */
 
-        private AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
+        //private AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
 
         /**
          * A reference to the frame size;
          *
          */
-        private final int frameSize = 1024;
+        private static final int frameSize = 1024;
 
         /**
          * A reference to the overlapping of the audio signal.
          */
-        private final int overLapSize = 512;
+        private static final int overLapSize = 0;
 
         /* CONSTRUCTORS *******************************************/
 
@@ -84,13 +84,13 @@ public class FeatureExtractor{
          * @throws  Exception       Throws an Exception if any error occurs.
          */
 
-        public void extractFeature(String fileName, String folderName){
+        public static void extractFeature(String fileName, String folderName){
 
-                JSONFormat jsonFormat = new JSONFormat();
+                AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
+                List<Song> songs = new ArrayList<Song>();
 
-                List<Song> song = new ArrayList<Song>();
-
-                List<Song> tempSong = jsonFormat.convertJSONtoArray(fileName);
+                SongHandler fileHandler = new SongHandler(fileName);
+                List<Song> tempSong = fileHandler.loadSongs();
 
                 File folder = new File(folderName);
 
@@ -141,7 +141,7 @@ public class FeatureExtractor{
                                         Pitch pitch = new Pitch(audioFrame,audioFormat);
                                         int[] pitchFeatures = pitch.getPitchGraph();
 
-                                        song.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures));
+                                        songs.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures));
                                 }
 
                         } catch(UnsupportedAudioFileException ex){
@@ -158,7 +158,8 @@ public class FeatureExtractor{
                         }
                 }
 
-                jsonFormat.convertArrayToJSON(song,fileName);
+
+                fileHandler.storeSongs(songs);
 
         }
 
