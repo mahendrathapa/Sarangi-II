@@ -13,6 +13,7 @@ import java.util.*;
 
 import com.sarangi.learningmodel.ann.MyANN;
 import com.sarangi.learningmodel.svm.MySVM;
+import com.sarangi.learningmodel.svm.SVMRunner;
 
 /**
  * A main class for interfacing all the other sub-classes.
@@ -51,16 +52,8 @@ public class App
                FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
                FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
 
-               /*
-               MyANN ann = new MyANN();
-               ann.readAllSongs(trainingFilename,testFilename);
-               ann.runANN();
-               */
-
-                MySVM svm = new MySVM();
-                svm.readAllSongs(trainingFilename,testFilename);
+                MySVM svm= new MySVM(trainingFilename,testFilename);
                 svm.runSVM();
-
 
         }
 }

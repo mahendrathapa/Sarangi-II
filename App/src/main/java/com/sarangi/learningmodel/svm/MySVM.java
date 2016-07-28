@@ -16,6 +16,7 @@ import java.lang.reflect.Type;
 
 import com.sarangi.structures.*;
 import com.sarangi.json.*;
+import com.sarangi.learningmodel.*;
 
 import smile.classification.SVM;
 import smile.classification.NeuralNetwork;
@@ -25,13 +26,6 @@ import java.lang.Math.*;
 
 /**
  * Support Vector Machine Class
- * for supervised learning of the music features
- *
- * <p>Includes constructor for assigning the training and test dataset and its answer 
- *
- * <p>Includes method for reading JSON file and merging the features into an array
- *
- * <p>Includes method for machine learning and accuracy caculation
  *
  * @author Mehang Rai
  * */
@@ -39,114 +33,70 @@ import java.lang.Math.*;
 
 public class MySVM {
 
-        /**
-         * For training
-         * Dataset containing the features of each music sample in double array
-         * Genre containing the genre of music to which each music sample belong
-         */
-        private double trainingSongsFeaturesDataset[][];
-        private int trainingSongsGenre[];
+        /* FIELDS **************************************************/
 
         /**
-         * For training
-         * Dataset containing the features of each music sample in double array
-         * Genre containing the genre of music to which each music sample belong
+         * The training dataset.
+         *
          */
-        private double testingSongsFeaturesDataset[][];
-        private int testingSongsGenre[];
 
+        public LearningDataset trainingSet; 
 
-        /**Construtor for the class**/
-        public MySVM(){
-                trainingSongsFeaturesDataset = new double[450][30]; 
-                trainingSongsGenre = new int[450];
-                testingSongsFeaturesDataset = new double[50][30];
-                testingSongsGenre = new int[50];
-        }
-
-
-        /**Method to read all song features from Json file and
-         * assign the respective features and
-         * the genre of each music sample to the dataset array
+        /**
+         * The testing dataset.
+         *
          */
-        public void readAllSongs (String trainingFilename,String testFilename) throws FileNotFoundException, IOException {
+        public LearningDataset testSet; 
+
+        /* CONSTRUCTORS *******************************************/
+
+        /**
+         * Two argument constructor.
+         *
+         * @param trainingFilename The file containing the songs for training.
+         * @param testFilename The file containing the songs for testing..
+         *
+         */
+        public MySVM(String trainingFilename, String testFilename) throws FileNotFoundException, IOException  {
 
                 SongHandler trainingSongHandler = new SongHandler(trainingFilename);
                 List<Song> trainingSongs = trainingSongHandler.loadSongs();
 
-
                 SongHandler testSongHandler = new SongHandler(testFilename);
                 List<Song> testSongs = testSongHandler.loadSongs();
 
-                //features extraction to suitable array form for training
-                int i = 0;
-                for (Song item : trainingSongs){
-                        int[] temp = item.getPitch();
-                        for(int j=0;j<30;j++){
-                       trainingSongsFeaturesDataset[i][j] = (double)temp[j]; 
-                        }
+                trainingSet = new LearningDataset(trainingSongs, new String[] {"classic","hiphop","jazz","pop","rock"},
+                                                  LearningDataset.FeatureType.SARANGI_PITCH);
 
-                        //Assigning genre to each frame
-                                if ( item.getSongName().contains("classic"))
-                                        trainingSongsGenre[i] = 1;
-                                else if (item.getSongName().contains("hiphop"))
-                                        trainingSongsGenre[i] = 2;
-                                else if (item.getSongName().contains("jazz"))
-                                        trainingSongsGenre[i] = 3;
-                                else if (item.getSongName().contains("pop"))
-                                        trainingSongsGenre[i] = 4;
-                                else            //for rock  
-                                        trainingSongsGenre[i] = 5;
-
-                                i++;
-                }
-                i = 0;
-                for (Song item : testSongs){
-                         int[] temp = item.getPitch();
-                        for(int j=0;j<30;j++){
-                       testingSongsFeaturesDataset[i][j] = (double)temp[j]; 
-                        }
-                        //Assigning genre to each frame
-                                if ( item.getSongName().contains("classic")){
-                                        testingSongsGenre[i] = 1;
-                                }
-                                else if (item.getSongName().contains("hiphop")){
-                                        testingSongsGenre[i] = 2;
-                                }
-                                else if (item.getSongName().contains("jazz")){
-                                        testingSongsGenre[i] = 3;
-                                }
-                                else if (item.getSongName().contains("pop")){
-                                        testingSongsGenre[i] = 4;
-                                }
-                                else {      //for rock 
-                                        testingSongsGenre[i] = 5;
-                                }
-                                i++;
-                        }
-
+                testSet = new LearningDataset(testSongs, new String[] {"classic","hiphop","jazz","pop","rock"},
+                                                  LearningDataset.FeatureType.SARANGI_PITCH);
         }
 
-        /**Method implements support vector machine
-         * on training dataset
-         * and predicts the accuracy through test dataset
+        /**
+         * Runs SVM on the datasets. 
+         *
          */
         public void runSVM(){
                 try {
 
-                        SVM svm = new SVM(new GaussianKernel(60.0d), 8.0d, Math.max(trainingSongsGenre)+1, SVM.Multiclass.ONE_VS_ONE);
-                        svm.learn(trainingSongsFeaturesDataset,trainingSongsGenre);
+                        SVM svm = new SVM(new GaussianKernel(60.0d), 8.0d, Math.max(trainingSet.getLabels())+1, SVM.Multiclass.ONE_VS_ONE);
+                        svm.learn(trainingSet.getDataset(),trainingSet.getLabels());
                         svm.finish();
+                        /*
                         int classicalError = 0;
                         int hiphopError = 0;
                         int jazzError = 0;
                         int popError = 0;
                         int rockError = 0;
+                        */
 
                         int error = 0;
-                        for (int i = 0; i < testingSongsFeaturesDataset.length; i++){
-                                if (svm.predict(testingSongsFeaturesDataset[i]) != testingSongsGenre[i]){
+                        for (int i = 0; i < testSet.getLength(); i++){
+                                double[][] testSetDataset = testSet.getDataset();
+                                int[] testLabels = testSet.getLabels();
+                                if (svm.predict(testSetDataset[i]) != testLabels[i]){
                                         error++;
+                                        /*
                                         if(testingSongsGenre[i]==1)
                                         {
                                                 classicalError++;
@@ -167,16 +117,20 @@ public class MySVM {
                                         {
                                                 rockError++;
                                         }
+                                        */
                                 }
                         }
+                        /*
                         System.out.println("Error for classical "+classicalError);
                         System.out.println("Error for hiphop "+hiphopError);
                         System.out.println("Error for jazz "+jazzError);
                         System.out.println("Error for pop "+popError);
                         System.out.println("Error for rock "+rockError);
-                        System.out.format("Accuracy rate = %.2f%%\n...........",(100-100.0*error/testingSongsFeaturesDataset.length));
+                        */
+                        System.out.format("Accuracy rate = %.2f%%\n...........",(100-100.0*error/testSet.getLength()));
 
 
+                        /*
                         //rest of code done for svm more epoch to increase efficiency
                         int epoch = 0; 
                         for (int i = 0; i < epoch; i++){
@@ -196,11 +150,13 @@ public class MySVM {
 
                                 System.out.format("Error rate = %.2f%%\n",(100-100.0*error/testingSongsFeaturesDataset.length));
                         }
+                        */
 
                 }
                 catch (Exception ex){
                         System.err.println(ex);
                 }
         }
+
 
 }

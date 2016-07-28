@@ -6,7 +6,7 @@
  * Insitute of Engineering
  */
 
-package com.sarangi.json;
+package com.sarangi.learningmodel;
 
 import com.sarangi.structures.*;
 
@@ -62,12 +62,13 @@ public class LearningDataset {
          * Also, set the level of the log according to the status in which the program is used.
          * The log levels are SEVERE, WARNING and INFO mainly.
          *
-         * @param fileName The file from which to load the songs.
          */
         public LearningDataset(List<Song> dataSongs, String[] labelArray, FeatureType featureType) {
 
                 logger.setLevel(Level.SEVERE);
                 this.featureType = featureType;
+                dataset = new double[dataSongs.size()][30];
+                labels = new int[dataSongs.size()];
 
                 if (this.featureType == FeatureType.SARANGI_PITCH || true ) {
                     int i = 0;
@@ -78,6 +79,8 @@ public class LearningDataset {
                             dataset[i] = convertIntArrayToDoubleArray(pitch);
 
                             labels[i] = getIndexOfLabel(song.getSongName(), labelArray);
+
+                            i++;
 
                     }
                 }
@@ -104,6 +107,10 @@ public class LearningDataset {
 
         public int[] getLabels() {
                 return labels;
+        }
+
+        public int getLength() {
+                return dataset.length;
         }
         
         /**
