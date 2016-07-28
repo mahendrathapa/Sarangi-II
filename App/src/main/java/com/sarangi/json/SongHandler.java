@@ -1,7 +1,7 @@
 /**
- * @(#) JSONFormat.java 2.0     June 9,2015
+ * @(#) SongHandler.java 2.0     July 19, 2016
  *
- * Mahendra Thapa
+ * Bijay Gurung
  *
  * Insitute of Engineering
  */
@@ -20,21 +20,16 @@ import java.util.*;
 import java.util.logging.*;
 
 /**
- * A class for converting the json format into Array List and vice versa. The features are stored
- * in json format for their standariztion.
+ * Class for loading all Songs stored beforehand.
+ * @see com.sarangi.structures.Song
  *
- * <p>Includes constructor for setting the level of logger.
  *
- * <p>Includes methods for converting the json file into array list.
- *
- * <p>Includes methods for converting the array list into json file.
- *
- * @author Mahendra Thapa
+ * @author Bijay Gurung
  */
 
-public class JSONFormat{
+public class SongHandler {
 
-        /* FIELDS  **************************************************/
+        /* FIELDS **************************************************/
 
 
         /**
@@ -42,32 +37,58 @@ public class JSONFormat{
          * execution of the program, warning messages to the user and information about the status of the program
          * to the user. The log is also beneficial during program debugging.
          */
-        private static Logger logger = Logger.getLogger("JSONFormat");
+        private Logger logger = Logger.getLogger("SongLoader");
+
+        /**
+         * The songs to be loaded from the file.
+         *
+         */
+        private List<Song> loadedSongs;
+
+        /**
+         * The file from which to load the songs.
+         *
+         */
+        private String fileName;
 
 
         /* CONSTRUCTORS *******************************************/
 
         /**
-         * Set the level of the log according to the status in which the program is used.
-         * The log levels are SEVERS, WARNING and INFO mainly.
+         * Initialize the fileName.
+         * Also, set the level of the log according to the status in which the program is used.
+         * The log levels are SEVERE, WARNING and INFO mainly.
+         *
+         * @param fileName The file from which to load the songs.
          */
+        public SongHandler(String fileName) {
 
-        public JSONFormat(){
-
+                this.fileName = fileName;
                 logger.setLevel(Level.SEVERE);
+
         }
+
+        /**
+         * Set the fileName.
+         *
+         * @param fileName The file from which to load the songs
+         */
+        public void setFilename(String fileName) {
+                loadedSongs = new ArrayList<Song>();
+                this.fileName = fileName;
+        }
+
+
 
         /** First the given arraylist is converted into json format and then stored
          * in the text file.
          *
-         * @param   song            A reference to the array list of an audio features of the audio samples.    
-         *
-         * @param   fileName        A referece to the file name which store the feature vector in json format.
+         * @param   songs            A reference to the array list of an audio features of the audio samples.    
          *
          * @throws  IOException     Throws an IOException if any error occurs.
          */
 
-        public static void convertArrayToJSON(List<Song> song, String fileName){
+        public void storeSongs(List<Song> songs){
 
                 Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
 
@@ -76,9 +97,9 @@ public class JSONFormat{
                         FileWriter fileWriter = new FileWriter(fileName,true);
                         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-                        for(Song singleSong : song){
+                        for(Song song : songs){
 
-                                String json = gson.toJson(singleSong);
+                                String json = gson.toJson(song);
                                 bufferedWriter.write(json + '\n');
                         }
 
@@ -97,17 +118,15 @@ public class JSONFormat{
          * Return the arraylist of the features. Text file is read where is feature vector is stored
          * int the form of json format and then converted into array list.
          *
-         * @param   fileName        A referece to the file in which the features vector is stored in json format.
-         *
          * @throws  IOException     Throw an exception if any exception occurs.
          *
          */
 
-        public static List<Song> convertJSONtoArray(String fileName){
+        public List<Song> loadSongs(){
 
                 Gson gson = new Gson();
 
-                List<Song> output = new ArrayList<Song>();
+                List<Song> tempLoadedSongs = new ArrayList<Song>();
 
                 try{
 
@@ -120,18 +139,29 @@ public class JSONFormat{
 
                         for(String line; (line = bufferedReader.readLine()) != null;){
 
-                                output.add(gson.fromJson(line,Song.class));
+                                tempLoadedSongs.add(gson.fromJson(line,Song.class));
                         }
 
-                        return output;
+                        loadedSongs = tempLoadedSongs;
+                        return tempLoadedSongs;
 
                 } catch(IOException ex){
-
 
                         return new ArrayList<Song>();
                 }
         }
 
+        /**
+         * Return the loaded songs.
+         *
+         * @return Loaded songs.
+         *
+         *
+         */
+        public List<Song> getSongs() {
+
+                return loadedSongs;
+
+        }
+
 }
-
-

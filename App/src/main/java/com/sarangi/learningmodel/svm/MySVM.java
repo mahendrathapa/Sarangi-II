@@ -71,9 +71,12 @@ public class MySVM {
          */
         public void readAllSongs (String trainingFilename,String testFilename) throws FileNotFoundException, IOException {
 
-                JSONFormat jsonFormat = new JSONFormat();
-                List<Song> trainingSongs = jsonFormat.convertJSONtoArray(trainingFilename);
-                List<Song> testSongs = jsonFormat.convertJSONtoArray(testFilename);
+                SongHandler trainingSongHandler = new SongHandler(trainingFilename);
+                List<Song> trainingSongs = trainingSongHandler.loadSongs();
+
+
+                SongHandler testSongHandler = new SongHandler(testFilename);
+                List<Song> testSongs = testSongHandler.loadSongs();
 
                 //features extraction to suitable array form for training
                 int i = 0;

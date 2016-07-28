@@ -32,7 +32,7 @@ import javax.sound.sampled.*;
 
 public class FeatureExtractor{
 
-        /* FILEDS **************************************************/
+        /* FIELDS **************************************************/
 
         /**
          * Logger is used to maintain the log of the program. The log contain the error message generated during the
@@ -87,9 +87,10 @@ public class FeatureExtractor{
         public static void extractFeature(String fileName, String folderName){
 
                 AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
-                List<Song> song = new ArrayList<Song>();
+                List<Song> songs = new ArrayList<Song>();
 
-                List<Song> tempSong = JSONFormat.convertJSONtoArray(fileName);
+                SongHandler fileHandler = new SongHandler(fileName);
+                List<Song> tempSong = fileHandler.loadSongs();
 
                 File folder = new File(folderName);
 
@@ -140,7 +141,7 @@ public class FeatureExtractor{
                                         Pitch pitch = new Pitch(audioFrame,audioFormat);
                                         int[] pitchFeatures = pitch.getPitchGraph();
 
-                                        song.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures));
+                                        songs.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures));
                                 }
 
                         } catch(UnsupportedAudioFileException ex){
@@ -157,7 +158,8 @@ public class FeatureExtractor{
                         }
                 }
 
-                JSONFormat.convertArrayToJSON(song,fileName);
+
+                fileHandler.storeSongs(songs);
 
         }
 
