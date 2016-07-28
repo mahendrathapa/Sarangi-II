@@ -60,7 +60,14 @@
                         <groupId>com.github.haifengl</groupId>
                         <artifactId>smile-core</artifactId>
                         <version>1.1.0</version>
-                </dependency>
+                 <exclusions>
+                        <exclusion>
+                                <groupId>org.slf4j</groupId>
+                                <artifactId>slf4j-log4j12</artifactId>
+                        </exclusion>
+                </exclusions>
+
+               </dependency>
 
                 <!-- TarsoDSP: Use for finding the features of the song -->
                 <dependency>
@@ -89,6 +96,7 @@
                         <version>1.0.3-1</version>
                 </dependency>
 
+
         </dependencies>
 
         <reporting>
@@ -106,4 +114,5 @@
                         </plugin>
                 </plugins>
         </reporting>
+
 </project>

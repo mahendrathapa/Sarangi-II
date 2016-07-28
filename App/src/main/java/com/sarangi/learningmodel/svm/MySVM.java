@@ -23,6 +23,7 @@ import smile.classification.NeuralNetwork;
 import smile.math.kernel.GaussianKernel;
 import smile.math.Math;
 import java.lang.Math.*;
+import java.util.*;
 
 /**
  * Support Vector Machine Class
@@ -65,10 +66,10 @@ public class MySVM {
                 SongHandler testSongHandler = new SongHandler(testFilename);
                 List<Song> testSongs = testSongHandler.loadSongs();
 
-                trainingSet = new LearningDataset(trainingSongs, new String[] {"classic","hiphop","jazz","pop","rock"},
+                trainingSet = new LearningDataset(trainingSongs, new String[] {"hvha","hvla","lvha","lvla"},
                                                   LearningDataset.FeatureType.SARANGI_PITCH);
 
-                testSet = new LearningDataset(testSongs, new String[] {"classic","hiphop","jazz","pop","rock"},
+                testSet = new LearningDataset(testSongs, new String[] {"hvha","hvla","lvha","lvla"},
                                                   LearningDataset.FeatureType.SARANGI_PITCH);
         }
 
@@ -79,7 +80,8 @@ public class MySVM {
         public void runSVM(){
                 try {
 
-                        SVM svm = new SVM(new GaussianKernel(60.0d), 8.0d, Math.max(trainingSet.getLabels())+1, SVM.Multiclass.ONE_VS_ONE);
+                        System.out.println(Arrays.toString(trainingSet.getLabels()));
+                        SVM svm = new SVM(new GaussianKernel(60.0d), 2.0d, Math.max(trainingSet.getLabels())+1, SVM.Multiclass.ONE_VS_ONE);
                         svm.learn(trainingSet.getDataset(),trainingSet.getLabels());
                         svm.finish();
                         /*
@@ -154,7 +156,7 @@ public class MySVM {
 
                 }
                 catch (Exception ex){
-                        System.err.println(ex);
+                        ex.printStackTrace();
                 }
         }
 

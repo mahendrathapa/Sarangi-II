@@ -50,6 +50,7 @@ public class LearningDataset {
 
                 SARANGI_MFCC, 
                 SARANGI_PITCH,
+                SARANGI_RHYTHM,
         }
 
         private FeatureType featureType = FeatureType.SARANGI_MFCC;

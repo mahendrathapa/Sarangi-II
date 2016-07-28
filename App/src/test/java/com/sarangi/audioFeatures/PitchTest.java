@@ -17,7 +17,7 @@ public class PitchTest extends TestCase{
 
                 try{
 
-                        AudioSample audioSample = new AudioSample(new File("src/resources/song/training/classical.00001.au"));
+                        AudioSample audioSample = new AudioSample(new File("src/resources/song/extra/hvha.1.wav"));
 
                         float[] sample = audioSample.getAudioSamples();
 
