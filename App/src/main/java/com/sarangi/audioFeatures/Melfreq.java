@@ -48,6 +48,12 @@ public class Melfreq{
          */
         private List<float[]> mfccFeatures = new ArrayList<float[]>();
 
+        /**
+         * The number of coefficients being extracted.
+         *
+         */
+        public static final int NUM_OF_COEFFICIENTS = 30;
+
         /*CONSTRUCTORS **********************************************************/
 
         /**
