@@ -47,7 +47,7 @@ public class Pitch{
          * A List for storing the  pitch features as time series which is extracted for the given song.
          *
          */
-        private List<Float> pitchFeature = new ArrayList<Float>();
+        private List<Float> pitchFrameWise = new ArrayList<Float>();
 
         /**
          * An array for the storing the pitch features as a graph between the strength vs pitch for the given song.
@@ -64,8 +64,13 @@ public class Pitch{
         /**
          * The gap of the pitch
          */
-
         private final int gap = 50;
+
+        /**
+         * Sampling frequency of the audio sample
+         */
+        private  int samplingFrequency;
+
 
 
         /*CONSTRUCTORS **********************************************************/
@@ -87,8 +92,9 @@ public class Pitch{
 
         {
                 pitchGraph = new int[range];
-
-                int samplingFrequency = (int)audioFormat.getSampleRate();
+                
+                samplingFrequency = (int)audioFormat.getSampleRate();
+                
                 int length = audioFrame.get(0).length;
 
                 logger.setLevel(Level.SEVERE);
@@ -106,7 +112,7 @@ public class Pitch{
                                                 float pitch = pitchDetectionResult.getPitch();
                                         
                                                 if(Math.abs(pitch + 1) > 0.1)
-                                                        pitchFeature.add(pitch);
+                                                        pitchFrameWise.add(pitch);
 
                                         }
                                 };
@@ -115,7 +121,7 @@ public class Pitch{
                                 audioDispatcher.run();
                         }
 
-                        for(float singlePitch : pitchFeature){
+                        for(float singlePitch : pitchFrameWise){
                                 int index = (int)singlePitch/gap;
 
                                 if(index<range)
@@ -133,8 +139,8 @@ public class Pitch{
          * @return      Pitch features of the audio sample.
          */
 
-        public List<Float> getPitchFeatures(){
-                return pitchFeature;
+        public List<Float> getPitchFrameWise(){
+                return pitchFrameWise;
         }
 
         /**

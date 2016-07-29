@@ -141,7 +141,10 @@ public class FeatureExtractor{
                                         Pitch pitch = new Pitch(audioFrame,audioFormat);
                                         int[] pitchFeatures = pitch.getPitchGraph();
 
-                                        songs.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures));
+                                        Rhythm rhythm = new Rhythm(audioFrame, audioFormat);
+                                        int[] rhythmFeatures = rhythm.getRhythmGraph();
+
+                                        songs.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures,rhythmFeatures));
                                 }
 
                         } catch(UnsupportedAudioFileException ex){

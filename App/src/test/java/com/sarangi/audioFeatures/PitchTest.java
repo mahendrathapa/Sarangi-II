@@ -31,7 +31,7 @@ public class PitchTest extends TestCase{
 
                         Pitch  pitch = new Pitch(audioFrame,audioFormat);
 
-                        List<Float> pitchOutput = pitch.getPitchFeatures();
+                        List<Float> pitchOutput = pitch.getPitchFrameWise();
 
                         int[] pitchGraph = pitch.getPitchGraph();
 
