@@ -32,7 +32,7 @@ import java.util.*;
  * */
 
 
-public class MySVM implements SarangiClassifier {
+public class SarangiSVM implements SarangiClassifier {
 
         /* FIELDS **************************************************/
 
@@ -77,7 +77,7 @@ public class MySVM implements SarangiClassifier {
          * @param testFilename The file containing the songs for testing..
          *
          */
-        public MySVM(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
+        public SarangiSVM(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
 
                 this.labels = labels;
                 this.featureType = featureType;
@@ -144,7 +144,6 @@ public class MySVM implements SarangiClassifier {
                 }
                     return new Result(accuracy,this.labels,labelAccuracy);
         }
-
 
 
 }

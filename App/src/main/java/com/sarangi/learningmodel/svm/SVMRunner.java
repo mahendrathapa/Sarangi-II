@@ -28,7 +28,7 @@ import java.lang.Math.*;
 
 
 /**
- * Class to Run MySVM class 
+ * Class to Run SarangiSVM class 
  *
  * @author Bijay Gurung
  */
@@ -51,7 +51,7 @@ public class SVMRunner {
                 SongHandler testSongHandler = new SongHandler(testFilename);
                 List<Song> testSongs = testSongHandler.loadSongs();
 
-                MySVM svm = new MySVM(trainingSongs,this.labels,DatasetUtil.FeatureType.SARANGI_MFCC);
+                SarangiSVM svm = new SarangiSVM(trainingSongs,this.labels,DatasetUtil.FeatureType.SARANGI_MFCC);
                 
                 Result result = svm.test(testSongs);
 
