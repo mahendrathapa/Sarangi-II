@@ -22,7 +22,7 @@ import java.util.logging.*;
  * @author Bijay Gurung
  */
 
-public static class DatasetUtil {
+public class DatasetUtil {
 
         public static enum FeatureType {
 
@@ -46,7 +46,7 @@ public static class DatasetUtil {
 
                 LearningDataset learningDataset = new LearningDataset();
 
-                learningDataset.labels = new int[dataSongs.size()];
+                learningDataset.labelIndices = new int[dataSongs.size()];
 
                 if (featureType == FeatureType.SARANGI_PITCH) {
                     learningDataset.dataset = new double[dataSongs.size()][dataSongs.get(0).getPitch().length];
@@ -56,7 +56,7 @@ public static class DatasetUtil {
                             int[] pitch = song.getPitch();
 
                             learningDataset.dataset[i] = convertIntArrayToDoubleArray(pitch);
-                            learningDataset.labels[i] = getIndexOfLabel(song.getSongName(), labelArray);
+                            learningDataset.labelIndices[i] = getIndexOfLabel(song.getSongName(), labelArray);
 
                             i++;
 
@@ -71,7 +71,7 @@ public static class DatasetUtil {
                     int i = 0;
                     for (Song song: dataSongs) {
 
-                            ArrayList<float[]> mfcc = song.getMFCC();
+                            List<float[]> mfcc = song.getMelcoeff();
 
                             double[] avgMFCC = new double[Melfreq.NUM_OF_COEFFICIENTS];
 
@@ -89,7 +89,7 @@ public static class DatasetUtil {
 
                             learningDataset.dataset[i] = avgMFCC;
 
-                            learningDataset.labels[i] = getIndexOfLabel(song.getSongName(), labelArray);
+                            learningDataset.labelIndices[i] = getIndexOfLabel(song.getSongName(), labelArray);
 
                             i++;
 
@@ -118,22 +118,31 @@ public static class DatasetUtil {
 
                     // Store the songs.
                     List<double[]> dataset = new ArrayList<double[]>();
-                    List<int> labels = new ArrayList<int>();
+
+                    List<Integer> labelIndices = new ArrayList<Integer>();
 
                     for (Song song: dataSongs) {
 
-                            List<double[]> mfcc = song.getMFCC();
+                            // Convert float to doubles
+                            List<float[]> mfccFloats = song.getMelcoeff();
+                            List<double[]> mfcc = new ArrayList<double[]>();
+                            for (float[] mfccFloat: mfccFloats) {
+                                mfcc.add(convertFloatsToDoubles(mfccFloat));
+                            }
 
                             dataset.addAll(mfcc);
+
+                            labelIndices.add(getIndexOfLabel(song.getSongName(), labelArray));
 
                     }
 
                     learningDataset.dataset = new double[dataset.size()][];
+                    learningDataset.labelIndices = new int[dataset.size()];
 
                     for (int i = 0; i < dataset.size(); i++) {
 
-                            learningDataset.dataset[i] = convertFloatsToDoubles(dataset.get(i));
-                            learningDataset.labels[i] = getIndexOfLabel(song.getSongName(), labelArray);
+                            learningDataset.dataset[i] = dataset.get(i);
+                            learningDataset.labelIndices[i] = labelIndices.get(i);
 
                     }
                 }

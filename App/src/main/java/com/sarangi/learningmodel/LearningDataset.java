@@ -31,7 +31,7 @@ public class LearningDataset {
          * The labels for the dataset.
          *
          */
-        public int labels[];
+        public int[] labelIndices;
 
         /* CONSTRUCTORS *******************************************/
 

@@ -36,4 +36,27 @@ import java.lang.Math.*;
 
 public class SVMRunner {
 
+        private String[] labels;
+
+        public SVMRunner(String[] labels) {
+        
+                this.labels = labels;
+        }
+
+        public void run(String trainingFilename, String testFilename) throws FileNotFoundException, IOException  {
+
+                SongHandler trainingSongHandler = new SongHandler(trainingFilename);
+                List<Song> trainingSongs = trainingSongHandler.loadSongs();
+
+                SongHandler testSongHandler = new SongHandler(testFilename);
+                List<Song> testSongs = testSongHandler.loadSongs();
+
+                MySVM svm = new MySVM(trainingSongs,this.labels,DatasetUtil.FeatureType.SARANGI_PITCH);
+                
+                Result result = svm.test(testSongs);
+
+                System.out.format("%.2f%%",result.accuracy);
+
+        }
+
 }

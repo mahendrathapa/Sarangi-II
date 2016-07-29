@@ -32,9 +32,28 @@ import java.util.*;
  * */
 
 
-public class MySVM {
+public class MySVM implements SarangiClassifier {
 
         /* FIELDS **************************************************/
+
+        /**
+         * The SMILE SVM object
+         *
+         */
+
+        public SVM svm; 
+
+        /**
+         * The labels.
+         *
+         */
+        public String[] labels;
+
+        /**
+         * The Feature Type.
+         *
+         */
+        public DatasetUtil.FeatureType featureType;
 
         /**
          * The training dataset.
@@ -58,107 +77,74 @@ public class MySVM {
          * @param testFilename The file containing the songs for testing..
          *
          */
-        public MySVM(String trainingFilename, String testFilename) throws FileNotFoundException, IOException  {
+        public MySVM(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
 
-                SongHandler trainingSongHandler = new SongHandler(trainingFilename);
-                List<Song> trainingSongs = trainingSongHandler.loadSongs();
+                this.labels = labels;
+                this.featureType = featureType;
 
-                SongHandler testSongHandler = new SongHandler(testFilename);
-                List<Song> testSongs = testSongHandler.loadSongs();
+                this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, DatasetUtil.FeatureType.SARANGI_PITCH);
 
-                trainingSet = new LearningDataset(trainingSongs, new String[] {"hvha","hvla","lvha","lvla"},
-                                                  LearningDataset.FeatureType.SARANGI_PITCH);
+                // Train SVM
+                svm = new SVM(new GaussianKernel(60.0d), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
+                svm.learn(trainingSet.dataset,trainingSet.labelIndices);
+                svm.finish();
 
-                testSet = new LearningDataset(testSongs, new String[] {"hvha","hvla","lvha","lvla"},
-                                                  LearningDataset.FeatureType.SARANGI_PITCH);
         }
 
         /**
-         * Runs SVM on the datasets. 
+         * Predict the label for the given song.
          *
+         * @param song The Song object whose label is to be predicted.
+         *
+         * @return The label index.
          */
-        public void runSVM(){
-                try {
+        public int predict(Song song) {
+                List<Song> oneSong = new ArrayList<Song>();
+                oneSong.add(song);
 
-                        System.out.println(Arrays.toString(trainingSet.getLabels()));
-                        SVM svm = new SVM(new GaussianKernel(60.0d), 2.0d, Math.max(trainingSet.getLabels())+1, SVM.Multiclass.ONE_VS_ONE);
-                        svm.learn(trainingSet.getDataset(),trainingSet.getLabels());
-                        svm.finish();
-                        /*
-                        int classicalError = 0;
-                        int hiphopError = 0;
-                        int jazzError = 0;
-                        int popError = 0;
-                        int rockError = 0;
-                        */
+                // TODO Get a better solution than this Hacky one.
+                LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
+                return svm.predict(songDataset.dataset[0]);
+        }
 
-                        int error = 0;
-                        for (int i = 0; i < testSet.getLength(); i++){
-                                double[][] testSetDataset = testSet.getDataset();
-                                int[] testLabels = testSet.getLabels();
-                                if (svm.predict(testSetDataset[i]) != testLabels[i]){
-                                        error++;
-                                        /*
-                                        if(testingSongsGenre[i]==1)
-                                        {
-                                                classicalError++;
-                                        }
-                                        else if(testingSongsGenre[i]==2)
-                                        {
-                                                hiphopError++;
-                                        }
-                                        else if(testingSongsGenre[i]==3)
-                                        {
-                                                jazzError++;
-                                        }
-                                        else if(testingSongsGenre[i]==4)
-                                        {
-                                                popError++;
-                                        }
-                                        else if(testingSongsGenre[i]==4)
-                                        {
-                                                rockError++;
-                                        }
-                                        */
-                                }
-                        }
-                        /*
-                        System.out.println("Error for classical "+classicalError);
-                        System.out.println("Error for hiphop "+hiphopError);
-                        System.out.println("Error for jazz "+jazzError);
-                        System.out.println("Error for pop "+popError);
-                        System.out.println("Error for rock "+rockError);
-                        */
-                        System.out.format("Accuracy rate = %.2f%%\n...........",(100-100.0*error/testSet.getLength()));
+        /**
+         * Tests the model on the given songs.
+         *
+         * @param testSongs The test Songs.
+         * @return The result of the test.
+         */
+        public Result test(List<Song> testSongs) {
+                    int correct = 0;
+                    double[] labelAccuracy = new double[this.labels.length];
+                    double accuracy = 0.0;
+
+                try{
+
+                    for (Song song: testSongs) {
+
+                            int labelIndex = DatasetUtil.getIndexOfLabel(song.getSongName(),this.labels);
+
+                            if (this.predict(song) == labelIndex){
+                                    labelAccuracy[labelIndex-1]++;
+                                    correct++;
+                            }
+                    }
+
+                    int numOfSongs = testSongs.size();
+
+                    accuracy = (100.0*correct/numOfSongs);
+
+                    for (int i=0; i<labelAccuracy.length; i++) {
+                            labelAccuracy[i] = (100.0*labelAccuracy[i]/numOfSongs);
+                    }
 
 
-                        /*
-                        //rest of code done for svm more epoch to increase efficiency
-                        int epoch = 0; 
-                        for (int i = 0; i < epoch; i++){
-                                System.out.println("Epoch........"+i);
-                                for (int j = 0; j < trainingSongsFeaturesDataset.length; j++){
-                                        int index = Math.randomInt(trainingSongsFeaturesDataset.length);
-                                        svm.learn(trainingSongsFeaturesDataset[index],trainingSongsGenre[index]);
-
-                                }
-                                svm.finish();
-                                error = 0;
-                                for (int k = 0; k < testingSongsFeaturesDataset.length; k++){
-                                        if (svm.predict(testingSongsFeaturesDataset[k]) != testingSongsGenre[k]){
-                                                error++;
-                                        }
-                                }
-
-                                System.out.format("Error rate = %.2f%%\n",(100-100.0*error/testingSongsFeaturesDataset.length));
-                        }
-                        */
-
-                }
-                catch (Exception ex){
+                }catch (Exception ex){
                         ex.printStackTrace();
                 }
+                    return new Result(accuracy,this.labels,labelAccuracy);
         }
+
 
 
 }

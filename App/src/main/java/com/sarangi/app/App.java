@@ -52,8 +52,8 @@ public class App
                FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
                FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
 
-                MySVM svm= new MySVM(trainingFilename,testFilename);
-                svm.runSVM();
+                SVMRunner svmRunner= new SVMRunner(new String[]{"hvha","hvla","lvla","lvha"});
+                svmRunner.run(trainingFilename,testFilename);
 
         }
 }
