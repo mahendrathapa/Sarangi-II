@@ -12,7 +12,7 @@ import java.io.*;
 import java.util.*;
 
 import com.sarangi.learningmodel.ann.MyANN;
-import com.sarangi.learningmodel.svm.MySVM;
+import com.sarangi.learningmodel.svm.SarangiSVM;
 import com.sarangi.learningmodel.svm.SVMRunner;
 
 /**
@@ -50,8 +50,8 @@ public class App
                 String testFilename = "src/resources/song/songFeatures/test.txt";
 
                 
-               //FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
-               //FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
+               FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training"));
+               FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing"));
 
                 SVMRunner svmRunner= new SVMRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
                 svmRunner.run(trainingFilename,testFilename);

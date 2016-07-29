@@ -62,7 +62,22 @@ public class DatasetUtil {
 
                     }
 
-                } else if (featureType == FeatureType.SARANGI_MFCC) {
+                }else if(featureType == FeatureType.SARANGI_RHYTHM){
+                        
+                    learningDataset.dataset = new double[dataSongs.size()][dataSongs.get(0).getRhythm().length];
+                    int i = 0;
+                    for (Song song: dataSongs) {
+
+                            int[] rhythm = song.getRhythm();
+
+                            learningDataset.dataset[i] = convertIntArrayToDoubleArray(rhythm);
+                            learningDataset.labelIndices[i] = getIndexOfLabel(song.getSongName(), labelArray);
+
+                            i++;
+
+                    }
+                        
+                }else if (featureType == FeatureType.SARANGI_MFCC) {
                     
                     // We average the value of MFCC over all frames to get one set of MFCC for the whole song.
 
