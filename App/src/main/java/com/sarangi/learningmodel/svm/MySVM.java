@@ -82,7 +82,7 @@ public class MySVM implements SarangiClassifier {
                 this.labels = labels;
                 this.featureType = featureType;
 
-                this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, DatasetUtil.FeatureType.SARANGI_PITCH);
+                this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
 
                 // Train SVM
                 svm = new SVM(new GaussianKernel(60.0d), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);

@@ -51,7 +51,7 @@ public class SVMRunner {
                 SongHandler testSongHandler = new SongHandler(testFilename);
                 List<Song> testSongs = testSongHandler.loadSongs();
 
-                MySVM svm = new MySVM(trainingSongs,this.labels,DatasetUtil.FeatureType.SARANGI_PITCH);
+                MySVM svm = new MySVM(trainingSongs,this.labels,DatasetUtil.FeatureType.SARANGI_MFCC);
                 
                 Result result = svm.test(testSongs);
 
