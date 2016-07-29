@@ -8,32 +8,30 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Unit test for MFCC
+ * Unit test for Rhythm
  */
 
-public class MelFreqTest extends TestCase{
+public class RhythmTest extends TestCase{
 
-        public void testMelFreq(){
+        public void testRhythm(){
 
                 try{
 
-                        AudioSample audioSample = new AudioSample(new File("src/resources/song/extra/abc.wav"));
+                        AudioSample audioSample = new AudioSample(new File("src/resources/song/Mood_training/hvha.1.wav"));
 
                         float[] sample = audioSample.getAudioSamples();
-
-                        System.out.println(sample.length);
 
                         AudioFormat audioFormat = audioSample.getAudioFormat();
 
                         AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
 
-                        List<float[]> input = audioPreProcessor.getAudioFrame(sample,1024,0);
+                        List<float[]> audioFrame = audioPreProcessor.getAudioFrame(sample,1024,512);
 
-                        Melfreq melfreq = new Melfreq(input,audioFormat);
+                        Rhythm  rhythm = new Rhythm(audioFrame,audioFormat);
 
-                        List<float[]> outputMFCC = melfreq.getMfccFeatures();
+                        int[] rhythmGraph = rhythm.getRhythmGraph();
 
-                        System.out.println(outputMFCC.size());
+                        System.out.println(Arrays.toString(rhythmGraph));
 
                 }catch(UnsupportedAudioFileException ex){
                         System.out.println(ex);
@@ -42,6 +40,8 @@ public class MelFreqTest extends TestCase{
                 }catch(IllegalArgumentException ex){
                         System.out.println(ex);
                 }
+
+
 
         }
 }
