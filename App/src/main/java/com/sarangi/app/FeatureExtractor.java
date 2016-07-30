@@ -56,7 +56,7 @@ public class FeatureExtractor{
         /**
          * A reference to the overlapping of the audio signal.
          */
-        private static final int overLapSize = 0;
+        private static final int overLapSize = 512;
 
         /* CONSTRUCTORS *******************************************/
 

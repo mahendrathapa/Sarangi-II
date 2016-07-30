@@ -45,6 +45,12 @@ public class Result {
          */
         public double[] labelAccuracy;
 
+        /**
+         * The Confusion Matrix
+         *
+         */
+        public int[][] confusionMatrix;
+
         /* CONSTRUCTORS *******************************************/
 
         /**
@@ -62,12 +68,36 @@ public class Result {
          * @param labelAccuracy The accuracy for each label.
          *
          */
-        public Result(double accuracy, String[] labels, double[] labelAccuracy) {
+        public Result(double accuracy, String[] labels, double[] labelAccuracy, int[][] confusionMatrix) {
                 this.accuracy = accuracy;
                 this.labels = labels;
                 this.labelAccuracy = labelAccuracy;
+                this.confusionMatrix = confusionMatrix;
         }
 
+        /**
+         * Print all data contained by the object.
+         *
+         */
+        public void printData() {
+                System.out.format("Overall Accuracy: %.2f%%\n",this.accuracy);
+
+                if (labels.length != labelAccuracy.length) {
+                        System.out.println("Error: Number of labels and accuracy count don't match");
+                        return;
+                }
+
+                for (int i=0; i<labels.length; i++) {
+                    System.out.format("Label %s: %.2f%%\n",this.labels[i],this.labelAccuracy[i]);
+                }
+
+                for (int i=0; i<confusionMatrix.length; i++ ){
+                        for (int j=0; j<confusionMatrix[i].length; j++) {
+                                System.out.format("%d ",confusionMatrix[i][j]);
+                        }
+                        System.out.println();
+                }
+        }
 
 
 
