@@ -1,4 +1,4 @@
-package com.sarangi.learningmodel.svm; 
+package com.sarangi.learningmodel.ann; 
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -7,7 +7,6 @@ import com.google.gson.reflect.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
@@ -15,33 +14,29 @@ import java.util.ArrayList;
 import java.lang.reflect.Type;
 
 import com.sarangi.structures.*;
-import com.sarangi.json.*;
+import com.sarangi.json.SongHandler;
 import com.sarangi.learningmodel.*;
 
-import smile.classification.SVM;
 import smile.classification.NeuralNetwork;
-import smile.math.kernel.GaussianKernel;
 import smile.math.Math;
 import java.lang.Math.*;
-import java.util.*;
 
 /**
- * Support Vector Machine Class
+ * Artificial Neural Network Class
+ * for supervised learning of the music features
  *
  * @author Mehang Rai
  * */
 
-
-public class SarangiSVM implements SarangiClassifier {
+public class SarangiANN implements SarangiClassifier {
 
         /* FIELDS **************************************************/
 
         /**
-         * The SMILE SVM object
+         * The NeuralNetwork object.
          *
          */
-
-        public SVM svm; 
+        public NeuralNetwork ann;
 
         /**
          * The labels.
@@ -68,7 +63,6 @@ public class SarangiSVM implements SarangiClassifier {
          */
         public LearningDataset testSet; 
 
-        /* CONSTRUCTORS *******************************************/
 
         /**
          * Three argument constructor.
@@ -78,17 +72,17 @@ public class SarangiSVM implements SarangiClassifier {
          * @param featureType The type of feature to be used
          *
          */
-        public SarangiSVM(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
+        public SarangiANN(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
 
                 this.labels = labels;
                 this.featureType = featureType;
 
                 this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
 
-                // Train SVM
-                svm = new SVM(new GaussianKernel(60.0d), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
-                svm.learn(trainingSet.dataset,trainingSet.labelIndices);
-                svm.finish();
+                // Train ANN
+
+                ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,30,15,15);
+                ann.learn(trainingSet.dataset,trainingSet.labelIndices);
 
         }
 
@@ -105,11 +99,12 @@ public class SarangiSVM implements SarangiClassifier {
 
                 // TODO Get a better solution than this Hacky one.
                 LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
-                return svm.predict(songDataset.dataset[0]);
+                return ann.predict(songDataset.dataset[0]);
         }
 
         /**
          * Tests the model on the given songs.
+         * TODO This could be put into an abstract class 
          *
          * @param testSongs The test Songs.
          * @return The result of the test.
@@ -145,6 +140,5 @@ public class SarangiSVM implements SarangiClassifier {
                 }
                     return new Result(accuracy,this.labels,labelAccuracy);
         }
-
 
 }
