@@ -50,12 +50,11 @@ public class ANNRunner {
                 SongHandler testSongHandler = new SongHandler(testFilename);
                 List<Song> testSongs = testSongHandler.loadSongs();
 
-                SarangiANN ann = new SarangiANN(trainingSongs,this.labels,DatasetUtil.FeatureType.SARANGI_MFCC);
+                SarangiANN ann = new SarangiANN(trainingSongs,this.labels,DatasetUtil.FeatureType.SARANGI_PITCH);
                 
                 Result result = ann.test(testSongs);
 
-                System.out.format("%.2f%%",result.accuracy);
-
+                result.printData();
         }
 
 }

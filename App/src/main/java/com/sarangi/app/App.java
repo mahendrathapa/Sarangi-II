@@ -51,14 +51,17 @@ public class App
                 String testFilename = "src/resources/song/songFeatures/test.txt";
 
                 
-               FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/Mood_training"));
-               FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/Mood_testing"));
+               //FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/Mood_training"));
+               //FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/Mood_testing"));
 
-                //SVMRunner svmRunner= new SVMRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
+                System.out.println("Running SVM...");
+                SVMRunner svmRunner= new SVMRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
                 //SVMRunner svmRunner= new SVMRunner(new String[]{"high_arousal","low_arousal"});
-                //svmRunner.run(trainingFilename,testFilename);
+                svmRunner.run(trainingFilename,testFilename);
 
-                ANNRunner annRunner= new ANNRunner(new String[]{"high_arousal","low_arousal"});
+                System.out.println("Running ANN...");
+                ANNRunner annRunner= new ANNRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
+                //ANNRunner annRunner= new ANNRunner(new String[]{"high_arousal","low_arousal"});
                 annRunner.run(trainingFilename,testFilename);
 
         }

@@ -117,6 +117,8 @@ public class SarangiSVM implements SarangiClassifier {
         public Result test(List<Song> testSongs) {
                     int correct = 0;
                     double[] labelAccuracy = new double[this.labels.length];
+                    double[] labelCount = new double[this.labels.length];
+                    int[][] confusionMatrix = new int[this.labels.length][this.labels.length];
                     double accuracy = 0.0;
 
                 try{
@@ -125,7 +127,12 @@ public class SarangiSVM implements SarangiClassifier {
 
                             int labelIndex = DatasetUtil.getIndexOfLabel(song.getSongName(),this.labels);
 
-                            if (this.predict(song) == labelIndex){
+                            labelCount[labelIndex-1]++;
+                            int predictedLabel = this.predict(song);
+
+                            confusionMatrix[labelIndex-1][predictedLabel-1]++;
+
+                            if (predictedLabel == labelIndex){
                                     labelAccuracy[labelIndex-1]++;
                                     correct++;
                             }
@@ -136,14 +143,14 @@ public class SarangiSVM implements SarangiClassifier {
                     accuracy = (100.0*correct/numOfSongs);
 
                     for (int i=0; i<labelAccuracy.length; i++) {
-                            labelAccuracy[i] = (100.0*labelAccuracy[i]/numOfSongs);
+                            labelAccuracy[i] = (100.0*labelAccuracy[i]/labelCount[i]);
                     }
 
 
                 }catch (Exception ex){
                         ex.printStackTrace();
                 }
-                    return new Result(accuracy,this.labels,labelAccuracy);
+                    return new Result(accuracy,this.labels,labelAccuracy,confusionMatrix);
         }
 
 

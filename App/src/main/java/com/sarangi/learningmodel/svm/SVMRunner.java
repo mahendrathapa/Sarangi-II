@@ -55,7 +55,7 @@ public class SVMRunner {
                 
                 Result result = svm.test(testSongs);
 
-                System.out.format("%.2f%%",result.accuracy);
+                result.printData();
 
         }
 
