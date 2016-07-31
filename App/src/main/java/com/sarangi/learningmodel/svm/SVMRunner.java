@@ -34,13 +34,10 @@ import java.lang.Math.*;
  */
 
 
-public class SVMRunner {
-
-        private String[] labels;
+public class SVMRunner extends ClassifierRunner {
 
         public SVMRunner(String[] labels) {
-        
-                this.labels = labels;
+                super(labels); 
         }
 
         public void run(String trainingFilename, String testFilename) throws FileNotFoundException, IOException  {

@@ -27,19 +27,16 @@ import java.lang.Math.*;
 
 /**
  * Class to Run SarangiSVM class.
- * TODO This and SVMRunner could have an abstract parent class
  *
  * @author Bijay Gurung
  */
 
 
-public class ANNRunner {
-
-        private String[] labels;
+public class ANNRunner extends ClassifierRunner {
 
         public ANNRunner(String[] labels) {
         
-                this.labels = labels;
+                super(labels);
         }
 
         public void run(String trainingFilename, String testFilename) throws FileNotFoundException, IOException  {
