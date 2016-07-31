@@ -15,6 +15,7 @@ import com.sarangi.learningmodel.ann.SarangiANN;
 import com.sarangi.learningmodel.ann.ANNRunner;
 import com.sarangi.learningmodel.svm.SarangiSVM;
 import com.sarangi.learningmodel.svm.SVMRunner;
+import com.sarangi.learningmodel.*;
 
 /**
  * A main class for interfacing all the other sub-classes.
@@ -57,12 +58,12 @@ public class App
                 System.out.println("Running SVM...");
                 SVMRunner svmRunner= new SVMRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
                 //SVMRunner svmRunner= new SVMRunner(new String[]{"high_arousal","low_arousal"});
-                svmRunner.run(trainingFilename,testFilename);
+                svmRunner.run(trainingFilename,testFilename, DatasetUtil.FeatureType.SARANGI_MFCC);
 
                 System.out.println("Running ANN...");
                 ANNRunner annRunner= new ANNRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
                 //ANNRunner annRunner= new ANNRunner(new String[]{"high_arousal","low_arousal"});
-                annRunner.run(trainingFilename,testFilename);
+                annRunner.run(trainingFilename,testFilename, DatasetUtil.FeatureType.SARANGI_MFCC);
 
         }
 }
