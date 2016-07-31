@@ -40,7 +40,7 @@ public class SVMRunner extends ClassifierRunner {
                 super(labels); 
         }
 
-        public void run(String trainingFilename, String testFilename) throws FileNotFoundException, IOException  {
+        public void run(String trainingFilename, String testFilename, DatasetUtil.FeatureType featureType) throws FileNotFoundException, IOException  {
 
                 SongHandler trainingSongHandler = new SongHandler(trainingFilename);
                 List<Song> trainingSongs = trainingSongHandler.loadSongs();
@@ -48,7 +48,7 @@ public class SVMRunner extends ClassifierRunner {
                 SongHandler testSongHandler = new SongHandler(testFilename);
                 List<Song> testSongs = testSongHandler.loadSongs();
 
-                SarangiSVM svm = new SarangiSVM(trainingSongs,this.labels,DatasetUtil.FeatureType.SARANGI_MFCC);
+                SarangiSVM svm = new SarangiSVM(trainingSongs,this.labels, featureType);
                 
                 Result result = svm.test(testSongs);
 

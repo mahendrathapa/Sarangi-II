@@ -28,7 +28,7 @@ import java.lang.Math.*;
  * @author Mehang Rai
  * */
 
-public class SarangiANN implements SarangiClassifier {
+public class SarangiANN extends SarangiClassifier {
 
         /* FIELDS **************************************************/
 
@@ -37,31 +37,6 @@ public class SarangiANN implements SarangiClassifier {
          *
          */
         public NeuralNetwork ann;
-
-        /**
-         * The labels.
-         *
-         */
-        public String[] labels;
-
-        /**
-         * The Feature Type.
-         *
-         */
-        public DatasetUtil.FeatureType featureType;
-
-        /**
-         * The training dataset.
-         *
-         */
-
-        public LearningDataset trainingSet; 
-
-        /**
-         * The testing dataset.
-         *
-         */
-        public LearningDataset testSet; 
 
 
         /**
@@ -74,16 +49,22 @@ public class SarangiANN implements SarangiClassifier {
          */
         public SarangiANN(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
 
-                this.labels = labels;
-                this.featureType = featureType;
+                super(trainingSongs,labels,featureType);
 
+        }
+        
+        /**
+         * Train the model in a Neural Network.
+         *
+         * @param trainingSongs The songs to be used for training.
+         *
+         */
+
+        public void train(List<Song> trainingSongs) {
                 this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
-
-                // Train ANN
 
                 ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,30,15,15);
                 ann.learn(trainingSet.dataset,trainingSet.labelIndices);
-
         }
 
         /**
@@ -102,50 +83,4 @@ public class SarangiANN implements SarangiClassifier {
                 return ann.predict(songDataset.dataset[0]);
         }
 
-        /**
-         * Tests the model on the given songs.
-         * TODO This could be put into an abstract class 
-         *
-         * @param testSongs The test Songs.
-         * @return The result of the test.
-         */
-        public Result test(List<Song> testSongs) {
-                    int correct = 0;
-                    double[] labelAccuracy = new double[this.labels.length];
-                    double[] labelCount = new double[this.labels.length];
-                    int[][] confusionMatrix = new int[this.labels.length][this.labels.length];
-                    double accuracy = 0.0;
-
-                try{
-
-                    for (Song song: testSongs) {
-
-                            int labelIndex = DatasetUtil.getIndexOfLabel(song.getSongName(),this.labels);
-
-                            labelCount[labelIndex-1]++;
-                            int predictedLabel = this.predict(song);
-
-                            confusionMatrix[labelIndex-1][predictedLabel-1]++;
-
-                            if (predictedLabel == labelIndex){
-                                    labelAccuracy[labelIndex-1]++;
-                                    correct++;
-                            }
-                    }
-
-                    int numOfSongs = testSongs.size();
-
-                    accuracy = (100.0*correct/numOfSongs);
-
-                    for (int i=0; i<labelAccuracy.length; i++) {
-                            labelAccuracy[i] = (100.0*labelAccuracy[i]/labelCount[i]);
-                    }
-
-
-                }catch (Exception ex){
-                        ex.printStackTrace();
-                }
-                    return new Result(accuracy,this.labels,labelAccuracy,confusionMatrix);
-        }
-
-}
+ }

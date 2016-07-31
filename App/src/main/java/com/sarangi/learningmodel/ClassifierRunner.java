@@ -32,6 +32,6 @@ public abstract class ClassifierRunner {
                 this.labels = labels;
         }
 
-        public abstract void run(String trainingFilename, String testFilename) throws FileNotFoundException, IOException;
+        public abstract void run(String trainingFilename, String testFilename, DatasetUtil.FeatureType featureType) throws FileNotFoundException, IOException;
 
 }

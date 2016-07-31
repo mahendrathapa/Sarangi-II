@@ -32,7 +32,7 @@ import java.util.*;
  * */
 
 
-public class SarangiSVM implements SarangiClassifier {
+public class SarangiSVM extends SarangiClassifier {
 
         /* FIELDS **************************************************/
 
@@ -43,30 +43,6 @@ public class SarangiSVM implements SarangiClassifier {
 
         public SVM svm; 
 
-        /**
-         * The labels.
-         *
-         */
-        public String[] labels;
-
-        /**
-         * The Feature Type.
-         *
-         */
-        public DatasetUtil.FeatureType featureType;
-
-        /**
-         * The training dataset.
-         *
-         */
-
-        public LearningDataset trainingSet; 
-
-        /**
-         * The testing dataset.
-         *
-         */
-        public LearningDataset testSet; 
 
         /* CONSTRUCTORS *******************************************/
 
@@ -80,8 +56,7 @@ public class SarangiSVM implements SarangiClassifier {
          */
         public SarangiSVM(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
 
-                this.labels = labels;
-                this.featureType = featureType;
+                super(trainingSongs, labels, featureType);
 
                 this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
 
@@ -90,6 +65,21 @@ public class SarangiSVM implements SarangiClassifier {
                 svm.learn(trainingSet.dataset,trainingSet.labelIndices);
                 svm.finish();
 
+        }
+
+        /**
+         * Train the model using SVM
+         *
+         * @param trainingSongs The songs to be used for training.
+         *
+         */
+
+        public void train(List<Song> trainingSongs) {
+                this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
+
+                svm = new SVM(new GaussianKernel(60.0d), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
+                svm.learn(trainingSet.dataset,trainingSet.labelIndices);
+                svm.finish();
         }
 
         /**
@@ -106,51 +96,6 @@ public class SarangiSVM implements SarangiClassifier {
                 // TODO Get a better solution than this Hacky one.
                 LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
                 return svm.predict(songDataset.dataset[0]);
-        }
-
-        /**
-         * Tests the model on the given songs.
-         *
-         * @param testSongs The test Songs.
-         * @return The result of the test.
-         */
-        public Result test(List<Song> testSongs) {
-                    int correct = 0;
-                    double[] labelAccuracy = new double[this.labels.length];
-                    double[] labelCount = new double[this.labels.length];
-                    int[][] confusionMatrix = new int[this.labels.length][this.labels.length];
-                    double accuracy = 0.0;
-
-                try{
-
-                    for (Song song: testSongs) {
-
-                            int labelIndex = DatasetUtil.getIndexOfLabel(song.getSongName(),this.labels);
-
-                            labelCount[labelIndex-1]++;
-                            int predictedLabel = this.predict(song);
-
-                            confusionMatrix[labelIndex-1][predictedLabel-1]++;
-
-                            if (predictedLabel == labelIndex){
-                                    labelAccuracy[labelIndex-1]++;
-                                    correct++;
-                            }
-                    }
-
-                    int numOfSongs = testSongs.size();
-
-                    accuracy = (100.0*correct/numOfSongs);
-
-                    for (int i=0; i<labelAccuracy.length; i++) {
-                            labelAccuracy[i] = (100.0*labelAccuracy[i]/labelCount[i]);
-                    }
-
-
-                }catch (Exception ex){
-                        ex.printStackTrace();
-                }
-                    return new Result(accuracy,this.labels,labelAccuracy,confusionMatrix);
         }
 
 
