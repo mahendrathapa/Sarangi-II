@@ -48,7 +48,7 @@ public class SVMRunner extends ClassifierRunner {
                 SongHandler testSongHandler = new SongHandler(testFilename);
                 List<Song> testSongs = testSongHandler.loadSongs();
 
-                SarangiSVM svm = new SarangiSVM(trainingSongs,this.labels, featureType);
+                SarangiFrameSVM svm = new SarangiFrameSVM(trainingSongs,this.labels, featureType);
                 
                 Result result = svm.test(testSongs);
 

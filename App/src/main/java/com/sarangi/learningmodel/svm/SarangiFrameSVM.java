@@ -1,3 +1,10 @@
+/**
+ * @(#) SVMRunner.java 2.0     August 01, 2016
+ *
+ * Bijay Gurung
+ *
+ * Insitute of Engineering
+ */
 package com.sarangi.learningmodel.svm; 
 
 import com.google.gson.Gson;
@@ -28,11 +35,11 @@ import java.util.*;
 /**
  * Support Vector Machine Class
  *
- * @author Mehang Rai
+ * @author Bijay Gurung
  * */
 
 
-public class SarangiSVM extends SarangiClassifier {
+public class SarangiFrameSVM extends SarangiClassifier {
 
         /* FIELDS **************************************************/
 
@@ -54,7 +61,7 @@ public class SarangiSVM extends SarangiClassifier {
          * @param featureType The type of feature to be used
          *
          */
-        public SarangiSVM(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
+        public SarangiFrameSVM(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
 
                 super(trainingSongs, labels, featureType);
 
@@ -68,7 +75,7 @@ public class SarangiSVM extends SarangiClassifier {
          */
 
         public void train(List<Song> trainingSongs) {
-                this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
+                this.trainingSet = DatasetUtil.getFramewiseDataset(trainingSongs, labels, featureType);
 
                 svm = new SVM(new GaussianKernel(60.0d), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
                 svm.learn(trainingSet.dataset,trainingSet.labelIndices);
@@ -87,8 +94,31 @@ public class SarangiSVM extends SarangiClassifier {
                 oneSong.add(song);
 
                 // TODO Get a better solution than this Hacky one.
-                LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
-                return svm.predict(songDataset.dataset[0]);
+                LearningDataset songDataset = DatasetUtil.getFramewiseDataset(oneSong,this.labels,this.featureType);
+                int[] labelCount = new int[labels.length];
+
+                for (int i=0; i < songDataset.dataset.length; i++) {
+                        labelCount[svm.predict(songDataset.dataset[i]) - 1]++;
+                }
+                
+                // The label in which most of the frames are predicted to be is the label for the song.
+
+                int songLabel = 1;
+                int baseCount = labelCount[0];
+
+                for (int i=1; i < labelCount.length; i++) {
+                        if (labelCount[i] > baseCount) {
+                                baseCount = labelCount[i];
+                                songLabel = i+1;
+                        }
+                }
+
+                if (baseCount < songDataset.dataset.length) {
+                        System.out.println("Doesn't have majority");
+                }
+
+                return songLabel;
+
         }
 
 

@@ -141,13 +141,13 @@ public class DatasetUtil {
                             // Convert float to doubles
                             List<float[]> mfccFloats = song.getMelcoeff();
                             List<double[]> mfcc = new ArrayList<double[]>();
+                            int indexOfLabel = getIndexOfLabel(song.getSongName(), labelArray);
                             for (float[] mfccFloat: mfccFloats) {
                                 mfcc.add(convertFloatsToDoubles(mfccFloat));
+                                labelIndices.add(indexOfLabel);
                             }
 
                             dataset.addAll(mfcc);
-
-                            labelIndices.add(getIndexOfLabel(song.getSongName(), labelArray));
 
                     }
 
