@@ -35,7 +35,6 @@ import java.lang.Math.*;
 public class ANNRunner extends ClassifierRunner {
 
         public ANNRunner(String[] labels) {
-        
                 super(labels);
         }
 
@@ -47,7 +46,7 @@ public class ANNRunner extends ClassifierRunner {
                 SongHandler testSongHandler = new SongHandler(testFilename);
                 List<Song> testSongs = testSongHandler.loadSongs();
 
-                SarangiANN ann = new SarangiANN(trainingSongs,this.labels,featureType);
+                SarangiFrameANN ann = new SarangiFrameANN(trainingSongs,this.labels,featureType);
                 
                 Result result = ann.test(testSongs);
 

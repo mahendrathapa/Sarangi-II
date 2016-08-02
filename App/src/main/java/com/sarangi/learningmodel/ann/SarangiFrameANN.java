@@ -1,11 +1,11 @@
 /**
- * @(#) SarangiFrameSVM.java 2.0     August 01, 2016
+ * @(#) SarangiFrameANN.java 2.0     August 02, 2016
  *
  * Bijay Gurung
  *
  * Insitute of Engineering
  */
-package com.sarangi.learningmodel.svm; 
+package com.sarangi.learningmodel.ann; 
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -25,7 +25,6 @@ import com.sarangi.structures.*;
 import com.sarangi.json.*;
 import com.sarangi.learningmodel.*;
 
-import smile.classification.SVM;
 import smile.classification.NeuralNetwork;
 import smile.math.kernel.GaussianKernel;
 import smile.math.Math;
@@ -33,22 +32,22 @@ import java.lang.Math.*;
 import java.util.*;
 
 /**
- * Support Vector Machine Class
+ * Class for ANN classifier that works on framewise data.
  *
  * @author Bijay Gurung
  * */
 
 
-public class SarangiFrameSVM extends SarangiClassifier {
+public class SarangiFrameANN extends SarangiClassifier {
 
         /* FIELDS **************************************************/
 
         /**
-         * The SMILE SVM object
+         * The SMILE ANN object
          *
          */
 
-        public SVM svm; 
+        public NeuralNetwork ann; 
 
 
         /* CONSTRUCTORS *******************************************/
@@ -61,7 +60,7 @@ public class SarangiFrameSVM extends SarangiClassifier {
          * @param featureType The type of feature to be used
          *
          */
-        public SarangiFrameSVM(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
+        public SarangiFrameANN(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
 
                 super(trainingSongs, labels, featureType);
 
@@ -77,9 +76,8 @@ public class SarangiFrameSVM extends SarangiClassifier {
         public void train(List<Song> trainingSongs) {
                 this.trainingSet = DatasetUtil.getFramewiseDataset(trainingSongs, labels, featureType);
 
-                svm = new SVM(new GaussianKernel(60.0d), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
-                svm.learn(trainingSet.dataset,trainingSet.labelIndices);
-                svm.finish();
+                ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,30,15,15);
+                ann.learn(trainingSet.dataset,trainingSet.labelIndices);
         }
 
         /**
@@ -98,7 +96,7 @@ public class SarangiFrameSVM extends SarangiClassifier {
                 int[] labelCount = new int[labels.length];
 
                 for (int i=0; i < songDataset.dataset.length; i++) {
-                        labelCount[svm.predict(songDataset.dataset[i]) - 1]++;
+                        labelCount[ann.predict(songDataset.dataset[i]) - 1]++;
                 }
                 
                 // The label in which most of the frames are predicted to be is the label for the song.
