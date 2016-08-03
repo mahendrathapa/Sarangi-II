@@ -55,15 +55,17 @@ public class App
                //FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/Mood_training"));
                //FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/Mood_testing"));
 
-                System.out.println("Running SVM...");
+                //System.out.println("Running SVM...");
                 SVMRunner svmRunner= new SVMRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
                 //SVMRunner svmRunner= new SVMRunner(new String[]{"high_arousal","low_arousal"});
-                svmRunner.run(trainingFilename,testFilename, DatasetUtil.FeatureType.SARANGI_MFCC);
+                //svmRunner.run(trainingFilename,testFilename, DatasetUtil.FeatureType.SARANGI_MFCC);
+                svmRunner.runCrossValidation(trainingFilename,DatasetUtil.FeatureType.SARANGI_MFCC,10);
 
-                System.out.println("Running ANN...");
-                ANNRunner annRunner= new ANNRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
+                //System.out.println("Running ANN...");
+                //ANNRunner annRunner= new ANNRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
                 //ANNRunner annRunner= new ANNRunner(new String[]{"high_arousal","low_arousal"});
-                annRunner.run(trainingFilename,testFilename, DatasetUtil.FeatureType.SARANGI_MFCC);
+                //annRunner.run(trainingFilename,testFilename, DatasetUtil.FeatureType.SARANGI_MFCC);
+                //annRunner.runCrossValidation(trainingFilename, DatasetUtil.FeatureType.SARANGI_MFCC,5);
 
         }
 }
