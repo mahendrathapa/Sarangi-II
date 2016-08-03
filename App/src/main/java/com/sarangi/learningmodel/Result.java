@@ -99,6 +99,15 @@ public class Result {
                 }
         }
 
+        /**
+         * Get the accuracy.
+         *
+         *
+         */
+        public double getAccuracy() {
+                return accuracy;
+        }
+
 
 
 }

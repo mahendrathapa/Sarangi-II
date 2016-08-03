@@ -56,4 +56,45 @@ public class SVMRunner extends ClassifierRunner {
 
         }
 
+        /**
+         * Run K-fold Cross Validation.
+         *
+         * @param filename The file holding the feature data.
+         * @param featureType The type of feature to be used for testing.
+         * @param k The number of partitions to create.
+         *
+         */
+
+        public void runCrossValidation(String filename, DatasetUtil.FeatureType featureType, int k) throws FileNotFoundException, IOException  {
+
+                SongHandler songHandler = new SongHandler(filename);
+                List<Song> songs = songHandler.loadSongs();
+
+                int partitionSize = songs.size()/k;
+                Collections.shuffle(songs);
+
+                double overallAvgAccuracy = 0.0;
+
+                for (int i=0; i < k; i++) {
+                        int lowerIndex = i*partitionSize;
+                        int upperIndex = (i+1)*partitionSize;
+
+                        List<Song> trainingSongs = new ArrayList<Song>(songs);
+                        List<Song> testSongs = new ArrayList<Song>(trainingSongs.subList(lowerIndex,upperIndex));
+
+                        trainingSongs.removeAll(testSongs);
+
+                        SarangiSVM svm = new SarangiSVM(trainingSongs,this.labels,featureType);
+                
+                        Result result = svm.test(testSongs);
+
+                        result.printData();
+
+                        overallAvgAccuracy += result.getAccuracy();
+
+                }
+
+                System.out.format("K-fold accuracy: %.2f%%", overallAvgAccuracy/k);
+
+        }
 }
