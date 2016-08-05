@@ -54,7 +54,7 @@ public class SarangiSVM extends SarangiClassifier {
          * @param featureType The type of feature to be used
          *
          */
-        public SarangiSVM(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
+        public SarangiSVM(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
 
                 super(trainingSongs, labels, featureType);
 

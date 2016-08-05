@@ -33,7 +33,7 @@ public abstract class SarangiClassifier implements Classifier {
          * The Feature Type.
          *
          */
-        public DatasetUtil.FeatureType featureType;
+        public FeatureType featureType;
 
         /**
          * The training dataset.
@@ -50,7 +50,7 @@ public abstract class SarangiClassifier implements Classifier {
          * @param featureType The type of feature to be used
          *
          */
-        public SarangiClassifier(List<Song> trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
+        public SarangiClassifier(List<Song> trainingSongs, String[] labels, FeatureType featureType) {
 
                 this.labels = labels;
                 this.featureType = featureType;

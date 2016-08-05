@@ -44,7 +44,7 @@ public class ClassifierRunner {
          *
          */
 
-        public void run(String trainingFilename, String testFilename, DatasetUtil.FeatureType featureType, String classifierType) throws FileNotFoundException, IOException  {
+        public void run(String trainingFilename, String testFilename, FeatureType featureType, String classifierType) throws FileNotFoundException, IOException  {
 
                 SongHandler trainingSongHandler = new SongHandler(trainingFilename);
                 List<Song> trainingSongs = trainingSongHandler.loadSongs();
@@ -72,7 +72,7 @@ public class ClassifierRunner {
          *
          */
 
-        public void runCrossValidation(String filename, DatasetUtil.FeatureType featureType, int k, String classifierType) throws FileNotFoundException, IOException  {
+        public void runCrossValidation(String filename, FeatureType featureType, int k, String classifierType) throws FileNotFoundException, IOException  {
 
                 SongHandler songHandler = new SongHandler(filename);
                 List<Song> songs = songHandler.loadSongs();
