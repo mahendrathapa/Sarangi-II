@@ -60,7 +60,7 @@ public class SarangiFrameANN extends SarangiClassifier {
          * @param featureType The type of feature to be used
          *
          */
-        public SarangiFrameANN(List<Song>trainingSongs, String[] labels, DatasetUtil.FeatureType featureType) {
+        public SarangiFrameANN(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
 
                 super(trainingSongs, labels, featureType);
 

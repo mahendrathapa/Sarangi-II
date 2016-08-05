@@ -14,6 +14,7 @@ import java.util.*;
 import com.sarangi.learningmodel.ann.*;
 import com.sarangi.learningmodel.svm.*;
 import com.sarangi.learningmodel.*;
+import com.sarangi.structures.FeatureType;
 
 /**
  * A main class for interfacing all the other sub-classes.
@@ -53,7 +54,7 @@ public class App
                //FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/Mood_testing"));
 
                 ClassifierRunner runner = new ClassifierRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
-                runner.runCrossValidation(trainingFilename, DatasetUtil.FeatureType.SARANGI_MFCC,10,"NeuralNetwork");
+                runner.runCrossValidation(trainingFilename, FeatureType.SARANGI_MFCC,10,"SVM");
 
         }
 }

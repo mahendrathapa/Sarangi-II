@@ -28,7 +28,7 @@ import com.sarangi.learningmodel.svm.*;
 
 public class ClassifierFactory {
 
-        public SarangiClassifier getClassifier(List<Song> trainingSongs, String[] labels, DatasetUtil.FeatureType featureType, String classifierType) {
+        public SarangiClassifier getClassifier(List<Song> trainingSongs, String[] labels, FeatureType featureType, String classifierType) {
                 if (classifierType == null) {
                         return null;
                 }

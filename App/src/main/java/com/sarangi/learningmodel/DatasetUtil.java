@@ -24,13 +24,6 @@ import java.util.logging.*;
 
 public class DatasetUtil {
 
-        public static enum FeatureType {
-
-                SARANGI_MFCC, 
-                SARANGI_PITCH,
-                SARANGI_RHYTHM,
-
-        }
 
         /**
          * Get the LearningDataset object on a song by song basis.
