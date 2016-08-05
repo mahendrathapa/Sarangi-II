@@ -61,9 +61,5 @@ public class LoggerHandler{
                 logger.setLevel(level);
         }
 
-
-
-
 }
-
 
