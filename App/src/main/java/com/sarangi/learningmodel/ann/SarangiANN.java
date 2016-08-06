@@ -1,17 +1,9 @@
 package com.sarangi.learningmodel.ann; 
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.reflect.*;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.List;
-import java.util.ArrayList;
-
-import java.lang.reflect.Type;
+import java.util.*;
 
 import com.sarangi.structures.*;
 import com.sarangi.json.SongHandler;
@@ -22,8 +14,8 @@ import smile.math.Math;
 import java.lang.Math.*;
 
 /**
- * Artificial Neural Network Class
- * for supervised learning of the music features
+ * Artificial Neural Network Class.
+ * For supervised learning of the music features
  *
  * @author Mehang Rai
  * */
@@ -40,7 +32,7 @@ public class SarangiANN extends SarangiClassifier {
 
 
         /**
-         * Three argument constructor.
+         * Constructor.
          *
          * @param trainingSongs The songs to be used for training
          * @param labels The string labels
@@ -60,6 +52,7 @@ public class SarangiANN extends SarangiClassifier {
          *
          */
 
+        @Override
         public void train(List<Song> trainingSongs) {
                 this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
 
@@ -74,11 +67,13 @@ public class SarangiANN extends SarangiClassifier {
          *
          * @return The label index.
          */
+
+        @Override 
         public int predict(Song song) {
                 List<Song> oneSong = new ArrayList<Song>();
                 oneSong.add(song);
 
-                // TODO Get a better solution than this Hacky one.
+                // TODO Get a better solution than this Hack
                 LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
                 return ann.predict(songDataset.dataset[0]);
         }

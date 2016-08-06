@@ -8,14 +8,9 @@
 
 package com.sarangi.learningmodel; 
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 import com.sarangi.structures.*;
-import com.sarangi.json.*;
-import com.sarangi.learningmodel.*;
 import com.sarangi.learningmodel.ann.*;
 import com.sarangi.learningmodel.svm.*;
 
@@ -28,6 +23,17 @@ import com.sarangi.learningmodel.svm.*;
 
 public class ClassifierFactory {
 
+        /**
+         * Get the required classifier instance.
+         *
+         * @param trainingSongs The songs to be used for training the classifier.
+         * @param labels The labels to be used for training the classifier.
+         * @param featureType The type of feature to be used for classification.
+         * @param classifierType The type of classifier instance to return.
+         *
+         * @return A SarangiClassifier instance as requested.
+         *
+         */
         public SarangiClassifier getClassifier(List<Song> trainingSongs, String[] labels, FeatureType featureType, String classifierType) {
                 if (classifierType == null) {
                         return null;

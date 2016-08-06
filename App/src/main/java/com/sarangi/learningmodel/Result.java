@@ -18,7 +18,6 @@ import java.util.logging.*;
 /**
  * Class for holding result of a classification.
  *
- *
  * @author Bijay Gurung
  */
 
@@ -107,7 +106,5 @@ public class Result {
         public double getAccuracy() {
                 return accuracy;
         }
-
-
 
 }
