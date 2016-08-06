@@ -18,7 +18,9 @@ import com.sarangi.json.*;
 import com.sarangi.learningmodel.*;
 
 /**
- * Abstract Class representing the runners for different classifiers.
+ * Class to handle all the necessary classifiers.
+ * The main method can work with this class instead of directly dealing 
+ * with the classifiers.
  *
  * @author Bijay Gurung
  */
@@ -26,7 +28,16 @@ import com.sarangi.learningmodel.*;
 
 public class ClassifierRunner {
 
+        /**
+         * The labels used by the classifiers.
+         *
+         */
         protected String[] labels;
+
+        /**
+         * Constructor.
+         *
+         */
 
         public ClassifierRunner(String[] labels) {
         

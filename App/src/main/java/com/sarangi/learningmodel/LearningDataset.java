@@ -36,7 +36,7 @@ public class LearningDataset {
         /* CONSTRUCTORS *******************************************/
 
         /**
-         * Empty Constructor.
+         * Constructor.
          *
          */
         public LearningDataset() {

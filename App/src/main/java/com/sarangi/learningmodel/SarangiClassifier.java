@@ -43,7 +43,7 @@ public abstract class SarangiClassifier implements Classifier {
         public LearningDataset trainingSet; 
 
         /**
-         * Three argument constructor.
+         * Constructor.
          *
          * @param trainingSongs The songs to be used for training
          * @param labels The string labels
@@ -87,11 +87,12 @@ public abstract class SarangiClassifier implements Classifier {
          * @return The result of the test.
          */
         public Result test(List<Song> testSongs) {
-                   int correct = 0;
-                    double[] labelAccuracy = new double[this.labels.length];
-                    double[] labelCount = new double[this.labels.length];
-                    int[][] confusionMatrix = new int[this.labels.length][this.labels.length];
-                    double accuracy = 0.0;
+
+                int correct = 0;
+                double[] labelAccuracy = new double[this.labels.length];
+                double[] labelCount = new double[this.labels.length];
+                int[][] confusionMatrix = new int[this.labels.length][this.labels.length];
+                double accuracy = 0.0;
 
                 try{
 

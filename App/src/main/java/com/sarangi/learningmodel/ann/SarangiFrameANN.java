@@ -7,22 +7,11 @@
  */
 package com.sarangi.learningmodel.ann; 
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.reflect.*;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import java.util.Scanner;
-import java.util.List;
-import java.util.ArrayList;
-
-import java.lang.reflect.Type;
-
 import com.sarangi.structures.*;
-import com.sarangi.json.*;
 import com.sarangi.learningmodel.*;
 
 import smile.classification.NeuralNetwork;
@@ -32,7 +21,7 @@ import java.lang.Math.*;
 import java.util.*;
 
 /**
- * Class for ANN classifier that works on framewise data.
+ * ANN classifier that works on framewise data for each song.
  *
  * @author Bijay Gurung
  * */
@@ -53,7 +42,7 @@ public class SarangiFrameANN extends SarangiClassifier {
         /* CONSTRUCTORS *******************************************/
 
         /**
-         * Three argument constructor.
+         * Constructor.
          *
          * @param trainingSongs The songs to be used for training
          * @param labels The string labels
@@ -73,6 +62,7 @@ public class SarangiFrameANN extends SarangiClassifier {
          *
          */
 
+        @Override
         public void train(List<Song> trainingSongs) {
                 this.trainingSet = DatasetUtil.getFramewiseDataset(trainingSongs, labels, featureType);
 
@@ -87,11 +77,12 @@ public class SarangiFrameANN extends SarangiClassifier {
          *
          * @return The label index.
          */
+        @Override
         public int predict(Song song) {
                 List<Song> oneSong = new ArrayList<Song>();
                 oneSong.add(song);
 
-                // TODO Get a better solution than this Hacky one.
+                // TODO Get a better solution than this Hack.
                 LearningDataset songDataset = DatasetUtil.getFramewiseDataset(oneSong,this.labels,this.featureType);
                 int[] labelCount = new int[labels.length];
 

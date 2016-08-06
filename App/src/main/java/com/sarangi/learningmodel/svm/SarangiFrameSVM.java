@@ -7,19 +7,9 @@
  */
 package com.sarangi.learningmodel.svm; 
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.reflect.*;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
-import java.util.Scanner;
-import java.util.List;
-import java.util.ArrayList;
-
-import java.lang.reflect.Type;
 
 import com.sarangi.structures.*;
 import com.sarangi.json.*;
@@ -33,7 +23,7 @@ import java.lang.Math.*;
 import java.util.*;
 
 /**
- * Support Vector Machine Class
+ * SVM that uses framewise data for each song.
  *
  * @author Bijay Gurung
  * */
@@ -54,7 +44,7 @@ public class SarangiFrameSVM extends SarangiClassifier {
         /* CONSTRUCTORS *******************************************/
 
         /**
-         * Three argument constructor.
+         * Constructor.
          *
          * @param trainingSongs The songs to be used for training
          * @param labels The string labels
@@ -74,6 +64,7 @@ public class SarangiFrameSVM extends SarangiClassifier {
          *
          */
 
+        @Override
         public void train(List<Song> trainingSongs) {
                 this.trainingSet = DatasetUtil.getFramewiseDataset(trainingSongs, labels, featureType);
 
@@ -89,6 +80,7 @@ public class SarangiFrameSVM extends SarangiClassifier {
          *
          * @return The label index.
          */
+        @Override
         public int predict(Song song) {
                 List<Song> oneSong = new ArrayList<Song>();
                 oneSong.add(song);
