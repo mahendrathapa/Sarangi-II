@@ -158,26 +158,31 @@ public class Statistics{
                 return maxIndex;
         }
 
-        public static double[] getRhythmAnalysis(double[][] features,int numberOfBmp){
 
-                int length = numberOfBmp * 3;
-                double[] output = new double[length];
+        public static double[] getRhythmAnalysis(double[][] feature){
+
+                int howLong = 12;
+
+                double[] strongestBeat = new double[howLong];
 
                 Map<Double,Integer> bmpCount = new HashMap<Double,Integer>();
                 Map<Double,Double> bmpEnergy = new HashMap<Double,Double>();
 
+                for(double[] single : feature){
 
-                for(double[] feature : features){
+                        double beatPerMinute = single[0];
+                        double strongest = single[1];
 
-                        if(bmpCount.containsKey(feature[0])){
-                                int value = bmpCount.get(feature[0]);
-                                bmpCount.put(feature[0], ++ value);
+                        if(bmpCount.containsKey(beatPerMinute)){
+                                int value = bmpCount.get(beatPerMinute);
+                                bmpCount.put(beatPerMinute, ++ value);
 
-                                double energy = bmpEnergy.get(feature[0]);
-                                bmpEnergy.put(feature[0],energy + feature[1]);
+                                double energy = bmpEnergy.get(beatPerMinute);
+                                bmpEnergy.put(beatPerMinute, energy + strongest);
                         }else{
-                                bmpCount.put(feature[0],1);
-                                bmpEnergy.put(feature[0],feature[1]);
+
+                                bmpCount.put(beatPerMinute,1);
+                                bmpEnergy.put(beatPerMinute,strongest);
                         }
                 }
 
@@ -185,18 +190,18 @@ public class Statistics{
 
                 ArrayList<Double> keys = new ArrayList<Double>(sortedMap.keySet());
 
-                for(int count = 0,i=keys.size()-1;i>=0 && count<length; --i,++count){
+                for(int count = 0,i=keys.size()-1;i>=0 && count<howLong; --i,++count){
 
-                        output[count] = keys.get(i);
-                        output[++count] = sortedMap.get(keys.get(i));
-                        output[++count] = bmpEnergy.get(keys.get(i))/sortedMap.get(keys.get(i));
+                        strongestBeat[count] = keys.get(i);
+                        strongestBeat[++count] = sortedMap.get(keys.get(i));
+                        strongestBeat[++count] = bmpEnergy.get(keys.get(i))/sortedMap.get(keys.get(i));
                 }
 
-                return output;
-
+                return strongestBeat;
+ 
         }
         
-        public static Map<Double, Integer> sortByComparator(Map<Double, Integer> unsortMap) {
+        private static Map<Double, Integer> sortByComparator(Map<Double, Integer> unsortMap) {
 
                 // Convert Map to List
                 List<Map.Entry<Double, Integer>> list = 
@@ -217,5 +222,17 @@ public class Statistics{
                         sortedMap.put(entry.getKey(), entry.getValue());
                 }
                 return sortedMap;
+        }
+
+        private static void printMap(Map<Double,Integer> map){
+
+                ArrayList<Double> keys = new ArrayList<Double>(map.keySet());
+
+                for(int i=keys.size()-1;i>=0; --i)
+                        System.out.println(keys.get(i) + " " + map.get(keys.get(i)));
+
+                /*for(Map.Entry<Double,Integer> entry : map.entrySet()){
+                  System.out.println(entry.getKey() + "  " +entry.getValue());
+                  }*/
         }
 }

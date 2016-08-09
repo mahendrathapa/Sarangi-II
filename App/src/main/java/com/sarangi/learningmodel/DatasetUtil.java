@@ -54,11 +54,10 @@ public class DatasetUtil {
 
                                 double[] melFreq = new double[20];
 
-                                //System.arraycopy(song.getMelFreq(),0,melFreq,0,10);
-                                //System.arraycopy(song.getMelFreq(),30,melFreq,10,10);
+                                System.arraycopy(song.getMelFreq(),0,melFreq,0,10);
+                                System.arraycopy(song.getMelFreq(),30,melFreq,10,10);
 
                                 double[] rhythm = song.getRhythm();
-
                                 double[] rms = song.getRMS();
                                 double[] spectralCentroid = song.getSpectralCentroid();
                                 double[] spectralFlux = song.getSpectralFlux();
@@ -66,7 +65,7 @@ public class DatasetUtil {
                                 double[] spectralVariablility = song.getSpectralVariablility();
                                 double[] zeroCrossing = song.getZeroCrossing();
 
-                                learningDataset.dataset[i] = Statistics.mergeArrays(rhythm);
+                                learningDataset.dataset[i] = Statistics.mergeArrays(rhythm,zeroCrossing);
 /*
                                 learningDataset.dataset[i] = Statistics.mergeArrays(compactness,
                                                                                     melFreq,

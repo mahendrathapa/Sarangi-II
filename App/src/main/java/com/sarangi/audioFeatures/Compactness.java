@@ -16,11 +16,11 @@ public class Compactness{
 
                 double[][] output = MagnitudeSpectrum.extractFeature(audioFrames,samplingRate);
 
-                return extractFeature(output);
+                return extractFeature(output,samplingRate);
 
         }
 
-        public static double[][] extractFeature(double[][] magnitudeSpectrums){
+        public static double[][] extractFeature(double[][] magnitudeSpectrums,double samplingRate){
 
                 int dimension = 1;
                 double[][] feature = new double[magnitudeSpectrums.length][dimension];

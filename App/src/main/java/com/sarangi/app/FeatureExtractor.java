@@ -135,17 +135,14 @@ public class FeatureExtractor{
                                         double[][] magnitudeSpectrumFrame = MagnitudeSpectrum.extractFeature(audioFrames,samplingRate);
                                         double[][] rmsFrame = RMS.extractFeature(audioFrames,samplingRate);
                                         
-                                        double[] compactness = Statistics.getAvgSD(Compactness.extractFeature(magnitudeSpectrumFrame));
+                                        double[] compactness = Statistics.getAvgSD(Compactness.extractFeature(magnitudeSpectrumFrame,samplingRate));
                                         double[] melFreq = Statistics.getAvgSD(MelFreq.extractFeature(audioFrames,samplingRate));
-
-                                        Rhythm rhythmClass = new Rhythm(audioFrames, audioSample.getAudioFormat());
-                                        double[] rhythm = rhythmClass.getStrongestBeat();
-
+                                        double[] rhythm = Statistics.getRhythmAnalysis(Rhythm.extractFeature(rmsFrame,samplingRate));
                                         double[] rms = Statistics.getAvgSD(rmsFrame);
-                                        double[] spectralCentroid = Statistics.getAvgSD(SpectralCentroid.extractFeature(powerSpectrumFrame));
-                                        double[] spectralFlux = Statistics.getAvgSD(SpectralFlux.extractFeature(magnitudeSpectrumFrame));
-                                        double[] spectralRolloffPoint = Statistics.getAvgSD(SpectralRolloffPoint.extractFeature(powerSpectrumFrame));
-                                        double[] spectralVariablility = Statistics.getAvgSD(SpectralVariability.extractFeature(magnitudeSpectrumFrame));
+                                        double[] spectralCentroid = Statistics.getAvgSD(SpectralCentroid.extractFeature(powerSpectrumFrame,samplingRate));
+                                        double[] spectralFlux = Statistics.getAvgSD(SpectralFlux.extractFeature(magnitudeSpectrumFrame,samplingRate));
+                                        double[] spectralRolloffPoint = Statistics.getAvgSD(SpectralRolloffPoint.extractFeature(powerSpectrumFrame,samplingRate));
+                                        double[] spectralVariablility = Statistics.getAvgSD(SpectralVariability.extractFeature(magnitudeSpectrumFrame,samplingRate));
                                         double[] zeroCrossing = Statistics.getAvgSD(ZeroCrossings.extractFeature(audioFrames,samplingRate));
 
                                         songs.add(new Song(songName,compactness,melFreq,rhythm,rms,spectralCentroid,spectralFlux,spectralRolloffPoint,spectralVariablility,zeroCrossing));

@@ -25,7 +25,7 @@ public class RMS{
                         double sum = 0.0;
                         int length = frame.length;
 
-                        for(int samp = 0; samp<length; samp++)
+                        for(int samp = 0; samp<length; ++samp)
                                 sum += Math.pow(frame[samp],2);
 
                         double[] rms = new double[]{Math.sqrt(sum/length)};

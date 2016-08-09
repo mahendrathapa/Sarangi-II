@@ -16,10 +16,10 @@ public class SpectralRolloffPoint{
 
                 double [][] output = PowerSpectrum.extractFeature(audioFrames,samplingRate);
 
-                return extractFeature(output);
+                return extractFeature(output, samplingRate);
         }
 
-        public static double[][] extractFeature(double[][] powerSpectrums){
+        public static double[][] extractFeature(double[][] powerSpectrums, double samplingRate){
 
                 final double cutoff = 0.85;
                 int dimension = 1;

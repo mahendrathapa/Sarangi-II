@@ -16,10 +16,10 @@ public class SpectralCentroid{
 
                 double [][] output = PowerSpectrum.extractFeature(audioFrames,samplingRate);
 
-                return extractFeature(output);
+                return extractFeature(output,samplingRate);
         }
 
-        public static double[][] extractFeature(double[][] powerSpectrums){
+        public static double[][] extractFeature(double[][] powerSpectrums,double samplingRate){
 
                 int dimension = 1;
                 double[][] feature = new double[powerSpectrums.length][dimension];

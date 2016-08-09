@@ -16,11 +16,11 @@ public class SpectralVariability{
 
                 double[][] output = MagnitudeSpectrum.extractFeature(audioFrames,samplingRate);
 
-                return extractFeature(output);
+                return extractFeature(output,samplingRate);
 
         }
 
-        public static double[][] extractFeature(double[][] magnitudeSpectrums){
+        public static double[][] extractFeature(double[][] magnitudeSpectrums,double samplingRate){
 
                 int dimension = 1;
                 int length = magnitudeSpectrums.length;
