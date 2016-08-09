@@ -33,9 +33,19 @@ public class SarangiSVM extends SarangiClassifier {
 
         public SVM svm; 
 
+        public static double SIGMA = 60.0d;
+
 
         /* CONSTRUCTORS *******************************************/
 
+        /**
+         * Constructor.
+         *
+         */
+        public SarangiSVM() {
+
+        }
+        
         /**
          * Constructor.
          *
@@ -46,7 +56,7 @@ public class SarangiSVM extends SarangiClassifier {
          */
         public SarangiSVM(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
 
-                super(trainingSongs, labels, featureType);
+                super(trainingSongs, labels, featureType,"SVM");
 
         }
 
@@ -61,7 +71,7 @@ public class SarangiSVM extends SarangiClassifier {
         public void train(List<Song> trainingSongs) {
                 this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
 
-                svm = new SVM(new GaussianKernel(60.0d), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
+                svm = new SVM(new GaussianKernel(SarangiSVM.SIGMA), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
                 svm.learn(trainingSet.dataset,trainingSet.labelIndices);
                 svm.finish();
         }
@@ -80,6 +90,7 @@ public class SarangiSVM extends SarangiClassifier {
 
                 // TODO Get a better solution than this Hack
                 LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
+                System.out.println(Arrays.toString(songDataset.dataset[0]));
                 return svm.predict(songDataset.dataset[0]);
         }
 

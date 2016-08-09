@@ -54,7 +54,8 @@ public class App
                //FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/Mood_testing"));
 
                 ClassifierRunner runner = new ClassifierRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
-                runner.runCrossValidation(trainingFilename, FeatureType.SARANGI_MFCC,10,"SVM");
+                //runner.runCrossValidation(trainingFilename, FeatureType.SARANGI_MFCC,10,"SVM");
+                runner.run(trainingFilename,testFilename,FeatureType.SARANGI_MFCC,"SVM");
 
         }
 }

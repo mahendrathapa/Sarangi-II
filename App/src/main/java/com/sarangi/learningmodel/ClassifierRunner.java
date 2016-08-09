@@ -64,10 +64,14 @@ public class ClassifierRunner {
                 List<Song> testSongs = testSongHandler.loadSongs();
 
 
-                ClassifierFactory factory = new ClassifierFactory();
-                SarangiClassifier classifier = factory.getClassifier(trainingSongs,this.labels,featureType,classifierType);
+                SarangiClassifier classifier = ClassifierFactory.getClassifier(trainingSongs,this.labels,featureType,classifierType);
+
+                String classifierFile = new String("src/resources/song/classifier.txt");
+                ClassifierFactory.storeClassifier(classifier,classifierFile);
+
+                SarangiClassifier loadedClassifier = ClassifierFactory.loadClassifier(classifierFile,"SVM");
                 
-                Result result = classifier.test(testSongs);
+                Result result = loadedClassifier.test(testSongs);
 
                 result.printData();
 

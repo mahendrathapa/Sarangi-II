@@ -46,6 +46,14 @@ public class SarangiFrameSVM extends SarangiClassifier {
         /**
          * Constructor.
          *
+         */
+        public SarangiFrameSVM() {
+
+        }
+
+        /**
+         * Constructor.
+         *
          * @param trainingSongs The songs to be used for training
          * @param labels The string labels
          * @param featureType The type of feature to be used
@@ -53,7 +61,7 @@ public class SarangiFrameSVM extends SarangiClassifier {
          */
         public SarangiFrameSVM(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
 
-                super(trainingSongs, labels, featureType);
+                super(trainingSongs, labels, featureType,"FrameSVM");
 
         }
 

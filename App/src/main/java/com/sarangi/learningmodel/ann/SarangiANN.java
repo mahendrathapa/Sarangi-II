@@ -34,6 +34,14 @@ public class SarangiANN extends SarangiClassifier {
         /**
          * Constructor.
          *
+         */
+        public SarangiANN() {
+
+        }
+
+        /**
+         * Constructor.
+         *
          * @param trainingSongs The songs to be used for training
          * @param labels The string labels
          * @param featureType The type of feature to be used
@@ -41,7 +49,7 @@ public class SarangiANN extends SarangiClassifier {
          */
         public SarangiANN(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
 
-                super(trainingSongs,labels,featureType);
+                super(trainingSongs,labels,featureType,"NeuralNetwork");
 
         }
         

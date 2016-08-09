@@ -44,6 +44,14 @@ public class SarangiFrameANN extends SarangiClassifier {
         /**
          * Constructor.
          *
+         */
+        public SarangiFrameANN() {
+
+        }
+
+        /**
+         * Constructor.
+         *
          * @param trainingSongs The songs to be used for training
          * @param labels The string labels
          * @param featureType The type of feature to be used
@@ -51,7 +59,7 @@ public class SarangiFrameANN extends SarangiClassifier {
          */
         public SarangiFrameANN(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
 
-                super(trainingSongs, labels, featureType);
+                super(trainingSongs, labels, featureType, "FrameNeuralNetwork");
 
         }
 
