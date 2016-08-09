@@ -16,8 +16,15 @@ package com.sarangi.structures;
 
 public enum FeatureType {
 
-        SARANGI_MFCC, 
-        SARANGI_PITCH,
+        SARANGI_ALL,
+        SARANGI_COMPACTNESS,
+        SARANGI_MELFREQ,
         SARANGI_RHYTHM,
+        SARANGI_RMS,
+        SARANGI_SPECTRALCENTROID,
+        SARANGI_SPECTRALFLUX,
+        SARANGI_SPECTRALROLLOFFPOINT,
+        SARANGI_SPECTRALVARIABILITY,
+        SARANGI_ZEROCROSSING
 
 }

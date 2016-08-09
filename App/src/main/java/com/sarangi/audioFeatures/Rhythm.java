@@ -32,38 +32,16 @@ public class Rhythm{
         /*FIELDS **************************************************************/
 
         /**
-         * A reference to the number of window
-         */
-        private final int binSize = 1024;
-
-        /**
-         * Reference to the range of the beats per minute.
-         */
-        private final int range = 30;
-
-        /**
-         * Reference to the gap of the beats per minute.
-         */
-        private final int gap = 10;
-
-        /**
-         * A reference to the array for storing the rhythmic features as a graph between the strength and beats per minute
-         */
-        int[] beatGraph = new int[range];
-
-        /**
-         * A reference to the beats per minutes of each window
-         */
-        List<Float> bpm = new ArrayList<Float>();
-
-        /**
          * Sampling frequency of the audio sample
          */
-        private  float samplingRate;
+
+        int binSize = 1024;
+
+        private  double samplingRate;
 
         int howLong = 12;
 
-        private float[] strongestBeat = new float[howLong];
+        private double[] strongestBeat = new double[howLong];
 
 
         /*CONSTRUCTORS ******************************************************************/
@@ -79,48 +57,47 @@ public class Rhythm{
          *
          */
 
-        public Rhythm(List<float[]> audioFrame, AudioFormat audioFormat){
+        public Rhythm(List<double[]> audioFrame, AudioFormat audioFormat){
 
-                samplingRate = (float)audioFormat.getSampleRate();
+
+                samplingRate = (double)audioFormat.getSampleRate();
 
                 int length = audioFrame.size() - binSize;
 
-                float[] rms = new float[binSize];
+                double[] rms = new double[binSize];
                 
-                float effectiveSamplingRate = samplingRate / (float)rms.length;
+                double effectiveSamplingRate = samplingRate / (double)rms.length;
 
                 int minLag = (int)(0.286 * effectiveSamplingRate);
                 int maxLag = (int)(3.0 * effectiveSamplingRate);
 
-                Map<Float,Integer> bmpCount = new HashMap<Float,Integer>();
-                Map<Float,Float> bmpEnergy = new HashMap<Float,Float>();
+                Map<Double,Integer> bmpCount = new HashMap<Double,Integer>();
+                Map<Double,Double> bmpEnergy = new HashMap<Double,Double>();
 
                 for(int loop=0; loop<=length; loop+= 1){
 
                         
                         for(int k=0, j = loop; k < binSize; ++j,++k){
 
-                                rms[k] = (float)getRms(audioFrame.get(j));
+                                rms[k] = (double)getRms(audioFrame.get(j));
                         }
 
-                        float[] beatHistogram = getAutoCorrelation(rms,minLag,maxLag);
+                        double[] beatHistogram = getAutoCorrelation(rms,minLag,maxLag);
 
-                        float[] beatLabels = getAutoCorrelationLabels(effectiveSamplingRate,minLag,maxLag);
+                        double[] beatLabels = getAutoCorrelationLabels(effectiveSamplingRate,minLag,maxLag);
 
                         for(int i=0; i<beatLabels.length; ++i)
                                 beatLabels[i]  *= 60.0;
 
-                        float beatPerMinute = getStrongestBeat(beatHistogram,beatLabels);
-                        
-                        bpm.add(beatPerMinute);
+                        double beatPerMinute = getStrongestBeat(beatHistogram,beatLabels);
 
-                        float strongest =  getStrengthofStrongestBeat(beatHistogram);
+                        double strongest =  getStrengthofStrongestBeat(beatHistogram);
 
                         if(bmpCount.containsKey(beatPerMinute)){
                                 int value = bmpCount.get(beatPerMinute);
                                 bmpCount.put(beatPerMinute, ++ value);
 
-                                float energy = bmpEnergy.get(beatPerMinute);
+                                double energy = bmpEnergy.get(beatPerMinute);
                                 bmpEnergy.put(beatPerMinute, energy + strongest);
                         }else{
 
@@ -130,27 +107,9 @@ public class Rhythm{
 
                 }
 
-                Map<Float,Integer> hmap = new HashMap<Float,Integer>();
+                Map<Double,Integer> sortedMap = sortByComparator(bmpCount);
 
-                for(float singleRms : bpm){
-
-                        if(hmap.containsKey(singleRms)){
-                                int value = hmap.get(singleRms);
-                                hmap.put(singleRms, ++value);
-
-                        }else
-                                hmap.put(singleRms,1);
-
-                        int index = (int)singleRms/gap;
-
-                        if(index<range)
-                                ++beatGraph[index];
-                }
-
-
-                Map<Float,Integer> sortedMap = sortByComparator(bmpCount);
-
-                ArrayList<Float> keys = new ArrayList<Float>(sortedMap.keySet());
+                ArrayList<Double> keys = new ArrayList<Double>(sortedMap.keySet());
 
                 for(int count = 0,i=keys.size()-1;i>=0 && count<howLong; --i,++count){
 
@@ -161,64 +120,45 @@ public class Rhythm{
 
         }
 
-        private Map<Float, Integer> sortByComparator(Map<Float, Integer> unsortMap) {
+        private Map<Double, Integer> sortByComparator(Map<Double, Integer> unsortMap) {
 
                 // Convert Map to List
-                List<Map.Entry<Float, Integer>> list = 
-                        new LinkedList<Map.Entry<Float, Integer>>(unsortMap.entrySet());
+                List<Map.Entry<Double, Integer>> list = 
+                        new LinkedList<Map.Entry<Double, Integer>>(unsortMap.entrySet());
 
                 // Sort list with comparator, to compare the Map values
-                Collections.sort(list, new Comparator<Map.Entry<Float, Integer>>() {
-                        public int compare(Map.Entry<Float, Integer> o1,
-                                        Map.Entry<Float, Integer> o2) {
+                Collections.sort(list, new Comparator<Map.Entry<Double, Integer>>() {
+                        public int compare(Map.Entry<Double, Integer> o1,
+                                        Map.Entry<Double, Integer> o2) {
                                 return (o1.getValue()).compareTo(o2.getValue());
                         }
                 });
 
                 // Convert sorted map back to a Map
-                Map<Float, Integer> sortedMap = new LinkedHashMap<Float, Integer>();
-                for (Iterator<Map.Entry<Float, Integer>> it = list.iterator(); it.hasNext();) {
-                        Map.Entry<Float, Integer> entry = it.next();
+                Map<Double, Integer> sortedMap = new LinkedHashMap<Double, Integer>();
+                for (Iterator<Map.Entry<Double, Integer>> it = list.iterator(); it.hasNext();) {
+                        Map.Entry<Double, Integer> entry = it.next();
                         sortedMap.put(entry.getKey(), entry.getValue());
                 }
                 return sortedMap;
         }
 
-        private void printMap(Map<Float,Integer> map){
+        private void printMap(Map<Double,Integer> map){
                
-                ArrayList<Float> keys = new ArrayList<Float>(map.keySet());
+                ArrayList<Double> keys = new ArrayList<Double>(map.keySet());
 
                 for(int i=keys.size()-1;i>=0; --i)
                         System.out.println(keys.get(i) + " " + map.get(keys.get(i)));
 
-                /*for(Map.Entry<Float,Integer> entry : map.entrySet()){
+                /*for(Map.Entry<Double,Integer> entry : map.entrySet()){
                         System.out.println(entry.getKey() + "  " +entry.getValue());
                 }*/
         }
 
-        public float[] getStrongestBeat(){
+        public double[] getStrongestBeat(){
                 return strongestBeat;
         }
-        /**
-         * Return the rhythmic graph of the given audio signal.
-         *
-         * @return      Rhythmic graph of the audio.
-         */
-        public int[] getRhythmGraph(){
-                return beatGraph;
-        }
-
-        /**
-         * Return the frame wise beats per minute of the given audio signal.
-         *
-         * @return      Beats per minute of the each frame.
-         *
-         */
-        public List<Float> getBPMFrameWise(){
-                return bpm;
-        }
-
-        /**
+       /**
          * Return the dominating beat of the audio signal based on the energy of that signal at that given BPM.
          *
          * @param   beatHistogram   The beat histogram of the audio signal.
@@ -227,7 +167,7 @@ public class Rhythm{
          *
          * @return                  Beats per minutes of the given audio signal.
          */
-        private float getStrongestBeat(float[] beatHistogram, float[] labels){
+        private double getStrongestBeat(double[] beatHistogram, double[] labels){
                 int highestBin = getIndexOfLargest(beatHistogram);
                 return labels[highestBin];
         }
@@ -239,10 +179,10 @@ public class Rhythm{
          *
          * @return                  The strength of the strongest beat of the given audio signal.
          */
-        private float getStrengthofStrongestBeat(float[] beatHistogram){
-                float beatSum = getBeatSum(beatHistogram);
+        private double getStrengthofStrongestBeat(double[] beatHistogram){
+                double beatSum = getBeatSum(beatHistogram);
                 int highestBin = getIndexOfLargest(beatHistogram);
-                float highestStrength = beatHistogram[highestBin];
+                double highestStrength = beatHistogram[highestBin];
                 return highestStrength/beatSum;
         }
 
@@ -254,8 +194,8 @@ public class Rhythm{
          * @return                  The strength of the beat of the given audio signal.
          */
 
-        private float[] getStrengthOfBeat(float[] beatHistogram){
-                float beatSum = getBeatSum(beatHistogram);
+        private double[] getStrengthOfBeat(double[] beatHistogram){
+                double beatSum = getBeatSum(beatHistogram);
                 int length = beatHistogram.length;
                 for(int i=0; i<length; ++i)
                         beatHistogram[i] /= beatSum;
@@ -269,22 +209,22 @@ public class Rhythm{
          *
          * @return                      Beat sum of the signal.
          */
-        private float getBeatSum(float[] beatHistogram){
-                float sum = (float)0.0;
-                for(float temp:beatHistogram)
+        private double getBeatSum(double[] beatHistogram){
+                double sum = (double)0.0;
+                for(double temp:beatHistogram)
                         sum += temp;
                 return sum;
         }
 
         /**
-         * Returns the index of the entry of an array of float with the largest value.
+         * Returns the index of the entry of an array of double with the largest value.
          *
          * @param   values      A reference to the array.
          *
          * @return              Index of the highest value of that array.
          *
          */
-        private int getIndexOfLargest (float[] values){
+        private int getIndexOfLargest (double[] values){
                 int maxIndex = 0;
                 for(int i=0; i<values.length; ++i)
                         if(values[i]>values[maxIndex])
@@ -305,10 +245,10 @@ public class Rhythm{
          *                              bins produced by the getAutoCorrelation method.
          */
 
-        private float[] getAutoCorrelationLabels(float samplingRate, int minLag, int maxLag){
-                float[] labels  = new float[maxLag-minLag + 1];
+        private double[] getAutoCorrelationLabels(double samplingRate, int minLag, int maxLag){
+                double[] labels  = new double[maxLag-minLag + 1];
                 for(int i=0; i<labels.length; ++i)
-                        labels[i] = samplingRate / ((float)(i+minLag));
+                        labels[i] = samplingRate / ((double)(i+minLag));
                 return labels;
         }
 
@@ -320,7 +260,7 @@ public class Rhythm{
          *
          * @return                  RMS value of the signal.
          */
-        private double getRms(float[] sample){
+        private double getRms(double[] sample){
                 double sum = 0.0;
                 for(int i=0; i<sample.length; ++i)
                         sum += Math.pow(sample[i],2);
@@ -343,11 +283,11 @@ public class Rhythm{
          *
          */
 
-        private float[] getAutoCorrelation(float[] signal, int minLag, int maxLag){
-                float[] autoCorrelation = new float[maxLag-minLag+1];
+        private double[] getAutoCorrelation(double[] signal, int minLag, int maxLag){
+                double[] autoCorrelation = new double[maxLag-minLag+1];
                 for(int lag = minLag; lag<=maxLag; ++lag){
                         int autoIndice= lag-minLag;
-                        autoCorrelation[autoIndice] = (float)0.0;
+                        autoCorrelation[autoIndice] = (double)0.0;
                         for(int samp = 0; samp<signal.length-lag;++samp)
                                 autoCorrelation[autoIndice] +=signal[samp]*signal[samp + lag];
                 }

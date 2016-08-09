@@ -1,6 +1,7 @@
-/App/src/resources/song/
-/App/target/
-/App/src/test/
+App/target/
+App/src/test/
+App/src/resources/song/
+App/src/resources/log/
 
 pom.xml.tag
 pom.xml.releaseBackup

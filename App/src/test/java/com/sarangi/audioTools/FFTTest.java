@@ -23,15 +23,18 @@ public class FFTTest extends TestCase{
               //  double[] samples = audioSample.getAudioSamples();
               //
 
+            try{
+/*
                 double[] samples = new double[]{2.0,0.3, 0.6, 1.22,4.0, 3.03, 0.45};
 
-                FFT fft = new FFT(samples);
+                FFT fft = new FFT(samples,null,false,false);
 
-                double[] realOutput = fft.getRealOutput();
-                double[] imagOutput = fft.getImagOutput();
+                double[] realOutput = fft.getRealValues();
+                double[] imagOutput = fft.getImaginaryValues();
 
-                IFFT ifft = new IFFT(realOutput,imagOutput);
-                double[] output = ifft.getRealOutput();
+                FFT ifft = new FFT(realOutput,imagOutput,true,false);
+                double[] output = ifft.getRealValues();
+                double[] ioutput = ifft.getImaginaryValues();
 
                 System.out.println(Arrays.toString(samples));
 
@@ -39,7 +42,11 @@ public class FFTTest extends TestCase{
                 System.out.println(Arrays.toString(imagOutput));
                 
                 System.out.println(Arrays.toString(output));
-
+                System.out.println(Arrays.toString(ioutput));
+*/
+            } catch (Exception ex){
+                    System.out.println(ex);
+            }
 
         }
 

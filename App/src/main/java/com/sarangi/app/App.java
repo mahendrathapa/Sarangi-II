@@ -50,12 +50,11 @@ public class App
                 String trainingFilename = "src/resources/song/songFeatures/features.txt";
                 String testFilename = "src/resources/song/songFeatures/test.txt";
 
-                FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/features.txt"),new String("src/resources/song/training_arousal"));
-                FeatureExtractor.extractFeature(new String("src/resources/song/songFeatures/test.txt"),new String("src/resources/song/testing_arousal"));
+                FeatureExtractor.extractFeature(trainingFilename,new String("src/resources/song/training_arousal"));
+                FeatureExtractor.extractFeature(testFilename,new String("src/resources/song/testing_arousal"));
 
                 ClassifierRunner runner = new ClassifierRunner(new String[]{"high_arousal","low_arousal"});
                 //runner.runCrossValidation(trainingFilename, FeatureType.SARANGI_MFCC,10,"SVM");
-                runner.run(trainingFilename,testFilename,FeatureType.SARANGI_RHYTHM,"SVM");
-
+                runner.run(trainingFilename,testFilename,FeatureType.SARANGI_ALL,"SVM");
         }
 }

@@ -1,5 +1,5 @@
 /*
- * @(#) RMS.java 2.0      August 8, 2016.
+ * @(#) RMS.java 2.0      August 5, 2016.
  *
  * Mahendra Thapa
  *
@@ -11,24 +11,12 @@ package com.sarangi.audioFeatures;
 import com.sarangi.audioTools.*;
 import java.util.*;
 
-public class RMS extends SarangiFeature{
+public class RMS{
 
-        private double[][] frameRms;
+        public static double[][] extractFeature(List<double[]> audioFrames, double samplingRate){
 
-        private final int frameLevelDimension = 1;
-
-        public RMS(){
-
-                this(2);
-        }
-
-        public RMS(int dimension){
-                super("Root Mean Square","A mearuse of the power of a signal",dimension);
-        }
-
-        public double[] extractFeature(List<double[]> audioFrames, double samplingRate){
-
-                frameRms = new double[audioFrames.size()][frameLevelDimension];
+                int dimension = 1;
+                double[][] feature = new double[audioFrames.size()][dimension];
 
                 int count = 0;
 
@@ -42,18 +30,12 @@ public class RMS extends SarangiFeature{
 
                         double[] rms = new double[]{Math.sqrt(sum/length)};
 
-                        frameRms = Statistics.assign1Dto2DArray(frameRms, rms, count);
+                        feature = Statistics.assign1Dto2DArray(feature, rms, count);
                         ++count;
                 }
 
-                feature = Statistics.getAverageAndStandardDeviation(frameRms,dimension);
-
                 return feature;
-        }
 
-        public double[][] getFrameLevelFeature(){
-                return frameRms;
         }
-
 }
 

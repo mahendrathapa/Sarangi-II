@@ -10,6 +10,7 @@ package com.sarangi.learningmodel;
 
 import com.sarangi.structures.*;
 import com.sarangi.audioFeatures.*;
+import com.sarangi.audioTools.*;
 
 import java.io.*;
 import java.util.*;
@@ -41,6 +42,51 @@ public class DatasetUtil {
 
                 learningDataset.labelIndices = new int[dataSongs.size()];
 
+                if(featureType == FeatureType.SARANGI_ALL){
+
+                        learningDataset.dataset = new double[dataSongs.size()][34];
+
+                        int i = 0;
+
+                        for(Song song : dataSongs){
+
+                                double[] compactness = song.getCompactness();
+
+                                double[] melFreq = new double[20];
+
+                                //System.arraycopy(song.getMelFreq(),0,melFreq,0,10);
+                                //System.arraycopy(song.getMelFreq(),30,melFreq,10,10);
+
+                                double[] rhythm = song.getRhythm();
+
+                                double[] rms = song.getRMS();
+                                double[] spectralCentroid = song.getSpectralCentroid();
+                                double[] spectralFlux = song.getSpectralFlux();
+                                double[] spectralRolloffPoint = song.getSpectralRolloffPoint();
+                                double[] spectralVariablility = song.getSpectralVariablility();
+                                double[] zeroCrossing = song.getZeroCrossing();
+
+                                learningDataset.dataset[i] = Statistics.mergeArrays(rhythm);
+/*
+                                learningDataset.dataset[i] = Statistics.mergeArrays(compactness,
+                                                                                    melFreq,
+                                                                                    rms,
+                                                                                    spectralCentroid,
+                                                                                    spectralFlux,
+                                                                                    spectralRolloffPoint,
+                                                                                    spectralVariablility,
+                                                                                    zeroCrossing);
+*/
+                                learningDataset.labelIndices[i] = getIndexOfLabel(song.getSongName(),labelArray);
+
+                                ++i;
+
+                        }
+
+
+                }
+
+                /*
                 if (featureType == FeatureType.SARANGI_PITCH) {
                     learningDataset.dataset = new double[dataSongs.size()][dataSongs.get(0).getPitch().length];
                     int i = 0;
@@ -103,6 +149,7 @@ public class DatasetUtil {
 
                     }
                 }
+                */
 
                 return learningDataset;
 
@@ -121,7 +168,7 @@ public class DatasetUtil {
         public static LearningDataset getFramewiseDataset(List<Song> dataSongs, String[] labelArray, FeatureType featureType) {
 
                 LearningDataset learningDataset = new LearningDataset();
-
+/*
                 if (featureType == FeatureType.SARANGI_MFCC) {
 
                     // Store the songs.
@@ -154,6 +201,7 @@ public class DatasetUtil {
 
                     }
                 }
+                */
 
                 return learningDataset;
 

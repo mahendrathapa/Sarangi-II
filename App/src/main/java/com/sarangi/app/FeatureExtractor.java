@@ -14,7 +14,6 @@ import com.sarangi.json.*;
 import com.sarangi.structures.*;
 import java.io.*;
 import java.util.*;
-import java.util.logging.*;
 import javax.sound.sampled.*;
 
 /**
@@ -33,13 +32,12 @@ import javax.sound.sampled.*;
 public class FeatureExtractor{
 
         /* FIELDS **************************************************/
-
         /**
          * Logger is used to maintain the log of the program. The log contain the error message generated during the
          * execution of the program, warning messages to the user and information about the status of the program
          * to the user. The log is also beneficial during program debugging.
          */
-        private static Logger logger = Logger.getLogger("FeatureExtractor");
+//        private Logger logger = Logger.getLogger("FeatureExtractor");
 
         /**
          * AudioPreProcessor is used for pre-processing of the audio signal.
@@ -69,7 +67,7 @@ public class FeatureExtractor{
 
         public FeatureExtractor(){
 
-                logger.setLevel(Level.INFO);
+//                logger.setLevel(Level.INFO);
 
         }
 
@@ -122,41 +120,48 @@ public class FeatureExtractor{
 
                                         File singleFileName = new File(folderName+"/"+songName);
 
-                                        logger.info(singleFileName.toString());
+                                        //logger.info(singleFileName.toString());
+                                        System.out.println(singleFileName.toString());
 
                                         AudioSample audioSample = new AudioSample(singleFileName);
 
-                                        float[] samples = audioSample.getAudioSamples();
+                                        double[] samples = audioSample.getAudioSamples();
 
-                                        AudioFormat audioFormat = audioSample.getAudioFormat();
+                                        double samplingRate = audioSample.getAudioFormat().getSampleRate();
 
-                                        List<float[]> audioFrame = audioPreProcessor.getAudioFrame(samples,frameSize,overLapSize);
+                                        List<double[]> audioFrames = audioPreProcessor.getAudioFrame(samples,frameSize,overLapSize);
+
+                                        double[][] powerSpectrumFrame = PowerSpectrum.extractFeature(audioFrames,samplingRate);
+                                        double[][] magnitudeSpectrumFrame = MagnitudeSpectrum.extractFeature(audioFrames,samplingRate);
+                                        double[][] rmsFrame = RMS.extractFeature(audioFrames,samplingRate);
                                         
-                                        Intensity intensity = new Intensity(audioFrame,audioFormat);
-                                        List<Float> intensityFeatures = intensity.getIntensityFeatures();
+                                        double[] compactness = Statistics.getAvgSD(Compactness.extractFeature(magnitudeSpectrumFrame));
+                                        double[] melFreq = Statistics.getAvgSD(MelFreq.extractFeature(audioFrames,samplingRate));
 
-                                        Melfreq melfreq = new Melfreq(audioFrame,audioFormat);
-                                        List<float[]> mfccFeatures = melfreq.getMfccFeatures();
+                                        Rhythm rhythmClass = new Rhythm(audioFrames, audioSample.getAudioFormat());
+                                        double[] rhythm = rhythmClass.getStrongestBeat();
 
-                                        Pitch pitch = new Pitch(audioFrame,audioFormat);
-                                        int[] pitchFeatures = pitch.getPitchGraph();
+                                        double[] rms = Statistics.getAvgSD(rmsFrame);
+                                        double[] spectralCentroid = Statistics.getAvgSD(SpectralCentroid.extractFeature(powerSpectrumFrame));
+                                        double[] spectralFlux = Statistics.getAvgSD(SpectralFlux.extractFeature(magnitudeSpectrumFrame));
+                                        double[] spectralRolloffPoint = Statistics.getAvgSD(SpectralRolloffPoint.extractFeature(powerSpectrumFrame));
+                                        double[] spectralVariablility = Statistics.getAvgSD(SpectralVariability.extractFeature(magnitudeSpectrumFrame));
+                                        double[] zeroCrossing = Statistics.getAvgSD(ZeroCrossings.extractFeature(audioFrames,samplingRate));
 
-                                        Rhythm rhythm = new Rhythm(audioFrame, audioFormat);
-                                        float[] rhythmFeatures = rhythm.getStrongestBeat();
+                                        songs.add(new Song(songName,compactness,melFreq,rhythm,rms,spectralCentroid,spectralFlux,spectralRolloffPoint,spectralVariablility,zeroCrossing));
 
-                                        songs.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures,rhythmFeatures));
                                 }
 
                         } catch(UnsupportedAudioFileException ex){
-                                logger.log(Level.SEVERE,ex.toString(),ex);
+                                //logger.log(Level.SEVERE,ex.toString(),ex);
                                 continue;
 
                         } catch(IOException ex){
-                                logger.log(Level.SEVERE,ex.toString(),ex);
+                                //logger.log(Level.SEVERE,ex.toString(),ex);
                                 continue;
 
                         } catch(IllegalArgumentException ex){
-                                logger.log(Level.SEVERE,ex.toString(),ex);
+                                //logger.log(Level.SEVERE,ex.toString(),ex);
                                 continue;
                         }
                 }

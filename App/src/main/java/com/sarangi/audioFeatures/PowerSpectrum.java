@@ -1,0 +1,40 @@
+/*
+ * @(#) PowerSpectrum.java 2.0      August 6, 2016.
+ *
+ * Mahendra Thapa
+ *
+ * Institue of Engineering
+ */
+
+package com.sarangi.audioFeatures;
+
+import com.sarangi.audioTools.*;
+import java.util.*;
+
+public class PowerSpectrum{
+
+        public static double[][] extractFeature(List<double[]> audioFrames,double samplingRate){
+
+                int dimension = audioFrames.get(0).length;
+
+                double[][] feature = new double[audioFrames.size()][dimension];
+
+                int count = 0;
+
+                try{
+
+                        for(double[] frame : audioFrames){
+
+                                FFT fft = new FFT(frame);
+                                feature = Statistics.assign1Dto2DArray(feature,fft.getPowerSpectrum(),count);
+                                ++count;
+                        }
+
+                } catch (Exception ex){
+                        System.out.println(ex);
+                }
+                return feature;
+        }
+}
+
+

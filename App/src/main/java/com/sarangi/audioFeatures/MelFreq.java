@@ -19,28 +19,14 @@ import be.tarsos.dsp.mfcc.MFCC;
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 
-public class MelFreq extends SarangiFeature{
+public class MelFreq{
 
+        public static double[][] extractFeature(List<double[]> audioFrames,double samplingRate){
 
-        private  int frameLevelDimension = 5;
-
-        public MelFreq(){
-
-                this(10);
-        }
-
-        public MelFreq(int dimension){
-
-                super("MFCC","MFCC calculations based on the TarsosDSP library",dimension);
-                frameLevelDimension = dimension / 2;
-        }
-
-
-        public double[] extractFeature(List<double[]> audioFrames,double samplingRate){
-
+                int dimension = 30;
                 int length = audioFrames.get(0).length;
 
-                double[][] frameMFCC = new double[audioFrames.size()][frameLevelDimension];
+                double[][] feature = new double[audioFrames.size()][dimension];
 
                 int count = 0;
 
@@ -55,9 +41,7 @@ public class MelFreq extends SarangiFeature{
                                 audioDispatcher.addAudioProcessor(mfcc);
                                 audioDispatcher.run();
 
-                                float[] output = mfcc.getMFCC(); 
-
-                                frameMFCC = Statistics.assign1Dto2DArray(frameMFCC,Statistics.convertFloatArrayToDoubleArray(output),count);
+                                feature = Statistics.assign1Dto2DArray(feature,Statistics.convertFloatArrayToDoubleArray(mfcc.getMFCC()),count);
                                 ++count;
 
                         }catch(Exception ex){
@@ -65,8 +49,6 @@ public class MelFreq extends SarangiFeature{
                         }
                 }
 
-                feature = Statistics.getAverageAndStandardDeviation(frameMFCC,dimension);
-        
                 return feature;
         }
 }

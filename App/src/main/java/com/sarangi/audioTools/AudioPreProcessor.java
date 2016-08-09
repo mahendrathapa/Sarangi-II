@@ -60,9 +60,9 @@ public class AudioPreProcessor{
          *
          */
 
-        public List<float[]> getAudioFrame(float[] audioSamples,int frameSize,int overLapSize){
+        public List<double[]> getAudioFrame(double[] audioSamples,int frameSize,int overLapSize){
 
-              List<float[]> output = new ArrayList<float[]>();  
+              List<double[]> output = new ArrayList<double[]>();  
 
 
               int length = audioSamples.length - frameSize;
@@ -70,10 +70,9 @@ public class AudioPreProcessor{
 
               for(int i=0; i<=length; i+= hopSize){
                       
-                      float[] temp = new float[frameSize];
+                      double[] temp = new double[frameSize];
                       System.arraycopy(audioSamples,i,temp,0,frameSize);
                       output.add(temp);
-
               }
 
               return output;

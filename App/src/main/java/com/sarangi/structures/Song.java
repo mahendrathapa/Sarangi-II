@@ -33,25 +33,17 @@ public class Song{
         protected String songName;
 
         /**
-         * Intensity features of the given song.
+         *  features of the given song.
          */
-        protected List<Float> intensity = new ArrayList<Float>();
-
-        /**
-         * MFCC features of the given song.
-         */
-        protected List<float[]> mfcc = new ArrayList<float[]>();
-
-        /**
-         * Pitch features of the given song.
-         */
-        protected int[] pitch;
-
-        /**
-         * Rhythm features of the given song.
-         */
-        protected float[] rhythm;
-
+        double[] compactness;
+        double[] melFreq;
+        double[] rhythm;
+        double[] rms;
+        double[] spectralCentroid;
+        double[] spectralFlux;
+        double[] spectralRolloffPoint;
+        double[] spectralVariablility;
+        double[] zeroCrossing;
 
         /* CONSTRUCTORS *****************************************/
 
@@ -67,14 +59,21 @@ public class Song{
          * @param   pitch           A reference to the pitch features of the song.
          */
 
-        public Song(String songName, List<Float> intensity, List<float[]> mfcc, int[] pitch, float[] rhythm){
+          public Song(String songName,double[] compactness,double[] melFreq,double[] rhythm,double[] rms,double[] spectralCentroid,double[] spectralFlux,double[] spectralRolloffPoint,double[] spectralVariablility,double[] zeroCrossing){
+
+                  this.songName = songName;
+                  this.compactness = compactness.clone();
+                  this.melFreq = melFreq.clone();
+                  this.rhythm = rhythm.clone();
+                  this.rms = rms.clone();
+                  this.spectralCentroid = spectralCentroid.clone();
+                  this.spectralFlux = spectralFlux.clone();
+                  this.spectralRolloffPoint = spectralRolloffPoint.clone();
+                  this.spectralVariablility = spectralVariablility.clone();
+                  this.zeroCrossing = zeroCrossing.clone();
+
+          }
                 
-                this.songName = songName;
-                this.intensity.addAll(intensity);
-                this.mfcc.addAll(mfcc);
-                this.pitch = pitch.clone();
-                this.rhythm = rhythm.clone();
-        }
 
         /**
          * Return the songName of the song.
@@ -86,44 +85,35 @@ public class Song{
                 return songName;
         }
 
-        /**
-         * Return the intensity features of the song.
-         *
-         * @return      Intensity features of the song.
-         */
-        public List<Float> getIntensity(){
-                return intensity;
+        public double[] getCompactness(){
+                return compactness;
+        }
+ 
+        public double[] getMelFreq(){
+                return melFreq;
         }
 
-        /**
-         * Return the mfcc features of the song.
-         *
-         * @return      MFCC features of the song.
-         *
-         */
-
-        public List<float[]> getMelcoeff(){
-                return mfcc;
-        }
-
-        /**
-         * Return the pitch features of the song.
-         *
-         * @return      Pitch features of the song.
-         */
-
-        public int[] getPitch(){
-                return pitch;
-        }
-
-        /**
-         * Return the rhythm features of the song.
-         *
-         * @return      Rhythm features of the song.
-         */
-
-        public float[] getRhythm(){
+        public double[] getRhythm(){
                 return rhythm;
         }
 
+       public double[] getRMS(){
+                return rms;
+        }
+        public double[] getSpectralCentroid(){
+                return spectralCentroid;
+        }
+        public double[] getSpectralFlux(){
+                return spectralFlux;
+        }
+
+        public double[] getSpectralRolloffPoint(){
+                return spectralRolloffPoint;
+        }  
+        public double[] getSpectralVariablility(){
+                return spectralVariablility;
+        }  
+        public double[] getZeroCrossing(){
+                return zeroCrossing;
+        }       
 }

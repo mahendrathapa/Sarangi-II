@@ -42,13 +42,15 @@ public class FFT{
          * It is used to store the imaginary output of the input audio signal. The imaginary output is the results of the fourier transform
          * of the audio signal.
          */
-        protected double[] imagOutput;
+        protected double[] imaginaryOutput;
+        protected double[] outputMagnitude;
+        protected double[] outputPower;
 
         /*CONSTRUCTORS *******************************************/
 
         /**
          * Calculating the fast fourier transform of the input audio samples and stores the result in the 
-         * realOutput and imagOutput.
+         * realOutput and imaginaryOutput.
          *
          * @param   samples         Stores the input audio signal sample values.
          *
@@ -57,7 +59,7 @@ public class FFT{
 
                 fft = new DoubleFFT_1D(samples.length);
                 realOutput = new double[samples.length];
-                imagOutput = new double[samples.length];
+                imaginaryOutput = new double[samples.length];
 
                 double[] fftData = new double[samples.length * 2];
 
@@ -72,7 +74,7 @@ public class FFT{
                 for(int i = 0; i<samples.length; ++i){
 
                         realOutput[i] = fftData[2 * i];
-                        imagOutput[i] = fftData[2 * i + 1];
+                        imaginaryOutput[i] = fftData[2 * i + 1];
                 }
 
         }
@@ -91,12 +93,35 @@ public class FFT{
         /**
          * Returns the imaginary output obtained by the FFT of the audio samples.
          *
-         * @return  Imaginary output obtained by the FFT of the audio samples.
+         * @return  imaginary output obtained by the FFT of the audio samples.
          *
          */
 
-        public double[] getImagOutput(){
-                return imagOutput;
+        public double[] getImaginaryOutput(){
+                return imaginaryOutput;
+        }
+
+        public double[] getMagnitudeSpectrum(){
+
+                int length = realOutput.length;
+                outputMagnitude = new double[length];
+
+                for(int i=0; i<length; ++i)
+                        outputMagnitude[i] = (Math.sqrt(realOutput[i] * realOutput[i] + imaginaryOutput[i] * imaginaryOutput[i] )) / length;
+
+                return outputMagnitude;
+        }
+
+        public double[] getPowerSpectrum(){
+
+                int length = realOutput.length;
+                outputPower = new double[length];
+
+                for(int i=0; i<length; ++i)
+                        outputPower[i] = (realOutput[i] * realOutput[i] + imaginaryOutput[i] * imaginaryOutput[i])/length;
+
+                return outputPower;
+
         }
 
 }

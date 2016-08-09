@@ -15,7 +15,7 @@ public class AudioPreProcessorTest extends TestCase{
 
         public void testAudioPreProcessor(){
 
-                AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
+/*                AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
 
                 float[] input = new float[]{
                         (float)1.0,(float)2.0,(float)3.0,(float)4.0,(float)5.0,(float)6.0,(float)7.0,(float)8.0,(float)9.0,(float)10.0
@@ -27,7 +27,7 @@ public class AudioPreProcessorTest extends TestCase{
                 
                 for(float[] temp: output)
                         System.out.println(Arrays.toString(temp));
-
+*/
 
 
         }

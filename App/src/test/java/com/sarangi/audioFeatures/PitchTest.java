@@ -15,8 +15,8 @@ public class PitchTest extends TestCase{
 
         public void testPitch(){
 
+/*
                 try{
-
                         AudioSample audioSample = new AudioSample(new File("src/resources/song/extra/hvha.1.wav"));
 
                         float[] sample = audioSample.getAudioSamples();
@@ -36,7 +36,6 @@ public class PitchTest extends TestCase{
                         int[] pitchGraph = pitch.getPitchGraph();
 
                         System.out.println(Arrays.toString(pitchGraph));
-
                 }catch(UnsupportedAudioFileException ex){
                         System.out.println(ex);
                 }catch(IOException ex){
@@ -45,6 +44,7 @@ public class PitchTest extends TestCase{
                         System.out.println(ex);
                 }
 
+*/
 
 
         }

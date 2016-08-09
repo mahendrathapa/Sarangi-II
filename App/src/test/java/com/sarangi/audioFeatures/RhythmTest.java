@@ -15,8 +15,8 @@ public class RhythmTest extends TestCase{
 
         public void testRhythm(){
 
+/*
                 try{
-
                         AudioSample audioSample = new AudioSample(new File("src/resources/song/Mood_training/hvha.1.wav"));
 
                         float[] sample = audioSample.getAudioSamples();
@@ -32,7 +32,6 @@ public class RhythmTest extends TestCase{
                         int[] rhythmGraph = rhythm.getRhythmGraph();
 
                         System.out.println(Arrays.toString(rhythmGraph));
-
                 }catch(UnsupportedAudioFileException ex){
                         System.out.println(ex);
                 }catch(IOException ex){
@@ -41,7 +40,7 @@ public class RhythmTest extends TestCase{
                         System.out.println(ex);
                 }
 
-
+*/
 
         }
 }

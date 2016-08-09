@@ -15,26 +15,33 @@ public class MelFreqTest extends TestCase{
 
         public void testMelFreq(){
 
-                try{
+                double[] one = new double[]{
+                        1,2,3,4
 
+                };
+                double[] two = new double[]{
+                        1,1
+                };
+                System.out.println(Arrays.toString(Statistics.mergeArrays(one,two)));
+
+                try{
                         AudioSample audioSample = new AudioSample(new File("src/resources/song/extra/abc.wav"));
 
-                        float[] sample = audioSample.getAudioSamples();
+                        double[] samples = audioSample.getAudioSamples();
 
-                        System.out.println(sample.length);
-
-                        AudioFormat audioFormat = audioSample.getAudioFormat();
+                        double samplingRate = audioSample.getAudioFormat().getSampleRate();
 
                         AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
+                        List<double[]> audioFrames = audioPreProcessor.getAudioFrame(samples,1024,512);
 
-                        List<float[]> input = audioPreProcessor.getAudioFrame(sample,1024,0);
+                        double[][] pSFeature  = PowerSpectrum.extractFeature(audioFrames,samplingRate);
 
-                        Melfreq melfreq = new Melfreq(input,audioFormat);
+                        double[][] mSFeature = MagnitudeSpectrum.extractFeature(audioFrames,samplingRate);
 
-                        List<float[]> outputMFCC = melfreq.getMfccFeatures();
+                        double[] compactnessFeature = Statistics.getAvgSD(Compactness.extractFeature(mSFeature));
 
-                        System.out.println(outputMFCC.size());
-
+                        System.out.println(Arrays.toString(compactnessFeature));
+                
                 }catch(UnsupportedAudioFileException ex){
                         System.out.println(ex);
                 }catch(IOException ex){

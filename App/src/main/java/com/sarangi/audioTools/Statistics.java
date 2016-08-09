@@ -1,6 +1,7 @@
 
 package com.sarangi.audioTools;
 
+import java.util.*;
 public class Statistics{
 
         public static float[] convertDoubleArrayToFloatArray(double[] data){
@@ -52,15 +53,15 @@ public class Statistics{
                 return Math.sqrt(sum / ((double) (length-1)));
         }
 
-        public static double[][] assign1Dto2DArray(double[][] twoDArray, double[] oneDArray, int index){
-
+        public static double[][] assign1Dto2DArray(double[][] twoDArray, double[] data, int index){
+/*
                 double[] data = new double[twoDArray[0].length];
 
                 if(twoDArray[0].length < oneDArray.length)
                         System.arraycopy(oneDArray,0,data,0,twoDArray[0].length);
                 else
                         System.arraycopy(oneDArray,0,data,0,oneDArray.length);
-
+*/
                 
                 int length = data.length;
 
@@ -85,14 +86,14 @@ public class Statistics{
 
         }
 
-        //first mean and then standar deviation
-        public static double[] getAverageAndStandardDeviation(double[][] data,int dimension){
+        //first mean and then standard deviation
+        public static double[] getAvgSD(double[][] data){
 
                 double[][] transposeData = transposeMatrix(data);
 
-                double[] feature = new double[dimension];
 
                 int length = transposeData.length;
+                double[] feature = new double[length*2];
 
                 for(int i=0; i<length; ++i){
                         feature[i] = getAverage(transposeData[i]);
@@ -100,5 +101,121 @@ public class Statistics{
                 }
 
                 return feature;
+        }
+
+        public static int ensureIsPowerOfN(int x, int n){
+
+                double logValue = logBaseN((double)x, (double)n);
+                int logInt = (int)logValue;
+                int validSize = pow(n,logInt);
+
+                if(validSize != x)
+                        validSize = pow(n,logInt + 1);
+
+                return validSize;
+        }
+
+        public static double logBaseN(double x, double n){
+                return (Math.log10(x) / Math.log10(n));
+        }
+
+        public static int pow(int a, int b){
+                int result = a;
+                for(int i = 1; i < b; ++i)
+                        result *= a;
+                return result;
+        }
+
+        public static double[] mergeArrays(double[] ...datas){
+
+                int length = 0;
+
+                for(double[] data : datas){
+                        length += data.length;
+                }
+
+                double[] output = new double[length];
+
+                int count = 0;
+
+                for(double[] data : datas){
+                        int size = data.length;
+                        System.arraycopy(data,0,output,count,size);
+                        count += size;
+                }
+
+                return output;
+        }
+
+        public static int getIndexOfLargest(double[] values){
+
+                int maxIndex = 0;
+
+                for(int i=0; i<values.length; ++i)
+                        if(values[i] > values[maxIndex])
+                                maxIndex = i;
+
+                return maxIndex;
+        }
+
+        public static double[] getRhythmAnalysis(double[][] features,int numberOfBmp){
+
+                int length = numberOfBmp * 3;
+                double[] output = new double[length];
+
+                Map<Double,Integer> bmpCount = new HashMap<Double,Integer>();
+                Map<Double,Double> bmpEnergy = new HashMap<Double,Double>();
+
+
+                for(double[] feature : features){
+
+                        if(bmpCount.containsKey(feature[0])){
+                                int value = bmpCount.get(feature[0]);
+                                bmpCount.put(feature[0], ++ value);
+
+                                double energy = bmpEnergy.get(feature[0]);
+                                bmpEnergy.put(feature[0],energy + feature[1]);
+                        }else{
+                                bmpCount.put(feature[0],1);
+                                bmpEnergy.put(feature[0],feature[1]);
+                        }
+                }
+
+                Map<Double,Integer> sortedMap = sortByComparator(bmpCount);
+
+                ArrayList<Double> keys = new ArrayList<Double>(sortedMap.keySet());
+
+                for(int count = 0,i=keys.size()-1;i>=0 && count<length; --i,++count){
+
+                        output[count] = keys.get(i);
+                        output[++count] = sortedMap.get(keys.get(i));
+                        output[++count] = bmpEnergy.get(keys.get(i))/sortedMap.get(keys.get(i));
+                }
+
+                return output;
+
+        }
+        
+        public static Map<Double, Integer> sortByComparator(Map<Double, Integer> unsortMap) {
+
+                // Convert Map to List
+                List<Map.Entry<Double, Integer>> list = 
+                        new LinkedList<Map.Entry<Double, Integer>>(unsortMap.entrySet());
+
+                // Sort list with comparator, to compare the Map values
+                Collections.sort(list, new Comparator<Map.Entry<Double, Integer>>() {
+                        public int compare(Map.Entry<Double, Integer> o1,
+                                        Map.Entry<Double, Integer> o2) {
+                                return (o1.getValue()).compareTo(o2.getValue());
+                        }
+                });
+
+                // Convert sorted map back to a Map
+                Map<Double, Integer> sortedMap = new LinkedHashMap<Double, Integer>();
+                for (Iterator<Map.Entry<Double, Integer>> it = list.iterator(); it.hasNext();) {
+                        Map.Entry<Double, Integer> entry = it.next();
+                        sortedMap.put(entry.getKey(), entry.getValue());
+                }
+                return sortedMap;
         }
 }
