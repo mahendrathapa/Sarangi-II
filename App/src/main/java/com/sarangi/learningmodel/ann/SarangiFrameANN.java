@@ -44,6 +44,14 @@ public class SarangiFrameANN extends SarangiClassifier {
         /**
          * Constructor.
          *
+         */
+        public SarangiFrameANN() {
+
+        }
+
+        /**
+         * Constructor.
+         *
          * @param trainingSongs The songs to be used for training
          * @param labels The string labels
          * @param featureType The type of feature to be used
@@ -110,5 +118,9 @@ public class SarangiFrameANN extends SarangiClassifier {
 
         }
 
+        public void store(String filename) {
+        }
+        public void load(String filename) {
+        }
 
 }

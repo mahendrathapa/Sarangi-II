@@ -1,16 +1,17 @@
 package com.sarangi.learningmodel.svm; 
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import com.sarangi.structures.*;
 import com.sarangi.json.*;
 import com.sarangi.learningmodel.*;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
+
 import smile.classification.SVM;
-import smile.classification.NeuralNetwork;
 import smile.math.kernel.GaussianKernel;
+import smile.math.kernel.MercerKernel;
 import smile.math.Math;
 import java.lang.Math.*;
 import java.util.*;
@@ -33,9 +34,19 @@ public class SarangiSVM extends SarangiClassifier {
 
         public SVM svm; 
 
+        public static double SIGMA = 60.0d;
+
 
         /* CONSTRUCTORS *******************************************/
 
+        /**
+         * Constructor.
+         *
+         */
+        public SarangiSVM() {
+                svm = new SVM(new GaussianKernel(SarangiSVM.SIGMA), 2.0d);
+        }
+        
         /**
          * Constructor.
          *
@@ -61,7 +72,7 @@ public class SarangiSVM extends SarangiClassifier {
         public void train(List<Song> trainingSongs) {
                 this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
 
-                svm = new SVM(new GaussianKernel(60.0d), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
+                svm = new SVM(new GaussianKernel(SarangiSVM.SIGMA), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
                 svm.learn(trainingSet.dataset,trainingSet.labelIndices);
                 svm.finish();
         }
@@ -80,8 +91,62 @@ public class SarangiSVM extends SarangiClassifier {
 
                 // TODO Get a better solution than this Hack
                 LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
+
                 return svm.predict(songDataset.dataset[0]);
         }
 
+        public void store(String filename) {
+                try{
+                        FileWriter fileWriter = new FileWriter(filename,true);
+
+                        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+                        /*
+                        final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator());
+                        final Gson gson = gsonBuilder.create();
+
+                        gson.toJson(svm,bufferedWriter);
+                        */
+
+                        XStream xstream = new XStream(new StaxDriver());
+                        String xml = xstream.toXML(svm);
+
+                        bufferedWriter.write(xml);
+
+                        bufferedWriter.close();
+
+                }catch(Exception ex) {
+                        ex.printStackTrace();
+                }
+        }
+
+        public void load(String filename) {
+                try{
+
+                        File file = new File(filename);
+
+                        if(file.length() == 0)
+                                return;
+
+                        BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+                        String xml = bufferedReader.readLine();
+
+                        /*
+                        final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator());
+                        final Gson gson = gsonBuilder.create();
+
+                        this.svm = gson.fromJson(jsonResponse,SVM.class);
+                        */
+
+                        XStream xstream = new XStream(new StaxDriver());
+                        this.svm = (SVM)xstream.fromXML(xml);
+
+                        bufferedReader.close();
+
+                } catch(Exception ex){
+                        ex.printStackTrace();
+                }
+
+        }
 
 }

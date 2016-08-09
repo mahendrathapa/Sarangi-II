@@ -34,6 +34,14 @@ public class SarangiANN extends SarangiClassifier {
         /**
          * Constructor.
          *
+         */
+        public SarangiANN() {
+
+        }
+
+        /**
+         * Constructor.
+         *
          * @param trainingSongs The songs to be used for training
          * @param labels The string labels
          * @param featureType The type of feature to be used
@@ -78,4 +86,8 @@ public class SarangiANN extends SarangiClassifier {
                 return ann.predict(songDataset.dataset[0]);
         }
 
+        public void store(String filename) {
+        }
+        public void load(String filename) {
+        }
  }

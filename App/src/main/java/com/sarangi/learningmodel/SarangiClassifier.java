@@ -21,7 +21,7 @@ import java.util.logging.*;
  * @author Bijay Gurung
  */
 
-public abstract class SarangiClassifier implements Classifier {
+public abstract class SarangiClassifier implements Classifier, Serializable {
 
         /**
          * The labels.
@@ -45,6 +45,14 @@ public abstract class SarangiClassifier implements Classifier {
         /**
          * Constructor.
          *
+         */
+        public SarangiClassifier() {
+
+        }
+
+        /**
+         * Constructor.
+         *
          * @param trainingSongs The songs to be used for training
          * @param labels The string labels
          * @param featureType The type of feature to be used
@@ -58,6 +66,17 @@ public abstract class SarangiClassifier implements Classifier {
                 this.train(trainingSongs);
 
         }
+
+        public void setLabels(String[] labels) {
+                this.labels = labels;
+        }
+
+        public void setFeatureType(FeatureType featureType) {
+                this.featureType = featureType;
+        }
+
+        public abstract void store(String filename);
+        public abstract void load(String filename);
 
         /**
          * Train the model using the given songs.

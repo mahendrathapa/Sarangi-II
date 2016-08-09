@@ -8,6 +8,8 @@
 
 package com.sarangi.learningmodel;
 
+import java.io.Serializable;
+
 /**
  * Structure Class for holding the dataset for training 
  *
@@ -15,7 +17,7 @@ package com.sarangi.learningmodel;
  * @author Bijay Gurung
  */
 
-public class LearningDataset {
+public class LearningDataset implements Serializable{
 
         /* FIELDS **************************************************/
 
