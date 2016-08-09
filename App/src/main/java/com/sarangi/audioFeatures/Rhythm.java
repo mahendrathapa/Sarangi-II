@@ -61,6 +61,10 @@ public class Rhythm{
          */
         private  float samplingRate;
 
+        int howLong = 12;
+
+        private float[] strongestBeat = new float[howLong];
+
 
         /*CONSTRUCTORS ******************************************************************/
 
@@ -88,6 +92,9 @@ public class Rhythm{
                 int minLag = (int)(0.286 * effectiveSamplingRate);
                 int maxLag = (int)(3.0 * effectiveSamplingRate);
 
+                Map<Float,Integer> bmpCount = new HashMap<Float,Integer>();
+                Map<Float,Float> bmpEnergy = new HashMap<Float,Float>();
+
                 for(int loop=0; loop<=length; loop+= 1){
 
                         
@@ -103,19 +110,95 @@ public class Rhythm{
                         for(int i=0; i<beatLabels.length; ++i)
                                 beatLabels[i]  *= 60.0;
 
-                        bpm.add(getStrongestBeat(beatHistogram,beatLabels));
+                        float beatPerMinute = getStrongestBeat(beatHistogram,beatLabels);
+                        
+                        bpm.add(beatPerMinute);
+
+                        float strongest =  getStrengthofStrongestBeat(beatHistogram);
+
+                        if(bmpCount.containsKey(beatPerMinute)){
+                                int value = bmpCount.get(beatPerMinute);
+                                bmpCount.put(beatPerMinute, ++ value);
+
+                                float energy = bmpEnergy.get(beatPerMinute);
+                                bmpEnergy.put(beatPerMinute, energy + strongest);
+                        }else{
+
+                                bmpCount.put(beatPerMinute,1);
+                                bmpEnergy.put(beatPerMinute,strongest);
+                        }
 
                 }
 
+                Map<Float,Integer> hmap = new HashMap<Float,Integer>();
+
                 for(float singleRms : bpm){
+
+                        if(hmap.containsKey(singleRms)){
+                                int value = hmap.get(singleRms);
+                                hmap.put(singleRms, ++value);
+
+                        }else
+                                hmap.put(singleRms,1);
+
                         int index = (int)singleRms/gap;
 
                         if(index<range)
                                 ++beatGraph[index];
                 }
 
+
+                Map<Float,Integer> sortedMap = sortByComparator(bmpCount);
+
+                ArrayList<Float> keys = new ArrayList<Float>(sortedMap.keySet());
+
+                for(int count = 0,i=keys.size()-1;i>=0 && count<howLong; --i,++count){
+
+                        strongestBeat[count] = keys.get(i);
+                        strongestBeat[++count] = sortedMap.get(keys.get(i));
+                        strongestBeat[++count] = bmpEnergy.get(keys.get(i))/sortedMap.get(keys.get(i));
+                }
+
         }
 
+        private Map<Float, Integer> sortByComparator(Map<Float, Integer> unsortMap) {
+
+                // Convert Map to List
+                List<Map.Entry<Float, Integer>> list = 
+                        new LinkedList<Map.Entry<Float, Integer>>(unsortMap.entrySet());
+
+                // Sort list with comparator, to compare the Map values
+                Collections.sort(list, new Comparator<Map.Entry<Float, Integer>>() {
+                        public int compare(Map.Entry<Float, Integer> o1,
+                                        Map.Entry<Float, Integer> o2) {
+                                return (o1.getValue()).compareTo(o2.getValue());
+                        }
+                });
+
+                // Convert sorted map back to a Map
+                Map<Float, Integer> sortedMap = new LinkedHashMap<Float, Integer>();
+                for (Iterator<Map.Entry<Float, Integer>> it = list.iterator(); it.hasNext();) {
+                        Map.Entry<Float, Integer> entry = it.next();
+                        sortedMap.put(entry.getKey(), entry.getValue());
+                }
+                return sortedMap;
+        }
+
+        private void printMap(Map<Float,Integer> map){
+               
+                ArrayList<Float> keys = new ArrayList<Float>(map.keySet());
+
+                for(int i=keys.size()-1;i>=0; --i)
+                        System.out.println(keys.get(i) + " " + map.get(keys.get(i)));
+
+                /*for(Map.Entry<Float,Integer> entry : map.entrySet()){
+                        System.out.println(entry.getKey() + "  " +entry.getValue());
+                }*/
+        }
+
+        public float[] getStrongestBeat(){
+                return strongestBeat;
+        }
         /**
          * Return the rhythmic graph of the given audio signal.
          *
@@ -270,7 +353,7 @@ public class Rhythm{
                 }
                 return autoCorrelation;
         }
-        
+
 
 }
 

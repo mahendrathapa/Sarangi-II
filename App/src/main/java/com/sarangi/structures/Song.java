@@ -50,7 +50,7 @@ public class Song{
         /**
          * Rhythm features of the given song.
          */
-        protected int[] rhythm;
+        protected float[] rhythm;
 
 
         /* CONSTRUCTORS *****************************************/
@@ -67,7 +67,7 @@ public class Song{
          * @param   pitch           A reference to the pitch features of the song.
          */
 
-        public Song(String songName, List<Float> intensity, List<float[]> mfcc, int[] pitch, int[] rhythm){
+        public Song(String songName, List<Float> intensity, List<float[]> mfcc, int[] pitch, float[] rhythm){
                 
                 this.songName = songName;
                 this.intensity.addAll(intensity);
@@ -122,7 +122,7 @@ public class Song{
          * @return      Rhythm features of the song.
          */
 
-        public int[] getRhythm(){
+        public float[] getRhythm(){
                 return rhythm;
         }
 

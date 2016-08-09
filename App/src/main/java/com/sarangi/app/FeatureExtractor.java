@@ -142,7 +142,7 @@ public class FeatureExtractor{
                                         int[] pitchFeatures = pitch.getPitchGraph();
 
                                         Rhythm rhythm = new Rhythm(audioFrame, audioFormat);
-                                        int[] rhythmFeatures = rhythm.getRhythmGraph();
+                                        float[] rhythmFeatures = rhythm.getStrongestBeat();
 
                                         songs.add(new Song(songName,intensityFeatures,mfccFeatures,pitchFeatures,rhythmFeatures));
                                 }

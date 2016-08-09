@@ -61,9 +61,9 @@ public class DatasetUtil {
                     int i = 0;
                     for (Song song: dataSongs) {
 
-                            int[] rhythm = song.getRhythm();
+                            float[] rhythm = song.getRhythm();
 
-                            learningDataset.dataset[i] = convertIntArrayToDoubleArray(rhythm);
+                            learningDataset.dataset[i] = convertFloatsToDoubles(rhythm);
                             learningDataset.labelIndices[i] = getIndexOfLabel(song.getSongName(), labelArray);
 
                             i++;
