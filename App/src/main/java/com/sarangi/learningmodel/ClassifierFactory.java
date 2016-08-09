@@ -11,18 +11,11 @@ package com.sarangi.learningmodel;
 import java.util.*;
 import java.io.*;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.reflect.*;
-import java.lang.reflect.Type;
-
 import com.sarangi.json.*;
 import com.sarangi.structures.*;
 import com.sarangi.learningmodel.ann.*;
 import com.sarangi.learningmodel.svm.*;
 import smile.math.kernel.GaussianKernel;
-import smile.math.kernel.MercerKernel;
 
 /**
  * Class to produce instance of required classifier.

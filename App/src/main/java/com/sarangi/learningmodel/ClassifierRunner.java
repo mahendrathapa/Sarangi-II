@@ -63,7 +63,6 @@ public class ClassifierRunner {
                 SongHandler testSongHandler = new SongHandler(testFilename);
                 List<Song> testSongs = testSongHandler.loadSongs();
 
-
                 SarangiClassifier classifier = ClassifierFactory.getClassifier(trainingSongs,this.labels,featureType,classifierType);
 
                 String classifierFile = new String("src/resources/song/classifier.txt");
@@ -71,9 +70,14 @@ public class ClassifierRunner {
 
                 SarangiClassifier loadedClassifier = ClassifierFactory.loadClassifier(classifierFile,"SVM",this.labels,featureType);
 
-                Result result = loadedClassifier.test(testSongs);
+                Result result = classifier.test(testSongs);
+                Result result2 = loadedClassifier.test(testSongs);
 
+                System.out.println("Direct classifier");
                 result.printData();
+
+                System.out.println("Classifier stored and loaded");
+                result2.printData();
 
         }
 
@@ -109,6 +113,17 @@ public class ClassifierRunner {
                         trainingSongs.removeAll(testSongs);
 
                         SarangiClassifier classifier = factory.getClassifier(trainingSongs,this.labels,featureType, classifierType);
+
+                        // Check loaded classifier
+                         
+                        /*
+                        String classifierFile = new String("src/resources/song/kfoldclassifier.txt");
+                        ClassifierFactory.storeClassifier(classifier,classifierFile);
+
+                        SarangiClassifier loadedClassifier = ClassifierFactory.loadClassifier(classifierFile,"SVM",this.labels,featureType);
+
+                        Result result = loadedClassifier.test(testSongs);
+                        */
                 
                         Result result = classifier.test(testSongs);
 

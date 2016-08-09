@@ -61,7 +61,7 @@ public class SarangiFrameSVM extends SarangiClassifier {
          */
         public SarangiFrameSVM(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
 
-                super(trainingSongs, labels, featureType,"FrameSVM");
+                super(trainingSongs, labels, featureType);
 
         }
 

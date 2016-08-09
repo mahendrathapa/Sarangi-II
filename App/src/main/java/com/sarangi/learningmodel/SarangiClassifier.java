@@ -43,12 +43,6 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
         public LearningDataset trainingSet; 
 
         /**
-         * The Classifier Type
-         *
-         */
-        public String type;
-
-        /**
          * Constructor.
          *
          */
@@ -64,11 +58,10 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
          * @param featureType The type of feature to be used
          *
          */
-        public SarangiClassifier(List<Song> trainingSongs, String[] labels, FeatureType featureType, String classifierType) {
+        public SarangiClassifier(List<Song> trainingSongs, String[] labels, FeatureType featureType) {
 
                 this.labels = labels;
                 this.featureType = featureType;
-                this.type = classifierType;
 
                 this.train(trainingSongs);
 
@@ -128,9 +121,6 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
 
                             labelCount[labelIndex-1]++;
                             int predictedLabel = this.predict(song);
-
-                            System.out.println(labelIndex);
-                            System.out.println(predictedLabel);
 
                             confusionMatrix[labelIndex-1][predictedLabel-1]++;
 

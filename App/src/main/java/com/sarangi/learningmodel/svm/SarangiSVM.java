@@ -6,14 +6,10 @@ import com.sarangi.structures.*;
 import com.sarangi.json.*;
 import com.sarangi.learningmodel.*;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.reflect.*;
-import java.lang.reflect.Type;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 import smile.classification.SVM;
-import smile.classification.NeuralNetwork;
 import smile.math.kernel.GaussianKernel;
 import smile.math.kernel.MercerKernel;
 import smile.math.Math;
@@ -61,7 +57,7 @@ public class SarangiSVM extends SarangiClassifier {
          */
         public SarangiSVM(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
 
-                super(trainingSongs, labels, featureType,"SVM");
+                super(trainingSongs, labels, featureType);
 
         }
 
@@ -105,10 +101,17 @@ public class SarangiSVM extends SarangiClassifier {
 
                         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
+                        /*
                         final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator());
                         final Gson gson = gsonBuilder.create();
 
                         gson.toJson(svm,bufferedWriter);
+                        */
+
+                        XStream xstream = new XStream(new StaxDriver());
+                        String xml = xstream.toXML(svm);
+
+                        bufferedWriter.write(xml);
 
                         bufferedWriter.close();
 
@@ -126,12 +129,17 @@ public class SarangiSVM extends SarangiClassifier {
                                 return;
 
                         BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
-                        String jsonResponse = bufferedReader.readLine();
+                        String xml = bufferedReader.readLine();
 
+                        /*
                         final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator());
                         final Gson gson = gsonBuilder.create();
 
                         this.svm = gson.fromJson(jsonResponse,SVM.class);
+                        */
+
+                        XStream xstream = new XStream(new StaxDriver());
+                        this.svm = (SVM)xstream.fromXML(xml);
 
                         bufferedReader.close();
 

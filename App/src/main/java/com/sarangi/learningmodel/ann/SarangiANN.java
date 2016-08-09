@@ -49,7 +49,7 @@ public class SarangiANN extends SarangiClassifier {
          */
         public SarangiANN(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
 
-                super(trainingSongs,labels,featureType,"NeuralNetwork");
+                super(trainingSongs,labels,featureType);
 
         }
         

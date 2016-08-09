@@ -59,7 +59,7 @@ public class SarangiFrameANN extends SarangiClassifier {
          */
         public SarangiFrameANN(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
 
-                super(trainingSongs, labels, featureType, "FrameNeuralNetwork");
+                super(trainingSongs, labels, featureType);
 
         }
 
