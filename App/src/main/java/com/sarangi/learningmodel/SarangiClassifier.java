@@ -74,6 +74,17 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
 
         }
 
+        public void setLabels(String[] labels) {
+                this.labels = labels;
+        }
+
+        public void setFeatureType(FeatureType featureType) {
+                this.featureType = featureType;
+        }
+
+        public abstract void store(String filename);
+        public abstract void load(String filename);
+
         /**
          * Train the model using the given songs.
          * The specific model to be used is determined by the child class.
@@ -117,6 +128,9 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
 
                             labelCount[labelIndex-1]++;
                             int predictedLabel = this.predict(song);
+
+                            System.out.println(labelIndex);
+                            System.out.println(predictedLabel);
 
                             confusionMatrix[labelIndex-1][predictedLabel-1]++;
 

@@ -1,16 +1,21 @@
 package com.sarangi.learningmodel.svm; 
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import com.sarangi.structures.*;
 import com.sarangi.json.*;
 import com.sarangi.learningmodel.*;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.reflect.*;
+import java.lang.reflect.Type;
+
 import smile.classification.SVM;
 import smile.classification.NeuralNetwork;
 import smile.math.kernel.GaussianKernel;
+import smile.math.kernel.MercerKernel;
 import smile.math.Math;
 import java.lang.Math.*;
 import java.util.*;
@@ -43,7 +48,7 @@ public class SarangiSVM extends SarangiClassifier {
          *
          */
         public SarangiSVM() {
-
+                svm = new SVM(new GaussianKernel(SarangiSVM.SIGMA), 2.0d);
         }
         
         /**
@@ -90,9 +95,50 @@ public class SarangiSVM extends SarangiClassifier {
 
                 // TODO Get a better solution than this Hack
                 LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
-                System.out.println(Arrays.toString(songDataset.dataset[0]));
+
                 return svm.predict(songDataset.dataset[0]);
         }
 
+        public void store(String filename) {
+                try{
+                        FileWriter fileWriter = new FileWriter(filename,true);
+
+                        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+                        final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator());
+                        final Gson gson = gsonBuilder.create();
+
+                        gson.toJson(svm,bufferedWriter);
+
+                        bufferedWriter.close();
+
+                }catch(Exception ex) {
+                        ex.printStackTrace();
+                }
+        }
+
+        public void load(String filename) {
+                try{
+
+                        File file = new File(filename);
+
+                        if(file.length() == 0)
+                                return;
+
+                        BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+                        String jsonResponse = bufferedReader.readLine();
+
+                        final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator());
+                        final Gson gson = gsonBuilder.create();
+
+                        this.svm = gson.fromJson(jsonResponse,SVM.class);
+
+                        bufferedReader.close();
+
+                } catch(Exception ex){
+                        ex.printStackTrace();
+                }
+
+        }
 
 }

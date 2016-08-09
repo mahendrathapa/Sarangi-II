@@ -118,5 +118,9 @@ public class SarangiFrameANN extends SarangiClassifier {
 
         }
 
+        public void store(String filename) {
+        }
+        public void load(String filename) {
+        }
 
 }

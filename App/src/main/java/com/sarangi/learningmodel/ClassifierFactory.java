@@ -97,35 +97,7 @@ public class ClassifierFactory {
          */
         public static void storeClassifier(SarangiClassifier classifier, String filename) {
 
-                try{
-
-                        FileWriter fileWriter = new FileWriter(filename,true);
-
-                        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-                        final TypeToken<SarangiClassifier> requestListTypeToken = new TypeToken<SarangiClassifier>() {};
-
-                        // Adding all different container classes with their flag
-                        final RuntimeTypeAdapterFactory<SarangiClassifier> typeFactory = RuntimeTypeAdapterFactory
-                        .of(SarangiClassifier.class, "type") 
-                        .registerSubtype(SarangiANN.class, "NeuralNetwork")
-                        .registerSubtype(SarangiSVM.class, "SVM");
-                        
-                        // Add the polymorphic specialization
-                        final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator())
-                                                        .registerTypeAdapterFactory(typeFactory);
-                        final Gson gson = gsonBuilder.create();
-
-                        String json = gson.toJson(classifier);
-
-                        bufferedWriter.write(json);
-                        bufferedWriter.close();
-
-                } catch(IOException ex){
-
-                        System.out.println("Program Terminating");
-                        System.exit(0);
-                }
+                classifier.store(filename);
         }
 
         /**
@@ -133,42 +105,16 @@ public class ClassifierFactory {
          *
          * @param filename The file from which to load the classifier.
          */
-        public static SarangiClassifier loadClassifier(String filename, String classifierType) {
+        public static SarangiClassifier loadClassifier(String filename, String classifierType, String[] labels, FeatureType featureType) {
 
-                SarangiClassifier classifier = getClassifier(classifierType);
+                SarangiClassifier loadedClassifier = getClassifier(classifierType);
 
-                try{
+                loadedClassifier.setLabels(labels);
+                loadedClassifier.setFeatureType(featureType);
 
-                        File file = new File(filename);
+                loadedClassifier.load(filename);
 
-                        if(file.length() == 0)
-                                return classifier;
-
-                        BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
-                        String jsonResponse = bufferedReader.readLine();
-
-                        final TypeToken<SarangiClassifier> requestListTypeToken = new TypeToken<SarangiClassifier>() {};
-
-                        // Adding all different container classes with their flag
-                        final RuntimeTypeAdapterFactory<SarangiClassifier> typeFactory = RuntimeTypeAdapterFactory
-                        .of(SarangiClassifier.class, "type") 
-                        .registerSubtype(SarangiANN.class, "NeuralNetwork")
-                        .registerSubtype(SarangiSVM.class, "SVM");
-                        
-                        // Add the polymorphic specialization
-                        final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator())
-                                                        .registerTypeAdapterFactory(typeFactory);
-                        final Gson gson = gsonBuilder.create();
-
-                        classifier = gson.fromJson(jsonResponse, requestListTypeToken.getType());
-
-                        bufferedReader.close();
-
-                        return classifier;
-                } catch(IOException ex){
-                        return null;
-                }
-
+                return loadedClassifier;
 
         }
 }

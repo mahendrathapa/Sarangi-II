@@ -69,8 +69,8 @@ public class ClassifierRunner {
                 String classifierFile = new String("src/resources/song/classifier.txt");
                 ClassifierFactory.storeClassifier(classifier,classifierFile);
 
-                SarangiClassifier loadedClassifier = ClassifierFactory.loadClassifier(classifierFile,"SVM");
-                
+                SarangiClassifier loadedClassifier = ClassifierFactory.loadClassifier(classifierFile,"SVM",this.labels,featureType);
+
                 Result result = loadedClassifier.test(testSongs);
 
                 result.printData();

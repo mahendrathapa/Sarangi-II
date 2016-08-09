@@ -121,5 +121,10 @@ public class SarangiFrameSVM extends SarangiClassifier {
 
         }
 
+        public void store(String filename) {
+        }
+        public void load(String filename) {
+        }
+
 
 }

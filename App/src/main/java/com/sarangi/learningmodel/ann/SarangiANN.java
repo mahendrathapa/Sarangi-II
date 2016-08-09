@@ -86,4 +86,8 @@ public class SarangiANN extends SarangiClassifier {
                 return ann.predict(songDataset.dataset[0]);
         }
 
+        public void store(String filename) {
+        }
+        public void load(String filename) {
+        }
  }
