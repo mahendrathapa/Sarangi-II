@@ -10,6 +10,7 @@
 
 package com.sarangi.audioFeatures;
 
+import com.sarangi.audioTools.*;
 import java.util.*;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 import be.tarsos.dsp.AudioDispatcher;
@@ -34,123 +35,46 @@ import java.util.logging.*;
 
 public class Pitch{
 
-        /*FIELDS ***************************************************/
 
-        /**
-         * Logger is used to maintain the log of the program. The log contain the error message generated during the
-         * execution of the program, warning messages to the user and information about the status of the program
-         * to the user. The log is also beneficial during program debugging.
-         */
-        private Logger logger = Logger.getLogger("Pitch");
+        public static double[][] extractFeature(List<double[]> Frames,double samplingRate){
 
-        /**
-         * A List for storing the  pitch features as time series which is extracted for the given song.
-         *
-         */
-        private List<Float> pitchFrameWise = new ArrayList<Float>();
+                int dimension = 1;
+                int length = Frames.get(0).length;
+               
+                double[][] feature = new double[Frames.size()][dimension];
 
-        /**
-         * An array for the storing the pitch features as a graph between the strength vs pitch for the given song.
-         */
+                final List<Double> pitchList = new ArrayList<Double>();
 
-        private int[] pitchGraph;
+                for(double[] frame : Frames){
 
-        /**
-         * Range of the pitch
-         */
-        private final int range = 30;
+                        float[] floatFrame = Statistics.convertDoubleArrayToFloatArray(frame);
 
-
-        /**
-         * The gap of the pitch
-         */
-        private final int gap = 50;
-
-        /**
-         * Sampling frequency of the audio sample
-         */
-        private  int samplingFrequency;
-
-
-
-        /*CONSTRUCTORS **********************************************************/
-
-        /**
-         * Extract the pitch features from the given audio Samples.
-         * Also set the level of the log according to the status in which the program is used.
-         * The log levels are SEVERS, WARNING and INFO mainly.
-         *
-         * @param   audioFrame          A reference to the audio frame of the song.
-         *
-         * @param   audioFormat         A reference to the audio format which is associated with given audio samples.
-         * 
-         * @throws  Exception           Throw an exception if any occur.
-         *
-         */
-
-        public Pitch(List<float[]> audioFrame, AudioFormat audioFormat)
-
-        {
-                pitchGraph = new int[range];
-                
-                samplingFrequency = (int)audioFormat.getSampleRate();
-                
-                int length = audioFrame.get(0).length;
-
-                logger.setLevel(Level.SEVERE);
-
-                try{
-
-                        for(float[] singleFrame:audioFrame){
-
-                                AudioDispatcher audioDispatcher = AudioDispatcherFactory.fromFloatArray(singleFrame,samplingFrequency,length,0);
-
+                        try{
+                                AudioDispatcher audioDispatcher = AudioDispatcherFactory.fromFloatArray(floatFrame,(int)samplingRate,length,0);
                                 PitchDetectionHandler pitchDetectionHandler = new PitchDetectionHandler() {
                                         @Override
                                         public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
+                                                pitchList.add((double)pitchDetectionResult.getPitch());
+                                                }
 
-                                                float pitch = pitchDetectionResult.getPitch();
-                                        
-                                                if(Math.abs(pitch + 1) > 0.1)
-                                                        pitchFrameWise.add(pitch);
-
-                                        }
                                 };
-
-                                audioDispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN,samplingFrequency,length,pitchDetectionHandler));
+                                audioDispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN,(int)samplingRate,length,pitchDetectionHandler));
                                 audioDispatcher.run();
-                        }
 
-                        for(float singlePitch : pitchFrameWise){
-                                int index = (int)singlePitch/gap;
-
-                                if(index<range)
-                                        ++pitchGraph[(int)singlePitch/gap];
-                        }
-
-                } catch(UnsupportedAudioFileException ex){
-                        logger.log(Level.SEVERE,ex.toString(),ex);
+                        } catch(UnsupportedAudioFileException ex){
+                        
+                        }        
                 }
-        }
 
-        /**
-         * A method for getting the pitch features of the audio sample.
-         *
-         * @return      Pitch features of the audio sample.
-         */
+                int count = 0;
+                for(double pitch : pitchList){
 
-        public List<Float> getPitchFrameWise(){
-                return pitchFrameWise;
-        }
+                        feature = Statistics.assign1Dto2DArray(feature,new double[]{pitch},count);
+                        ++count;
+                }
 
-        /**
-         * A method for getting the pitch graph of the audio sample.
-         *
-         * @return      Pitch graph of the audio sample.
-         */
-
-        public int[] getPitchGraph(){
-                return pitchGraph;
+                return feature;
         }
 }
+
 

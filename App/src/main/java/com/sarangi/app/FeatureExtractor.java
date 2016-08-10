@@ -137,6 +137,7 @@ public class FeatureExtractor{
                                         
                                         double[] compactness = Statistics.getAvgSD(Compactness.extractFeature(magnitudeSpectrumFrame,samplingRate));
                                         double[] melFreq = Statistics.getAvgSD(MelFreq.extractFeature(audioFrames,samplingRate));
+                                        double[] pitch = Statistics.getPitchAnalysis(Pitch.extractFeature(audioFrames,samplingRate));
                                         double[] rhythm = Statistics.getRhythmAnalysis(Rhythm.extractFeature(rmsFrame,samplingRate));
                                         double[] rms = Statistics.getAvgSD(rmsFrame);
                                         double[] spectralCentroid = Statistics.getAvgSD(SpectralCentroid.extractFeature(powerSpectrumFrame,samplingRate));
@@ -145,7 +146,7 @@ public class FeatureExtractor{
                                         double[] spectralVariablility = Statistics.getAvgSD(SpectralVariability.extractFeature(magnitudeSpectrumFrame,samplingRate));
                                         double[] zeroCrossing = Statistics.getAvgSD(ZeroCrossings.extractFeature(audioFrames,samplingRate));
 
-                                        songs.add(new Song(songName,compactness,melFreq,rhythm,rms,spectralCentroid,spectralFlux,spectralRolloffPoint,spectralVariablility,zeroCrossing));
+                                        songs.add(new Song(songName,compactness,melFreq,pitch,rhythm,rms,spectralCentroid,spectralFlux,spectralRolloffPoint,spectralVariablility,zeroCrossing));
 
                                 }
 

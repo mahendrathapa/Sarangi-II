@@ -37,6 +37,7 @@ public class Song{
          */
         double[] compactness;
         double[] melFreq;
+        double[] pitch;
         double[] rhythm;
         double[] rms;
         double[] spectralCentroid;
@@ -59,11 +60,12 @@ public class Song{
          * @param   pitch           A reference to the pitch features of the song.
          */
 
-          public Song(String songName,double[] compactness,double[] melFreq,double[] rhythm,double[] rms,double[] spectralCentroid,double[] spectralFlux,double[] spectralRolloffPoint,double[] spectralVariablility,double[] zeroCrossing){
+          public Song(String songName,double[] compactness,double[] melFreq,double[] pitch,double[] rhythm,double[] rms,double[] spectralCentroid,double[] spectralFlux,double[] spectralRolloffPoint,double[] spectralVariablility,double[] zeroCrossing){
 
                   this.songName = songName;
                   this.compactness = compactness.clone();
                   this.melFreq = melFreq.clone();
+                  this.pitch = pitch.clone();
                   this.rhythm = rhythm.clone();
                   this.rms = rms.clone();
                   this.spectralCentroid = spectralCentroid.clone();
@@ -91,6 +93,10 @@ public class Song{
  
         public double[] getMelFreq(){
                 return melFreq;
+        }
+
+        public double[] getPitch(){
+                return pitch;
         }
 
         public double[] getRhythm(){

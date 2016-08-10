@@ -159,9 +159,48 @@ public class Statistics{
         }
 
 
+        public static double[] getPitchAnalysis(double[][] features){
+
+                int howLong = 10;
+
+                double[] output = new double[howLong];
+
+                Map<Integer,Integer> pitchCount = new HashMap<Integer,Integer>();
+
+                for(double[] feature : features){
+
+                        int pitch =  (int)feature[0];
+
+                        if(pitch != -1){
+
+                                if(pitchCount.containsKey(pitch)){
+                                        int value = pitchCount.get(pitch);
+                                        pitchCount.put(pitch,++value);
+                                }else{
+                                        pitchCount.put(pitch,1);
+                                }
+                        }
+                }
+
+                Map<Integer,Integer> sortedMap = sortByComparatorPitch(pitchCount);
+
+                ArrayList<Integer> keys = new ArrayList<Integer>(sortedMap.keySet());
+
+                int featureSize = features.length;
+
+                for( int count=0 , i=keys.size()-1 ; i>=0 && count<howLong ; --i , ++count ){
+
+                        output[count] = keys.get(i);
+                        output[++count] = sortedMap.get(keys.get(i))/featureSize;
+                }
+
+                return output;
+
+        }
         public static double[] getRhythmAnalysis(double[][] feature){
 
                 int howLong = 12;
+                int featureSize = feature.length;
 
                 double[] strongestBeat = new double[howLong];
 
@@ -186,14 +225,14 @@ public class Statistics{
                         }
                 }
 
-                Map<Double,Integer> sortedMap = sortByComparator(bmpCount);
+                Map<Double,Integer> sortedMap = sortByComparatorRhythm(bmpCount);
 
                 ArrayList<Double> keys = new ArrayList<Double>(sortedMap.keySet());
 
                 for(int count = 0,i=keys.size()-1;i>=0 && count<howLong; --i,++count){
 
                         strongestBeat[count] = keys.get(i);
-                        strongestBeat[++count] = sortedMap.get(keys.get(i));
+                        strongestBeat[++count] = sortedMap.get(keys.get(i))/featureSize;
                         strongestBeat[++count] = bmpEnergy.get(keys.get(i))/sortedMap.get(keys.get(i));
                 }
 
@@ -201,7 +240,7 @@ public class Statistics{
  
         }
         
-        private static Map<Double, Integer> sortByComparator(Map<Double, Integer> unsortMap) {
+        private static Map<Double, Integer> sortByComparatorRhythm(Map<Double, Integer> unsortMap) {
 
                 // Convert Map to List
                 List<Map.Entry<Double, Integer>> list = 
@@ -223,7 +262,29 @@ public class Statistics{
                 }
                 return sortedMap;
         }
+        
+        private static Map<Integer, Integer> sortByComparatorPitch(Map<Integer, Integer> unsortMap) {
 
+                // Convert Map to List
+                List<Map.Entry<Integer, Integer>> list = 
+                        new LinkedList<Map.Entry<Integer, Integer>>(unsortMap.entrySet());
+
+                // Sort list with comparator, to compare the Map values
+                Collections.sort(list, new Comparator<Map.Entry<Integer, Integer>>() {
+                        public int compare(Map.Entry<Integer, Integer> o1,
+                                        Map.Entry<Integer, Integer> o2) {
+                                return (o1.getValue()).compareTo(o2.getValue());
+                        }
+                });
+
+                // Convert sorted map back to a Map
+                Map<Integer, Integer> sortedMap = new LinkedHashMap<Integer, Integer>();
+                for (Iterator<Map.Entry<Integer, Integer>> it = list.iterator(); it.hasNext();) {
+                        Map.Entry<Integer, Integer> entry = it.next();
+                        sortedMap.put(entry.getKey(), entry.getValue());
+                }
+                return sortedMap;
+        }
         private static void printMap(Map<Double,Integer> map){
 
                 ArrayList<Double> keys = new ArrayList<Double>(map.keySet());
@@ -235,4 +296,5 @@ public class Statistics{
                   System.out.println(entry.getKey() + "  " +entry.getValue());
                   }*/
         }
+
 }
