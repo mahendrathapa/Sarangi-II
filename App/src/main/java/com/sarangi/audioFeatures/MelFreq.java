@@ -18,10 +18,14 @@ import java.lang.*;
 import be.tarsos.dsp.mfcc.MFCC;
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
+import java.util.logging.Level;
 
 public class MelFreq{
 
+
         public static double[][] extractFeature(List<double[]> audioFrames,double samplingRate){
+
+                LoggerHandler loggerHandler = LoggerHandler.getInstance();
 
                 int dimension = 30;
                 int length = audioFrames.get(0).length;
@@ -30,12 +34,12 @@ public class MelFreq{
 
                 int count = 0;
 
-                for(double[] frame : audioFrames){
+                try{
+                        for(double[] frame : audioFrames){
 
-                        float[] floatFrame = Statistics.convertDoubleArrayToFloatArray(frame);
+                                float[] floatFrame = Statistics.convertDoubleArrayToFloatArray(frame);
 
 
-                        try{
                                 AudioDispatcher audioDispatcher = AudioDispatcherFactory.fromFloatArray(floatFrame,(int)samplingRate,length,0);
                                 MFCC mfcc = new MFCC(length,(int)samplingRate);
                                 audioDispatcher.addAudioProcessor(mfcc);
@@ -44,13 +48,21 @@ public class MelFreq{
                                 feature = Statistics.assign1Dto2DArray(feature,Statistics.convertFloatArrayToDoubleArray(mfcc.getMFCC()),count);
                                 ++count;
 
-                        }catch(Exception ex){
-                                System.out.println(ex);
                         }
-                }
 
-                return feature;
+                        return feature;
+
+                }catch(Exception ex){
+
+                        loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                                                    Level.SEVERE,
+                                                    ExceptionPrint.getExceptionPrint(ex));
+
+                        return new double[][]{};
+
+                }
         }
+
 }
 
 

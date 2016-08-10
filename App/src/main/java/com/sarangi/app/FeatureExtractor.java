@@ -15,6 +15,7 @@ import com.sarangi.structures.*;
 import java.io.*;
 import java.util.*;
 import javax.sound.sampled.*;
+import java.util.logging.Level;
 
 /**
  * A class for extracting the features of the audio songs. The audio songs is stored
@@ -31,23 +32,10 @@ import javax.sound.sampled.*;
 
 public class FeatureExtractor{
 
-        /* FIELDS **************************************************/
-        /**
-         * Logger is used to maintain the log of the program. The log contain the error message generated during the
-         * execution of the program, warning messages to the user and information about the status of the program
-         * to the user. The log is also beneficial during program debugging.
-         */
-//        private Logger logger = Logger.getLogger("FeatureExtractor");
-
-        /**
-         * AudioPreProcessor is used for pre-processing of the audio signal.
-         */
-
-        //private AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
-
+        /*FIELDS**************************************************/
+         
         /**
          * A reference to the frame size;
-         *
          */
         private static final int frameSize = 1024;
 
@@ -55,21 +43,6 @@ public class FeatureExtractor{
          * A reference to the overlapping of the audio signal.
          */
         private static final int overLapSize = 512;
-
-        /* CONSTRUCTORS *******************************************/
-
-        /**
-         * Set the level of the log according to the status in which the program is used.
-         * The log levels are SEVERS, WARNING and INFO mainly.
-         *
-         * Also, Define the AudioPreprocessing.
-         */
-
-        public FeatureExtractor(){
-
-//                logger.setLevel(Level.INFO);
-
-        }
 
 
         /**
@@ -84,7 +57,8 @@ public class FeatureExtractor{
 
         public static void extractFeature(String fileName, String folderName){
 
-                AudioPreProcessor audioPreProcessor = new AudioPreProcessor();
+                LoggerHandler loggerHandler = LoggerHandler.getInstance();
+
                 List<Song> songs = new ArrayList<Song>();
 
                 SongHandler fileHandler = new SongHandler(fileName);
@@ -120,16 +94,13 @@ public class FeatureExtractor{
 
                                         File singleFileName = new File(folderName+"/"+songName);
 
-                                        //logger.info(singleFileName.toString());
-                                        System.out.println(singleFileName.toString());
-
                                         AudioSample audioSample = new AudioSample(singleFileName);
 
                                         double[] samples = audioSample.getAudioSamples();
 
                                         double samplingRate = audioSample.getAudioFormat().getSampleRate();
 
-                                        List<double[]> audioFrames = audioPreProcessor.getAudioFrame(samples,frameSize,overLapSize);
+                                        List<double[]> audioFrames = AudioPreProcessor.getAudioFrame(samples,frameSize,overLapSize);
 
                                         double[][] powerSpectrumFrame = PowerSpectrum.extractFeature(audioFrames,samplingRate);
                                         double[][] magnitudeSpectrumFrame = MagnitudeSpectrum.extractFeature(audioFrames,samplingRate);
@@ -137,6 +108,7 @@ public class FeatureExtractor{
                                         
                                         double[] compactness = Statistics.getAvgSD(Compactness.extractFeature(magnitudeSpectrumFrame,samplingRate));
                                         double[] melFreq = Statistics.getAvgSD(MelFreq.extractFeature(audioFrames,samplingRate));
+                                        double[] pitch = Statistics.getPitchAnalysis(Pitch.extractFeature(audioFrames,samplingRate));
                                         double[] rhythm = Statistics.getRhythmAnalysis(Rhythm.extractFeature(rmsFrame,samplingRate));
                                         double[] rms = Statistics.getAvgSD(rmsFrame);
                                         double[] spectralCentroid = Statistics.getAvgSD(SpectralCentroid.extractFeature(powerSpectrumFrame,samplingRate));
@@ -145,28 +117,37 @@ public class FeatureExtractor{
                                         double[] spectralVariablility = Statistics.getAvgSD(SpectralVariability.extractFeature(magnitudeSpectrumFrame,samplingRate));
                                         double[] zeroCrossing = Statistics.getAvgSD(ZeroCrossings.extractFeature(audioFrames,samplingRate));
 
-                                        songs.add(new Song(songName,compactness,melFreq,rhythm,rms,spectralCentroid,spectralFlux,spectralRolloffPoint,spectralVariablility,zeroCrossing));
+                                        songs.add(new Song(songName,compactness,melFreq,pitch,rhythm,rms,spectralCentroid,spectralFlux,spectralRolloffPoint,spectralVariablility,zeroCrossing));
 
+                                        loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                                                                    Level.INFO,
+                                                                    "Feature of " +singleFileName.toString() + " is extracted successfull");
                                 }
 
                         } catch(UnsupportedAudioFileException ex){
-                                //logger.log(Level.SEVERE,ex.toString(),ex);
+
+                                loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                                                            Level.SEVERE,
+                                                            ExceptionPrint.getExceptionPrint(ex));
                                 continue;
 
                         } catch(IOException ex){
-                                //logger.log(Level.SEVERE,ex.toString(),ex);
+                               
+                                loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                                                            Level.SEVERE,
+                                                            ExceptionPrint.getExceptionPrint(ex));
                                 continue;
 
                         } catch(IllegalArgumentException ex){
-                                //logger.log(Level.SEVERE,ex.toString(),ex);
+                                
+                                loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                                                            Level.SEVERE,
+                                                            ExceptionPrint.getExceptionPrint(ex));
                                 continue;
                         }
                 }
 
-
                 fileHandler.storeSongs(songs);
-
         }
-
 
 }

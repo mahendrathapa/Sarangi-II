@@ -16,13 +16,15 @@ import java.util.logging.SimpleFormatter;
 
 public class LoggerHandler{
 
+        private static LoggerHandler instance;
+
         private Logger logger;
         private FileHandler fileHandler;
         private SimpleFormatter formatter;
 
         private final int FILE_SIZE = 1024 * 1024;
 
-        public LoggerHandler(){
+        private LoggerHandler(){
 
                 logger = Logger.getLogger("SarangiLog");
                 logger.setLevel(Level.ALL);
@@ -34,6 +36,15 @@ public class LoggerHandler{
 
                 FEATURE_EXTRACTION,
                 LEARNING_MODEL
+        }
+
+        public static synchronized LoggerHandler getInstance(){
+
+                if(instance == null){
+                        instance = new LoggerHandler();
+                }
+
+                return instance;
         }
 
         public void loggingSystem(LogType logType, Level level, String logMessage){

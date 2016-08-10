@@ -21,17 +21,12 @@ public class MagnitudeSpectrum{
 
                 int count = 0;
 
-                try{
 
-                        for(double[] frame : audioFrames){
+                for(double[] frame : audioFrames){
 
-                                FFT fft = new FFT(frame);
-                                feature = Statistics.assign1Dto2DArray(feature,fft.getMagnitudeSpectrum(),count);
-                                ++count;
-                        }
-
-                } catch(Exception ex){
-
+                        FFT fft = new FFT(frame);
+                        feature = Statistics.assign1Dto2DArray(feature,fft.getMagnitudeSpectrum(),count);
+                        ++count;
                 }
 
                 return feature;

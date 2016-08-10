@@ -19,6 +19,7 @@ public enum FeatureType {
         SARANGI_ALL,
         SARANGI_COMPACTNESS,
         SARANGI_MELFREQ,
+        SARANGI_PITCH,
         SARANGI_RHYTHM,
         SARANGI_RMS,
         SARANGI_SPECTRALCENTROID,
