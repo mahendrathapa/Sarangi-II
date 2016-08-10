@@ -38,42 +38,50 @@ public class Pitch{
 
         public static double[][] extractFeature(List<double[]> Frames,double samplingRate){
 
+                LoggerHandler loggerHandler = LoggerHandler.getInstance();
+
                 int dimension = 1;
                 int length = Frames.get(0).length;
-               
+
                 double[][] feature = new double[Frames.size()][dimension];
 
                 final List<Double> pitchList = new ArrayList<Double>();
 
-                for(double[] frame : Frames){
+                try{
+                        for(double[] frame : Frames){
 
-                        float[] floatFrame = Statistics.convertDoubleArrayToFloatArray(frame);
+                                float[] floatFrame = Statistics.convertDoubleArrayToFloatArray(frame);
 
-                        try{
                                 AudioDispatcher audioDispatcher = AudioDispatcherFactory.fromFloatArray(floatFrame,(int)samplingRate,length,0);
                                 PitchDetectionHandler pitchDetectionHandler = new PitchDetectionHandler() {
                                         @Override
                                         public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
                                                 pitchList.add((double)pitchDetectionResult.getPitch());
-                                                }
+                                        }
 
                                 };
                                 audioDispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN,(int)samplingRate,length,pitchDetectionHandler));
                                 audioDispatcher.run();
 
-                        } catch(UnsupportedAudioFileException ex){
-                        
-                        }        
+                        }
+
+                        int count = 0;
+                        for(double pitch : pitchList){
+
+                                feature = Statistics.assign1Dto2DArray(feature,new double[]{pitch},count);
+                                ++count;
+                        }
+
+                        return feature;
+
+                } catch(UnsupportedAudioFileException ex){
+
+                        loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                                        Level.SEVERE,
+                                        ExceptionPrint.getExceptionPrint(ex));
+
+                        return new double[][]{};
                 }
-
-                int count = 0;
-                for(double pitch : pitchList){
-
-                        feature = Statistics.assign1Dto2DArray(feature,new double[]{pitch},count);
-                        ++count;
-                }
-
-                return feature;
         }
 }
 

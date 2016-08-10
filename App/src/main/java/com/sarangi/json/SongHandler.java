@@ -15,9 +15,10 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.reflect.*;
 import java.lang.reflect.Type;
 
+import com.sarangi.audioTools.*;
 import java.io.*;
 import java.util.*;
-import java.util.logging.*;
+import java.util.logging.Level;
 
 /**
  * Class for loading all Songs stored beforehand.
@@ -31,14 +32,6 @@ public class SongHandler {
 
         /* FIELDS **************************************************/
 
-
-        /**
-         * Logger is used to maintain the log of the program. The log contain the error message generated during the
-         * execution of the program, warning messages to the user and information about the status of the program
-         * to the user. The log is also beneficial during program debugging.
-         */
-        private Logger logger = Logger.getLogger("SongLoader");
-
         /**
          * The songs to be loaded from the file.
          *
@@ -50,6 +43,8 @@ public class SongHandler {
          *
          */
         private String fileName;
+
+        LoggerHandler loggerHandler;
 
 
         /* CONSTRUCTORS *******************************************/
@@ -63,8 +58,8 @@ public class SongHandler {
          */
         public SongHandler(String fileName) {
 
+                loggerHandler = LoggerHandler.getInstance();
                 this.fileName = fileName;
-                logger.setLevel(Level.SEVERE);
 
         }
 
@@ -107,8 +102,14 @@ public class SongHandler {
 
                 } catch(IOException ex){
 
-                        logger.log(Level.SEVERE,ex.toString(),ex);
-                        System.out.println("Program Terminating");
+                        loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                                                    Level.SEVERE,
+                                                    ExceptionPrint.getExceptionPrint(ex));
+
+                        loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                                                    Level.SEVERE,
+                                                    "Program Terminating");
+
                         System.exit(0);
                 }
         }

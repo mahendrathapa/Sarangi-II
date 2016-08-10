@@ -44,7 +44,7 @@ public class DatasetUtil {
 
                 if(featureType == FeatureType.SARANGI_ALL){
 
-                        learningDataset.dataset = new double[dataSongs.size()][34];
+                        learningDataset.dataset = new double[dataSongs.size()][2];
 
                         int i = 0;
 
@@ -52,11 +52,11 @@ public class DatasetUtil {
 
                                 double[] compactness = song.getCompactness();
 
-                                double[] melFreq = new double[20];
-
+                                double[] melFreq =new double[20];
                                 System.arraycopy(song.getMelFreq(),0,melFreq,0,10);
                                 System.arraycopy(song.getMelFreq(),30,melFreq,10,10);
 
+                                double[] pitch = song.getPitch();
                                 double[] rhythm = song.getRhythm();
                                 double[] rms = song.getRMS();
                                 double[] spectralCentroid = song.getSpectralCentroid();
@@ -65,7 +65,7 @@ public class DatasetUtil {
                                 double[] spectralVariablility = song.getSpectralVariablility();
                                 double[] zeroCrossing = song.getZeroCrossing();
 
-                                learningDataset.dataset[i] = Statistics.mergeArrays(rhythm,zeroCrossing);
+                                learningDataset.dataset[i] = Statistics.mergeArrays(zeroCrossing);
 /*
                                 learningDataset.dataset[i] = Statistics.mergeArrays(compactness,
                                                                                     melFreq,

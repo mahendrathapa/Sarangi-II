@@ -8,16 +8,14 @@ import java.util.logging.Level;
  */
 
 public class LoggerHandlerTest extends TestCase{
-
-        public void testLoggerHandler() {
 /*
-                LoggerHandler lH = new LoggerHandler();
+        public void testLoggerHandler() {
 
-                LoggerHandler.LogType lT = LoggerHandler.LogType.FEATURE_EXTRACTION;
+                LoggerHandler lH = LoggerHandler.getInstance();
 
-                lH.loggingSystem(lT,Level.INFO,new String("Testing Log"));
-*/
+                lH.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,Level.INFO,new String("AAAAJk;w"));
         }
+        */
 }
 
 

@@ -1,5 +1,4 @@
-/*
- * @(#) Song.java   2.0     June 9, 2016.
+ /* @(#) Song.java   2.0     June 9, 2016.
  *
  * Mahendra Thapa
  *

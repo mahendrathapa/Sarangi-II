@@ -24,29 +24,7 @@ import java.lang.System.*;
  */
 
 public class AudioPreProcessor{
-
-        /*FIELDS**********************************************************/
-
-        /**
-         * Logger is used to maintain the log of the program. The log contain the error message generated during the
-         * execution of the program, warning messages to the user and information about the status of the program
-         * to the user. The log is also beneficial during program debugging.
-         */
-        private Logger logger = Logger.getLogger("AudioPreProcessor");
-
-
-        /*CONSTRUCTORS****************************************************/
-
-        /**
-         *Set the level of the log according to the status in which the program is used.
-         * The log levels are SEVERS, WARNING and INFO mainly.
-         */
-
-        public AudioPreProcessor(){
-
-                logger.setLevel(Level.SEVERE);
-        }
-
+        
         /**
          * A method to break down the audio sample into the frame of given size.
          *
@@ -60,7 +38,7 @@ public class AudioPreProcessor{
          *
          */
 
-        public List<double[]> getAudioFrame(double[] audioSamples,int frameSize,int overLapSize){
+        public static List<double[]> getAudioFrame(double[] audioSamples,int frameSize,int overLapSize){
 
               List<double[]> output = new ArrayList<double[]>();  
 

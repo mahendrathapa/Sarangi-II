@@ -140,6 +140,7 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
 
 
                 }catch (Exception ex){
+
                         ex.printStackTrace();
                 }
                     return new Result(accuracy,this.labels,labelAccuracy,confusionMatrix);

@@ -21,18 +21,14 @@ public class PowerSpectrum{
 
                 int count = 0;
 
-                try{
 
-                        for(double[] frame : audioFrames){
+                for(double[] frame : audioFrames){
 
-                                FFT fft = new FFT(frame);
-                                feature = Statistics.assign1Dto2DArray(feature,fft.getPowerSpectrum(),count);
-                                ++count;
-                        }
-
-                } catch (Exception ex){
-                        System.out.println(ex);
+                        FFT fft = new FFT(frame);
+                        feature = Statistics.assign1Dto2DArray(feature,fft.getPowerSpectrum(),count);
+                        ++count;
                 }
+
                 return feature;
         }
 }
