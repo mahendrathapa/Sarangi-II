@@ -58,11 +58,36 @@ public class App
                 CommandExtract extract = new CommandExtract();
                 jc.addCommand("extract",extract);
 
+                CommandTrain train = new CommandTrain();
+                jc.addCommand("train",train);
+
+                CommandTest test = new CommandTest();
+                jc.addCommand("test",test);
+
+                CommandClassify classify = new CommandClassify();
+                jc.addCommand("classify",classify);
+
+                try {
+
                 jc.parse(args);
 
-                if (jc.getParsedCommand().equals("extract")) {
-                        System.out.println(extract.folder);
-                        System.out.println(extract.file);
+                    if (jc.getParsedCommand().equals("extract")) {
+                    }else if(jc.getParsedCommand().equals("train")) {
+
+                    }else if(jc.getParsedCommand().equals("test")) {
+
+                    }else if(jc.getParsedCommand().equals("classify")) {
+
+                    }
+
+                } catch (Exception e) {
+                        jc.usage();
+                        System.exit(1);
+                }
+
+                if (cm.help || jc.getParsedCommand() == null) {
+                        jc.usage();
+                        System.exit(0);
                 }
 
                 /*
