@@ -11,6 +11,9 @@ package com.sarangi.app;
 import java.io.*;
 import java.util.*;
 
+import com.beust.jcommander.JCommander;
+
+import com.sarangi.app.commands.*;
 import com.sarangi.learningmodel.ann.*;
 import com.sarangi.learningmodel.svm.*;
 import com.sarangi.learningmodel.*;
@@ -47,6 +50,22 @@ public class App
         public static void main( String[] args )
                 throws FileNotFoundException, IOException
         {
+
+                CommandLine cm = new CommandLine();
+
+                JCommander jc = new JCommander(cm);
+
+                CommandExtract extract = new CommandExtract();
+                jc.addCommand("extract",extract);
+
+                jc.parse(args);
+
+                if (jc.getParsedCommand().equals("extract")) {
+                        System.out.println(extract.folder);
+                        System.out.println(extract.file);
+                }
+
+                /*
                 String trainingFilename = "src/resources/song/songFeatures/features.txt";
                 String testFilename = "src/resources/song/songFeatures/test.txt";
 
@@ -57,5 +76,6 @@ public class App
                 //ClassifierRunner runner = new ClassifierRunner(new String[]{"high_arousal","low_arousal"});
                 //runner.runCrossValidation(trainingFilename, FeatureType.SARANGI_MFCC,10,"SVM");
                 runner.run(trainingFilename,testFilename,FeatureType.SARANGI_ALL,"SVM");
+                */
         }
 }
