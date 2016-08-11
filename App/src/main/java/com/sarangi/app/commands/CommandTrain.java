@@ -26,7 +26,7 @@ public class CommandTrain {
                 public String file;
 
         @Parameter(names = {"-c","--classifier"},description = "The file to store the classifier")
-                public String folder;
+                public String classifierFile;
 
         @Parameter(names = "--help", help = true)
                 public boolean help;

@@ -72,9 +72,20 @@ public class App
                 jc.parse(args);
 
                     if (jc.getParsedCommand().equals("extract")) {
+
+                        FeatureExtractor.extractFeature(extract.file,extract.folder);
+
                     }else if(jc.getParsedCommand().equals("train")) {
 
+                        ClassifierRunner runner = new ClassifierRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
+                        runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,"SVM");
+
                     }else if(jc.getParsedCommand().equals("test")) {
+
+                            if (test.kfoldFile != null) {
+                                    ClassifierRunner runner = new ClassifierRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
+                                    runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,"SVM");
+                            }
 
                     }else if(jc.getParsedCommand().equals("classify")) {
 

@@ -23,7 +23,7 @@ import com.beust.jcommander.Parameters;
 public class CommandTest {
          
         @Parameter(names = {"-k","--kfold"},description = "Run K-fold validation on given file")
-                public String file;
+                public String kfoldFile;
 
         @Parameter(names = "--help", help = true)
                 public boolean help;
