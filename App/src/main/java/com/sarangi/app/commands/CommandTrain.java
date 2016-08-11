@@ -28,6 +28,9 @@ public class CommandTrain {
         @Parameter(names = {"-c","--classifier"},description = "The file to store the classifier")
                 public String classifierFile;
 
+        @Parameter(names = {"-l","--label"},description = "The label to be used for training")
+                public int labelIndex = 0;
+
         @Parameter(names = "--help", help = true)
                 public boolean help;
 }

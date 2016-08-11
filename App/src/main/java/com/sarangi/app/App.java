@@ -69,6 +69,13 @@ public class App
                 jc.addCommand("classify",classify);
 
                 String[] labels = {"classical","hiphop","jazz","pop","rock"};
+                String[] arousalLabels = {"low_arousal","high_arousal"};
+                String[] valenceLabels = {"low_valence","high_valence"};
+
+                List<String[]> labelsArray = new ArrayList<String[]>();
+                labelsArray.add(labels);
+                labelsArray.add(arousalLabels);
+                labelsArray.add(valenceLabels);
 
                 try {
 
@@ -80,13 +87,13 @@ public class App
 
                     }else if(jc.getParsedCommand().equals("train")) {
 
-                        ClassifierRunner runner = new ClassifierRunner(labels);
+                        ClassifierRunner runner = new ClassifierRunner(labelsArray.get(train.labelIndex));
                         runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,"SVM");
 
                     }else if(jc.getParsedCommand().equals("test")) {
 
                             if (test.kfoldFile != null) {
-                                    ClassifierRunner runner = new ClassifierRunner(labels);
+                                    ClassifierRunner runner = new ClassifierRunner(labelsArray.get(test.labelIndex));
                                     runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,"SVM");
                             }
 
@@ -98,9 +105,15 @@ public class App
                             oneSong.add(FeatureExtractor.extractSongFeature(classify.file));
                             fileHandler.storeSongs(oneSong);
 
-                            SarangiClassifier classifier = ClassifierFactory.loadClassifier(classify.classifierFile,"SVM",labels,FeatureType.SARANGI_ALL);
-                            int labelIndex = classifier.predict(oneSong.get(0));
-                            System.out.println("Classification: "+labels[labelIndex-1]);
+
+                            //TODO Bind label to classifier.
+                            int i = 0;
+                            for (String classifierFile: classify.classifierFiles) {
+                                SarangiClassifier classifier = ClassifierFactory.loadRawClassifier(classifierFile,"SVM");
+                                int labelIndex = classifier.predict(oneSong.get(0));
+                                System.out.println("Classification: "+(labelsArray.get(i))[labelIndex-1]);
+                                i++;
+                            }
 
                     }
 
