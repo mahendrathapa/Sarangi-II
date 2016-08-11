@@ -94,6 +94,22 @@ public class ClassifierFactory {
         }
 
         /**
+         * Load the classifier from the specified file without labels and featureType
+         *
+         * @param filename The file from which to load the classifier.
+         * @param classifierType The type of classifier.
+         */
+        public static SarangiClassifier loadRawClassifier(String filename, String classifierType) {
+
+                SarangiClassifier loadedClassifier = getClassifier(classifierType);
+
+                loadedClassifier.load(filename);
+
+                return loadedClassifier;
+
+        }
+
+        /**
          * Load the classifier from the specified file.
          *
          * @param filename The file from which to load the classifier.
