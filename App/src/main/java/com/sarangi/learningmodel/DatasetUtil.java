@@ -44,7 +44,7 @@ public class DatasetUtil {
 
                 if(featureType == FeatureType.SARANGI_ALL){
 
-                        learningDataset.dataset = new double[dataSongs.size()][2];
+                        learningDataset.dataset = new double[dataSongs.size()][20];
 
                         int i = 0;
 
@@ -65,7 +65,7 @@ public class DatasetUtil {
                                 double[] spectralVariablility = song.getSpectralVariablility();
                                 double[] zeroCrossing = song.getZeroCrossing();
 
-                                learningDataset.dataset[i] = Statistics.mergeArrays(zeroCrossing);
+                                learningDataset.dataset[i] = Statistics.mergeArrays(melFreq);
 /*
                                 learningDataset.dataset[i] = Statistics.mergeArrays(compactness,
                                                                                     melFreq,

@@ -2,6 +2,7 @@ App/target/
 App/src/test/
 App/src/resources/song/
 App/src/resources/log/
+App/src/resources/classifier/
 
 pom.xml.tag
 pom.xml.releaseBackup

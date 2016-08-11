@@ -82,6 +82,28 @@ public class ClassifierRunner {
         }
 
         /**
+         * Store the classifier.
+         *
+         *
+         * @param trainingFilename The file where the training dataset is stored.
+         * @param featureType The type of feature to be used for classification.
+         * @param classifierType The type of classifier to run.
+         *
+         */
+
+        public void storeClassifier(String trainingFilename, String classifierFile, FeatureType featureType, String classifierType) throws FileNotFoundException, IOException  {
+
+                SongHandler trainingSongHandler = new SongHandler(trainingFilename);
+                List<Song> trainingSongs = trainingSongHandler.loadSongs();
+
+                SarangiClassifier classifier = ClassifierFactory.getClassifier(trainingSongs,this.labels,featureType,classifierType);
+
+                ClassifierFactory.storeClassifier(classifier,classifierFile);
+
+        }
+
+
+        /**
          * Run K-fold Cross Validation.
          *
          * @param filename The file holding the feature data.

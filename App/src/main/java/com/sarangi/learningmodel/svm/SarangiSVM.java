@@ -97,7 +97,7 @@ public class SarangiSVM extends SarangiClassifier {
 
         public void store(String filename) {
                 try{
-                        FileWriter fileWriter = new FileWriter(filename,true);
+                        FileWriter fileWriter = new FileWriter(filename);
 
                         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
