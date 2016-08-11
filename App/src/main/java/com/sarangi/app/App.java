@@ -17,7 +17,8 @@ import com.sarangi.app.commands.*;
 import com.sarangi.learningmodel.ann.*;
 import com.sarangi.learningmodel.svm.*;
 import com.sarangi.learningmodel.*;
-import com.sarangi.structures.FeatureType;
+import com.sarangi.structures.*;
+import com.sarangi.json.*;
 
 /**
  * A main class for interfacing all the other sub-classes.
@@ -67,6 +68,8 @@ public class App
                 CommandClassify classify = new CommandClassify();
                 jc.addCommand("classify",classify);
 
+                String[] labels = {"classical","hiphop","jazz","pop","rock"};
+
                 try {
 
                 jc.parse(args);
@@ -77,17 +80,27 @@ public class App
 
                     }else if(jc.getParsedCommand().equals("train")) {
 
-                        ClassifierRunner runner = new ClassifierRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
+                        ClassifierRunner runner = new ClassifierRunner(labels);
                         runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,"SVM");
 
                     }else if(jc.getParsedCommand().equals("test")) {
 
                             if (test.kfoldFile != null) {
-                                    ClassifierRunner runner = new ClassifierRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
+                                    ClassifierRunner runner = new ClassifierRunner(labels);
                                     runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,"SVM");
                             }
 
                     }else if(jc.getParsedCommand().equals("classify")) {
+
+                            // Extract Song Feature to temp file
+                            SongHandler fileHandler = new SongHandler("src/resources/song/songFeatures/temp.txt");
+                            List<Song> oneSong = new ArrayList<Song>();
+                            oneSong.add(FeatureExtractor.extractSongFeature(classify.file));
+                            fileHandler.storeSongs(oneSong);
+
+                            SarangiClassifier classifier = ClassifierFactory.loadClassifier(classify.classifierFile,"SVM",labels,FeatureType.SARANGI_ALL);
+                            int labelIndex = classifier.predict(oneSong.get(0));
+                            System.out.println("Classification: "+labels[labelIndex-1]);
 
                     }
 

@@ -73,8 +73,6 @@ public class SongHandler {
                 this.fileName = fileName;
         }
 
-
-
         /** First the given arraylist is converted into json format and then stored
          * in the text file.
          *
@@ -83,13 +81,27 @@ public class SongHandler {
          * @throws  IOException     Throws an IOException if any error occurs.
          */
 
-        public void storeSongs(List<Song> songs){
+        public void storeSongs(List<Song> songs) {
+                storeSongs(songs,false);
+        }
+
+
+        /** First the given arraylist is converted into json format and then stored
+         * in the text file.
+         *
+         * @param   songs            A reference to the array list of an audio features of the audio samples.    
+         * @param   append          Append the songs or not.
+         *
+         * @throws  IOException     Throws an IOException if any error occurs.
+         */
+
+        public void storeSongs(List<Song> songs, boolean append) {
 
                 Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
 
                 try{
 
-                        FileWriter fileWriter = new FileWriter(fileName,true);
+                        FileWriter fileWriter = new FileWriter(fileName,append);
                         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
                         for(Song song : songs){
