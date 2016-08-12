@@ -105,11 +105,11 @@ public class App
                             oneSong.add(FeatureExtractor.extractSongFeature(classify.file));
                             fileHandler.storeSongs(oneSong);
 
-
                             //TODO Bind label to classifier.
                             int i = 0;
                             for (String classifierFile: classify.classifierFiles) {
-                                SarangiClassifier classifier = ClassifierFactory.loadRawClassifier(classifierFile,"SVM");
+                                System.out.println("Classifier: "+classifierFile);
+                                SarangiClassifier classifier = ClassifierFactory.loadClassifier(classifierFile,"SVM",labelsArray.get(i),FeatureType.SARANGI_ALL);
                                 int labelIndex = classifier.predict(oneSong.get(0));
                                 System.out.println("Classification: "+(labelsArray.get(i))[labelIndex-1]);
                                 i++;
@@ -118,6 +118,7 @@ public class App
                     }
 
                 } catch (Exception e) {
+                        e.printStackTrace();
                         jc.usage();
                         System.exit(1);
                 }
