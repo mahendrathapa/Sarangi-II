@@ -98,7 +98,7 @@ public class FeatureExtractor{
 
                                         loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
                                                                     Level.INFO,
-                                                                    "Feature of " +singleFileName+ " is extracted successfull");
+                                                                    "Feature of " +singleFileName+ " is extracted successfully");
                                 }
 
                         } catch(UnsupportedAudioFileException ex){

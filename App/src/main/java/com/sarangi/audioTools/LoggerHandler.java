@@ -58,14 +58,14 @@ public class LoggerHandler{
                                 fileHandler = new FileHandler("src/resources/log/learningModel.log",FILE_SIZE,10,true);
 
                 }catch(IOException ex){
-                        //logger.warning("Field to initilize logger handler");
-
+                        logger.warning("Failed to initilize logger handler");
                 }
 
                 logger.addHandler(fileHandler);
                 fileHandler.setFormatter(formatter);
 
                 logger.log(level,logMessage);
+                fileHandler.close();
         }
 
         public void setLogLevel(Level level){

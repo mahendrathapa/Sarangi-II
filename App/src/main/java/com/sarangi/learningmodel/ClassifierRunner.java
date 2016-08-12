@@ -155,7 +155,7 @@ public class ClassifierRunner {
 
                 }
 
-                System.out.format("K-fold accuracy: %.2f%%", overallAvgAccuracy/k);
+                System.out.format("[====> K-fold accuracy: %.2f%% <====]\n\n", overallAvgAccuracy/k);
 
         }
 }
