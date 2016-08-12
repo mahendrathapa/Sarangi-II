@@ -88,13 +88,13 @@ public class App
                     }else if(jc.getParsedCommand().equals("train")) {
 
                         ClassifierRunner runner = new ClassifierRunner(labelsArray.get(train.labelIndex));
-                        runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,"SVM");
+                        runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,"NeuralNetwork");
 
                     }else if(jc.getParsedCommand().equals("test")) {
 
                             if (test.kfoldFile != null) {
                                     ClassifierRunner runner = new ClassifierRunner(labelsArray.get(test.labelIndex));
-                                    runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,"SVM");
+                                    runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,"NeuralNetwork");
                             }
 
                     }else if(jc.getParsedCommand().equals("classify")) {
@@ -109,7 +109,7 @@ public class App
                             int i = 0;
                             for (String classifierFile: classify.classifierFiles) {
                                 System.out.println("Classifier: "+classifierFile);
-                                SarangiClassifier classifier = ClassifierFactory.loadClassifier(classifierFile,"SVM",labelsArray.get(i),FeatureType.SARANGI_ALL);
+                                SarangiClassifier classifier = ClassifierFactory.loadClassifier(classifierFile,"NeuralNetwork",labelsArray.get(i),FeatureType.SARANGI_ALL);
                                 int labelIndex = classifier.predict(oneSong.get(0));
                                 System.out.println("Classification: "+(labelsArray.get(i))[labelIndex-1]);
                                 i++;
@@ -119,7 +119,7 @@ public class App
 
                 } catch (Exception e) {
                         e.printStackTrace();
-                        jc.usage();
+                        //jc.usage();
                         System.exit(1);
                 }
 
@@ -128,17 +128,5 @@ public class App
                         System.exit(0);
                 }
 
-                /*
-                String trainingFilename = "src/resources/song/songFeatures/features.txt";
-                String testFilename = "src/resources/song/songFeatures/test.txt";
-
-                FeatureExtractor.extractFeature(trainingFilename,new String("src/resources/song/Genre_training"));
-                FeatureExtractor.extractFeature(testFilename,new String("src/resources/song/Genre_testing"));
-
-                ClassifierRunner runner = new ClassifierRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
-                //ClassifierRunner runner = new ClassifierRunner(new String[]{"high_arousal","low_arousal"});
-                //runner.runCrossValidation(trainingFilename, FeatureType.SARANGI_MFCC,10,"SVM");
-                runner.run(trainingFilename,testFilename,FeatureType.SARANGI_ALL,"SVM");
-                */
         }
 }
