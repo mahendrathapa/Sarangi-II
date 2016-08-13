@@ -34,19 +34,15 @@ public class ClassifierFactory {
          * @return A SarangiClassifier instance as requested.
          *
          */
-        public static SarangiClassifier getClassifier(String classifierType) {
+        public static SarangiClassifier getClassifier(ClassifierType classifierType) {
                 if (classifierType == null) {
                         return null;
                 }
 
-                if (classifierType.equalsIgnoreCase("NeuralNetwork")){
+                if (classifierType == ClassifierType.SARANGI_ANN){
                         return new SarangiANN();
-                }else if (classifierType.equalsIgnoreCase("SVM")){
+                }else if (classifierType == ClassifierType.SARANGI_SVM){
                         return new SarangiSVM();
-                }else if (classifierType.equalsIgnoreCase("FRAMEWISENEURALNETWORK")){
-                        return new SarangiFrameANN();
-                }else if (classifierType.equalsIgnoreCase("FRAMEWISESVM")){
-                        return new SarangiFrameSVM();
                 }
 
                 return null;
@@ -63,19 +59,15 @@ public class ClassifierFactory {
          * @return A SarangiClassifier instance as requested.
          *
          */
-        public static SarangiClassifier getClassifier(List<Song> trainingSongs, String[] labels, FeatureType featureType, String classifierType) {
+        public static SarangiClassifier getClassifier(List<Song> trainingSongs, String[] labels, FeatureType featureType, ClassifierType classifierType) {
                 if (classifierType == null) {
                         return null;
                 }
 
-                if (classifierType.equalsIgnoreCase("NeuralNetwork")){
+                if (classifierType == ClassifierType.SARANGI_ANN){
                         return new SarangiANN(trainingSongs,labels,featureType);
-                }else if (classifierType.equalsIgnoreCase("SVM")){
+                }else if (classifierType == ClassifierType.SARANGI_SVM){
                         return new SarangiSVM(trainingSongs,labels,featureType);
-                }else if (classifierType.equalsIgnoreCase("FRAMEWISENEURALNETWORK")){
-                        return new SarangiFrameANN(trainingSongs,labels,featureType);
-                }else if (classifierType.equalsIgnoreCase("FRAMEWISESVM")){
-                        return new SarangiFrameSVM(trainingSongs,labels,featureType);
                 }
 
                 return null;
@@ -89,7 +81,6 @@ public class ClassifierFactory {
          * TODO Implement a custom JsonSerializer/JsonDeserializer
          */
         public static void storeClassifier(SarangiClassifier classifier, String filename) {
-
                 classifier.store(filename);
         }
 
@@ -99,7 +90,7 @@ public class ClassifierFactory {
          * @param filename The file from which to load the classifier.
          * @param classifierType The type of classifier.
          */
-        public static SarangiClassifier loadRawClassifier(String filename, String classifierType) {
+        public static SarangiClassifier loadRawClassifier(String filename, ClassifierType classifierType) {
 
                 SarangiClassifier loadedClassifier = getClassifier(classifierType);
 
@@ -114,7 +105,7 @@ public class ClassifierFactory {
          *
          * @param filename The file from which to load the classifier.
          */
-        public static SarangiClassifier loadClassifier(String filename, String classifierType, String[] labels, FeatureType featureType) {
+        public static SarangiClassifier loadClassifier(String filename, ClassifierType classifierType, String[] labels, FeatureType featureType) {
 
                 SarangiClassifier loadedClassifier = getClassifier(classifierType);
 
