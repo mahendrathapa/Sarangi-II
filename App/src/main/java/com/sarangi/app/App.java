@@ -88,13 +88,14 @@ public class App
                     }else if(jc.getParsedCommand().equals("train")) {
 
                         ClassifierRunner runner = new ClassifierRunner(labelsArray.get(train.labelIndex));
-                        runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,ClassifierType.SARANGI_ANN);
+
+                        runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,ClassifierType.fromString(train.classifierType));
 
                     }else if(jc.getParsedCommand().equals("test")) {
 
                             if (test.kfoldFile != null) {
                                     ClassifierRunner runner = new ClassifierRunner(labelsArray.get(test.labelIndex));
-                                    runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,ClassifierType.SARANGI_ANN);
+                                    runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,ClassifierType.fromString(test.classifierType));
                             }
 
                     }else if(jc.getParsedCommand().equals("classify")) {
@@ -109,7 +110,7 @@ public class App
                             int i = 0;
                             for (String classifierFile: classify.classifierFiles) {
                                 System.out.println("Classifier: "+classifierFile);
-                                SarangiClassifier classifier = ClassifierFactory.loadClassifier(classifierFile,ClassifierType.SARANGI_ANN,labelsArray.get(i),FeatureType.SARANGI_ALL);
+                                SarangiClassifier classifier = ClassifierFactory.loadClassifier(classifierFile,ClassifierType.fromString(classify.classifierType),labelsArray.get(i),FeatureType.SARANGI_ALL);
                                 int labelIndex = classifier.predict(oneSong.get(0));
                                 System.out.println("Classification: "+(labelsArray.get(i))[labelIndex-1]);
                                 i++;

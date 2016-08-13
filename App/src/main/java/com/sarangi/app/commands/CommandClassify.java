@@ -11,6 +11,7 @@ package com.sarangi.app.commands;
 import com.beust.jcommander.Parameter; 
 import com.beust.jcommander.Parameters; 
 
+import com.sarangi.learningmodel.ClassifierType;
 import java.util.*;
 
 /**
@@ -26,6 +27,9 @@ public class CommandClassify {
          
         @Parameter(names = {"-f","--file"},description = "Music File to be classified")
                 public String file;
+
+        @Parameter(names = {"-C","--classifier-type"},description = "Type of Classifier to use.")
+                public String classifierType = "SVM";
 
         @Parameter(names = {"-c","--classifier"}, variableArity = true, description = "Classifier File to be used.")
                 public List<String> classifierFiles = new ArrayList<String>(Arrays.asList("src/resources/classifier/svm.txt"));

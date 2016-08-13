@@ -11,6 +11,8 @@ package com.sarangi.app.commands;
 import com.beust.jcommander.Parameter; 
 import com.beust.jcommander.Parameters; 
 
+import com.sarangi.learningmodel.ClassifierType;
+
 /**
  * Command to train a classifier.
  *
@@ -27,6 +29,9 @@ public class CommandTrain {
 
         @Parameter(names = {"-c","--classifier"},description = "The file to store the classifier")
                 public String classifierFile;
+
+        @Parameter(names = {"-C","--classifier-type"},description = "Type of Classifier to use.")
+                public String classifierType = "SVM";
 
         @Parameter(names = {"-l","--label"},description = "The label to be used for training")
                 public int labelIndex = 0;
