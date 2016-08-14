@@ -55,7 +55,7 @@ public class ClassifierRunner {
          *
          */
 
-        public void run(String trainingFilename, String testFilename, FeatureType featureType, String classifierType) throws FileNotFoundException, IOException  {
+        public void run(String trainingFilename, String testFilename, FeatureType featureType, ClassifierType classifierType) throws FileNotFoundException, IOException  {
 
                 SongHandler trainingSongHandler = new SongHandler(trainingFilename);
                 List<Song> trainingSongs = trainingSongHandler.loadSongs();
@@ -68,7 +68,7 @@ public class ClassifierRunner {
                 String classifierFile = new String("src/resources/song/classifier.txt");
                 ClassifierFactory.storeClassifier(classifier,classifierFile);
 
-                SarangiClassifier loadedClassifier = ClassifierFactory.loadClassifier(classifierFile,"SVM",this.labels,featureType);
+                SarangiClassifier loadedClassifier = ClassifierFactory.loadClassifier(classifierFile,ClassifierType.SARANGI_SVM,this.labels,featureType);
 
                 Result result = classifier.test(testSongs);
                 Result result2 = loadedClassifier.test(testSongs);
@@ -91,7 +91,7 @@ public class ClassifierRunner {
          *
          */
 
-        public void storeClassifier(String trainingFilename, String classifierFile, FeatureType featureType, String classifierType) throws FileNotFoundException, IOException  {
+        public void storeClassifier(String trainingFilename, String classifierFile, FeatureType featureType, ClassifierType classifierType) throws FileNotFoundException, IOException  {
 
                 SongHandler trainingSongHandler = new SongHandler(trainingFilename);
                 List<Song> trainingSongs = trainingSongHandler.loadSongs();
@@ -110,16 +110,45 @@ public class ClassifierRunner {
          * @param featureType The type of feature to be used for testing.
          * @param k The number of partitions to create.
          * @param classifierType The type of classifier to run.
+         * @param random Shuffle the songs or create 'nice' partitions
          *
          */
 
-        public void runCrossValidation(String filename, FeatureType featureType, int k, String classifierType) throws FileNotFoundException, IOException  {
+        public void runCrossValidation(String filename, FeatureType featureType, int k, ClassifierType classifierType, boolean random) throws FileNotFoundException, IOException  {
 
                 SongHandler songHandler = new SongHandler(filename);
                 List<Song> songs = songHandler.loadSongs();
 
                 int partitionSize = songs.size()/k;
-                Collections.shuffle(songs);
+
+                if (random) {
+                    Collections.shuffle(songs);
+                } else {
+                        List<Song> tempSongs = new ArrayList<Song>();
+
+                        int numOfLabelSongsInPartition = partitionSize/this.labels.length;
+
+                        int[] songIndex = new int[this.labels.length];
+
+                        // For Every Partition
+                        for (int i=0; i<k; i++) {
+
+                                // For Every Label, get numOfLabelSongsInPartition songs.
+                                for (int j=0; j<this.labels.length; j++) {
+
+                                        int songCount = 0;
+                                        while (songCount != numOfLabelSongsInPartition) {
+                                            if (songs.get(songIndex[j]).getSongName().contains(this.labels[j])) {
+                                                    tempSongs.add(songs.get(songIndex[j]));
+                                                    songCount++;
+                                            }
+                                            songIndex[j]++;
+                                        }
+                                }
+                        }
+
+                        songs = tempSongs;
+                }
 
                 double overallAvgAccuracy = 0.0;
 
@@ -136,17 +165,6 @@ public class ClassifierRunner {
 
                         SarangiClassifier classifier = factory.getClassifier(trainingSongs,this.labels,featureType, classifierType);
 
-                        // Check loaded classifier
-                         
-                        /*
-                        String classifierFile = new String("src/resources/song/kfoldclassifier.txt");
-                        ClassifierFactory.storeClassifier(classifier,classifierFile);
-
-                        SarangiClassifier loadedClassifier = ClassifierFactory.loadClassifier(classifierFile,"SVM",this.labels,featureType);
-
-                        Result result = loadedClassifier.test(testSongs);
-                        */
-                
                         Result result = classifier.test(testSongs);
 
                         result.printData();

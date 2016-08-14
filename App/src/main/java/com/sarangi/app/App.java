@@ -81,35 +81,58 @@ public class App
 
                 jc.parse(args);
 
+                if (cm.help || jc.getParsedCommand() == null) {
+                        jc.usage();
+                        System.exit(0);
+                }
+
                     if (jc.getParsedCommand().equals("extract")) {
+
+                        if (extract.help) {
+                                jc.usage("extract");
+                                System.exit(0);
+                        }
 
                         FeatureExtractor.extractFeature(extract.file,extract.folder);
 
                     }else if(jc.getParsedCommand().equals("train")) {
 
+                        if (train.help) {
+                                jc.usage("train");
+                                System.exit(0);
+                        }
+
                         ClassifierRunner runner = new ClassifierRunner(labelsArray.get(train.labelIndex));
-                        runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,"SVM");
+
+                        runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,ClassifierType.fromString(train.classifierType));
 
                     }else if(jc.getParsedCommand().equals("test")) {
 
+                        if (test.help) {
+                                jc.usage("test");
+                                System.exit(0);
+                        }
+
                             if (test.kfoldFile != null) {
                                     ClassifierRunner runner = new ClassifierRunner(labelsArray.get(test.labelIndex));
-                                    runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,"SVM");
+                                    runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,ClassifierType.fromString(test.classifierType),false);
                             }
 
                     }else if(jc.getParsedCommand().equals("classify")) {
 
-                            // Extract Song Feature to temp file
-                            SongHandler fileHandler = new SongHandler("src/resources/song/songFeatures/temp.txt");
+                        if (classify.help) {
+                                jc.usage("classify");
+                                System.exit(0);
+                        }
+
                             List<Song> oneSong = new ArrayList<Song>();
                             oneSong.add(FeatureExtractor.extractSongFeature(classify.file));
-                            fileHandler.storeSongs(oneSong);
 
                             //TODO Bind label to classifier.
                             int i = 0;
                             for (String classifierFile: classify.classifierFiles) {
                                 System.out.println("Classifier: "+classifierFile);
-                                SarangiClassifier classifier = ClassifierFactory.loadClassifier(classifierFile,"SVM",labelsArray.get(i),FeatureType.SARANGI_ALL);
+                                SarangiClassifier classifier = ClassifierFactory.loadClassifier(classifierFile,ClassifierType.fromString(classify.classifierType),labelsArray.get(i),FeatureType.SARANGI_ALL);
                                 int labelIndex = classifier.predict(oneSong.get(0));
                                 System.out.println("Classification: "+(labelsArray.get(i))[labelIndex-1]);
                                 i++;
@@ -119,26 +142,9 @@ public class App
 
                 } catch (Exception e) {
                         e.printStackTrace();
-                        jc.usage();
                         System.exit(1);
                 }
 
-                if (cm.help || jc.getParsedCommand() == null) {
-                        jc.usage();
-                        System.exit(0);
-                }
 
-                /*
-                String trainingFilename = "src/resources/song/songFeatures/features.txt";
-                String testFilename = "src/resources/song/songFeatures/test.txt";
-
-                FeatureExtractor.extractFeature(trainingFilename,new String("src/resources/song/Genre_training"));
-                FeatureExtractor.extractFeature(testFilename,new String("src/resources/song/Genre_testing"));
-
-                ClassifierRunner runner = new ClassifierRunner(new String[]{"classical","hiphop","jazz","pop","rock"});
-                //ClassifierRunner runner = new ClassifierRunner(new String[]{"high_arousal","low_arousal"});
-                //runner.runCrossValidation(trainingFilename, FeatureType.SARANGI_MFCC,10,"SVM");
-                runner.run(trainingFilename,testFilename,FeatureType.SARANGI_ALL,"SVM");
-                */
         }
 }
