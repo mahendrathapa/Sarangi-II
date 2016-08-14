@@ -21,14 +21,14 @@ import com.beust.jcommander.Parameters;
 
 @Parameters(separators = "=", commandDescription = "Extract features of songs in the specified folder")
 public class CommandExtract {
-         
-        @Parameter(names = {"-F","--folder"},description = "The folder to be used")
-                public String folder;
 
-        @Parameter(names = {"-f","--file"},description = "The file where the features are to be stored")
-                public String file;
+    @Parameter(names = {"-F","--folder"},description = "The folder to be used")
+        public String folder;
 
-        @Parameter(names = "--help", help = true)
-                public boolean help;
+    @Parameter(names = {"-f","--file"},description = "The file where the features are to be stored")
+        public String file;
+
+    @Parameter(names = "--help", help = true)
+        public boolean help;
 }
 

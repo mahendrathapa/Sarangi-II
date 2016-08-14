@@ -36,53 +36,53 @@ import java.util.logging.*;
 public class Pitch{
 
 
-        public static double[][] extractFeature(List<double[]> Frames,double samplingRate){
+    public static double[][] extractFeature(List<double[]> Frames,double samplingRate){
 
-                LoggerHandler loggerHandler = LoggerHandler.getInstance();
+        LoggerHandler loggerHandler = LoggerHandler.getInstance();
 
-                int dimension = 1;
-                int length = Frames.get(0).length;
+        int dimension = 1;
+        int length = Frames.get(0).length;
 
-                double[][] feature = new double[Frames.size()][dimension];
+        double[][] feature = new double[Frames.size()][dimension];
 
-                final List<Double> pitchList = new ArrayList<Double>();
+        final List<Double> pitchList = new ArrayList<Double>();
 
-                try{
-                        for(double[] frame : Frames){
+        try{
+            for(double[] frame : Frames){
 
-                                float[] floatFrame = Statistics.convertDoubleArrayToFloatArray(frame);
+                float[] floatFrame = Statistics.convertDoubleArrayToFloatArray(frame);
 
-                                AudioDispatcher audioDispatcher = AudioDispatcherFactory.fromFloatArray(floatFrame,(int)samplingRate,length,0);
-                                PitchDetectionHandler pitchDetectionHandler = new PitchDetectionHandler() {
-                                        @Override
-                                        public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
-                                                pitchList.add((double)pitchDetectionResult.getPitch());
-                                        }
+                AudioDispatcher audioDispatcher = AudioDispatcherFactory.fromFloatArray(floatFrame,(int)samplingRate,length,0);
+                PitchDetectionHandler pitchDetectionHandler = new PitchDetectionHandler() {
+                    @Override
+                    public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
+                        pitchList.add((double)pitchDetectionResult.getPitch());
+                    }
 
-                                };
-                                audioDispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN,(int)samplingRate,length,pitchDetectionHandler));
-                                audioDispatcher.run();
+                };
+                audioDispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN,(int)samplingRate,length,pitchDetectionHandler));
+                audioDispatcher.run();
 
-                        }
+            }
 
-                        int count = 0;
-                        for(double pitch : pitchList){
+            int count = 0;
+            for(double pitch : pitchList){
 
-                                feature = Statistics.assign1Dto2DArray(feature,new double[]{pitch},count);
-                                ++count;
-                        }
+                feature = Statistics.assign1Dto2DArray(feature,new double[]{pitch},count);
+                ++count;
+            }
 
-                        return feature;
+            return feature;
 
-                } catch(UnsupportedAudioFileException ex){
+        } catch(UnsupportedAudioFileException ex){
 
-                        loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
-                                        Level.SEVERE,
-                                        ExceptionPrint.getExceptionPrint(ex));
+            loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                    Level.SEVERE,
+                    ExceptionPrint.getExceptionPrint(ex));
 
-                        return new double[][]{};
-                }
+            return new double[][]{};
         }
+    }
 }
 
 

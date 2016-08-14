@@ -19,30 +19,30 @@ import java.io.Serializable;
 
 public class LearningDataset implements Serializable{
 
-        /* FIELDS **************************************************/
+    /* FIELDS **************************************************/
 
 
-        /**
-         * The actual data.
-         * A two dimensional array of doubles.
-         *
-         */
-        public double dataset[][];
+    /**
+     * The actual data.
+     * A two dimensional array of doubles.
+     *
+     */
+    public double dataset[][];
 
-        /**
-         * The labels for the dataset.
-         *
-         */
-        public int[] labelIndices;
+    /**
+     * The labels for the dataset.
+     *
+     */
+    public int[] labelIndices;
 
-        /* CONSTRUCTORS *******************************************/
+    /* CONSTRUCTORS *******************************************/
 
-        /**
-         * Constructor.
-         *
-         */
-        public LearningDataset() {
-        }
+    /**
+     * Constructor.
+     *
+     */
+    public LearningDataset() {
+    }
 
 
 }

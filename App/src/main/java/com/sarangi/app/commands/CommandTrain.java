@@ -23,20 +23,20 @@ import com.sarangi.learningmodel.ClassifierType;
 
 @Parameters(separators = "=", commandDescription = "Train the classifier using the given features file.")
 public class CommandTrain {
-         
-        @Parameter(names = {"-f","--file"},description = "The file where the features are stored")
-                public String file;
 
-        @Parameter(names = {"-c","--classifier"},description = "The file to store the classifier")
-                public String classifierFile;
+    @Parameter(names = {"-f","--file"},description = "The file where the features are stored")
+        public String file;
 
-        @Parameter(names = {"-C","--classifier-type"},description = "Type of Classifier to use.")
-                public String classifierType = "SVM";
+    @Parameter(names = {"-c","--classifier"},description = "The file to store the classifier")
+        public String classifierFile;
 
-        @Parameter(names = {"-l","--label"},description = "The label to be used for training")
-                public int labelIndex = 0;
+    @Parameter(names = {"-C","--classifier-type"},description = "Type of Classifier to use.")
+        public String classifierType = "SVM";
 
-        @Parameter(names = "--help", help = true)
-                public boolean help;
+    @Parameter(names = {"-l","--label"},description = "The label to be used for training")
+        public int labelIndex = 0;
+
+    @Parameter(names = "--help", help = true)
+        public boolean help;
 }
 

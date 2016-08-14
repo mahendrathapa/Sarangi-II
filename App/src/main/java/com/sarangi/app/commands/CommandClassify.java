@@ -24,17 +24,17 @@ import java.util.*;
 
 @Parameters(separators = "=", commandDescription = "Classify the given music file/files.")
 public class CommandClassify {
-         
-        @Parameter(names = {"-f","--file"},description = "Music File to be classified")
-                public String file;
 
-        @Parameter(names = {"-C","--classifier-type"},description = "Type of Classifier to use.")
-                public String classifierType = "SVM";
+    @Parameter(names = {"-f","--file"},description = "Music File to be classified")
+        public String file;
 
-        @Parameter(names = {"-c","--classifier"}, variableArity = true, description = "Classifier Files to be used.")
-                public List<String> classifierFiles = new ArrayList<String>(Arrays.asList("src/resources/classifier/svm.txt"));
+    @Parameter(names = {"-C","--classifier-type"},description = "Type of Classifier to use.")
+        public String classifierType = "SVM";
 
-        @Parameter(names = "--help", help = true)
-                public boolean help;
+    @Parameter(names = {"-c","--classifier"}, variableArity = true, description = "Classifier Files to be used.")
+        public List<String> classifierFiles = new ArrayList<String>(Arrays.asList("src/resources/classifier/svm.txt"));
+
+    @Parameter(names = "--help", help = true)
+        public boolean help;
 }
 

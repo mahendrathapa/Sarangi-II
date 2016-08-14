@@ -32,138 +32,138 @@ import java.util.logging.Level;
 
 public class FeatureExtractor{
 
-        /*FIELDS**************************************************/
-         
-        /**
-         * A reference to the frame size;
-         */
-        private static final int frameSize = 1024;
+    /*FIELDS**************************************************/
 
-        /**
-         * A reference to the overlapping of the audio signal.
-         */
-        private static final int overLapSize = 512;
+    /**
+     * A reference to the frame size;
+     */
+    private static final int frameSize = 1024;
+
+    /**
+     * A reference to the overlapping of the audio signal.
+     */
+    private static final int overLapSize = 512;
 
 
-        /**
-         * Extract the feature of song present in given folder Name and stores the features vector in given file name is json format.
-         *
-         * @param   fileName        A reference to file name in which the features in json format is stored.
-         *
-         * @param   folderName      A reference to folder name which contain the songs.
-         *
-         * @throws  Exception       Throws an Exception if any error occurs.
-         */
+    /**
+     * Extract the feature of song present in given folder Name and stores the features vector in given file name is json format.
+     *
+     * @param   fileName        A reference to file name in which the features in json format is stored.
+     *
+     * @param   folderName      A reference to folder name which contain the songs.
+     *
+     * @throws  Exception       Throws an Exception if any error occurs.
+     */
 
-        public static void extractFeature(String fileName, String folderName){
+    public static void extractFeature(String fileName, String folderName){
 
-                LoggerHandler loggerHandler = LoggerHandler.getInstance();
+        LoggerHandler loggerHandler = LoggerHandler.getInstance();
 
-                List<Song> songs = new ArrayList<Song>();
+        List<Song> songs = new ArrayList<Song>();
 
-                SongHandler fileHandler = new SongHandler(fileName);
-                List<Song> tempSong = fileHandler.loadSongs();
+        SongHandler fileHandler = new SongHandler(fileName);
+        List<Song> tempSong = fileHandler.loadSongs();
 
-                File folder = new File(folderName);
+        File folder = new File(folderName);
 
-                File[] listOfFiles = folder.listFiles();
+        File[] listOfFiles = folder.listFiles();
 
-                Arrays.sort(listOfFiles);
+        Arrays.sort(listOfFiles);
 
-                int numOfFiles = listOfFiles.length;
+        int numOfFiles = listOfFiles.length;
 
-                for(int i=0; i<numOfFiles; ++i){
+        for(int i=0; i<numOfFiles; ++i){
 
-                        boolean flag = false;
-                        String songName = listOfFiles[i].getName();
+            boolean flag = false;
+            String songName = listOfFiles[i].getName();
 
-                        for(Song singleSong : tempSong){
+            for(Song singleSong : tempSong){
 
-                                if(singleSong.getSongName().equals(songName)){
-                                        
-                                        flag = true;
-                                        tempSong.remove(singleSong);
-                                        break;
+                if(singleSong.getSongName().equals(songName)){
 
-                                }
+                    flag = true;
+                    tempSong.remove(singleSong);
+                    break;
 
-                        }
-
-                        try{
-                                if(!flag){
-
-                                        String singleFileName = folderName +"/" + songName;
-                                        Song song = extractSongFeature(singleFileName);
-                                        songs.add(song);
-
-                                        loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
-                                                                    Level.INFO,
-                                                                    "Feature of " +singleFileName+ " is extracted successfully");
-                                }
-
-                        } catch(UnsupportedAudioFileException ex){
-
-                                loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
-                                                            Level.SEVERE,
-                                                            ExceptionPrint.getExceptionPrint(ex));
-                                continue;
-
-                        } catch(IOException ex){
-                               
-                                loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
-                                                            Level.SEVERE,
-                                                            ExceptionPrint.getExceptionPrint(ex));
-                                continue;
-
-                        } catch(IllegalArgumentException ex){
-                                
-                                loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
-                                                            Level.SEVERE,
-                                                            ExceptionPrint.getExceptionPrint(ex));
-                                continue;
-                        }
                 }
 
-                fileHandler.storeSongs(songs,true);
+            }
+
+            try{
+                if(!flag){
+
+                    String singleFileName = folderName +"/" + songName;
+                    Song song = extractSongFeature(singleFileName);
+                    songs.add(song);
+
+                    loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                            Level.INFO,
+                            "Feature of " +singleFileName+ " is extracted successfully");
+                }
+
+            } catch(UnsupportedAudioFileException ex){
+
+                loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                        Level.SEVERE,
+                        ExceptionPrint.getExceptionPrint(ex));
+                continue;
+
+            } catch(IOException ex){
+
+                loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                        Level.SEVERE,
+                        ExceptionPrint.getExceptionPrint(ex));
+                continue;
+
+            } catch(IllegalArgumentException ex){
+
+                loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                        Level.SEVERE,
+                        ExceptionPrint.getExceptionPrint(ex));
+                continue;
+            }
         }
 
-        /**
-         * Extract the feature of given song and stores the features vector in given file name is json format.
-         *
-         * @param   songName      A reference to the name of the song file.
-         *
-         * @throws  Exception     Throws an Exception if any error occurs.
-         */
+        fileHandler.storeSongs(songs,true);
+    }
 
-        public static Song extractSongFeature(String songName)
-                throws UnsupportedAudioFileException, IOException, IllegalArgumentException 
-        {
+    /**
+     * Extract the feature of given song and stores the features vector in given file name is json format.
+     *
+     * @param   songName      A reference to the name of the song file.
+     *
+     * @throws  Exception     Throws an Exception if any error occurs.
+     */
 
-                File songFile = new File(songName);
-                AudioSample audioSample = new AudioSample(songFile);
+    public static Song extractSongFeature(String songName)
+        throws UnsupportedAudioFileException, IOException, IllegalArgumentException 
+    {
 
-                double[] samples = audioSample.getAudioSamples();
+        File songFile = new File(songName);
+        AudioSample audioSample = new AudioSample(songFile);
 
-                double samplingRate = audioSample.getAudioFormat().getSampleRate();
+        double[] samples = audioSample.getAudioSamples();
 
-                List<double[]> audioFrames = AudioPreProcessor.getAudioFrame(samples,frameSize,overLapSize);
+        double samplingRate = audioSample.getAudioFormat().getSampleRate();
 
-                double[][] powerSpectrumFrame = PowerSpectrum.extractFeature(audioFrames,samplingRate);
-                double[][] magnitudeSpectrumFrame = MagnitudeSpectrum.extractFeature(audioFrames,samplingRate);
-                double[][] rmsFrame = RMS.extractFeature(audioFrames,samplingRate);
+        List<double[]> audioFrames = AudioPreProcessor.getAudioFrame(samples,frameSize,overLapSize);
 
-                double[] compactness = Statistics.getAvgSD(Compactness.extractFeature(magnitudeSpectrumFrame,samplingRate));
-                double[] melFreq = Statistics.getAvgSD(MelFreq.extractFeature(audioFrames,samplingRate));
-                double[] pitch = Statistics.getPitchAnalysis(Pitch.extractFeature(audioFrames,samplingRate));
-                double[] rhythm = Statistics.getRhythmAnalysis(Rhythm.extractFeature(rmsFrame,samplingRate));
-                double[] rms = Statistics.getAvgSD(rmsFrame);
-                double[] spectralCentroid = Statistics.getAvgSD(SpectralCentroid.extractFeature(powerSpectrumFrame,samplingRate));
-                double[] spectralFlux = Statistics.getAvgSD(SpectralFlux.extractFeature(magnitudeSpectrumFrame,samplingRate));
-                double[] spectralRolloffPoint = Statistics.getAvgSD(SpectralRolloffPoint.extractFeature(powerSpectrumFrame,samplingRate));
-                double[] spectralVariablility = Statistics.getAvgSD(SpectralVariability.extractFeature(magnitudeSpectrumFrame,samplingRate));
-                double[] zeroCrossing = Statistics.getAvgSD(ZeroCrossings.extractFeature(audioFrames,samplingRate));
+        double[][] powerSpectrumFrame = PowerSpectrum.extractFeature(audioFrames,samplingRate);
+        double[][] magnitudeSpectrumFrame = MagnitudeSpectrum.extractFeature(audioFrames,samplingRate);
+        double[][] rmsFrame = RMS.extractFeature(audioFrames,samplingRate);
 
-            return new Song(songName,compactness,melFreq,pitch,rhythm,rms,spectralCentroid,
-                            spectralFlux,spectralRolloffPoint,spectralVariablility,zeroCrossing);
-        }
+        double[] compactness = Statistics.getAvgSD(Compactness.extractFeature(magnitudeSpectrumFrame,samplingRate));
+        double[] melFreq = Statistics.getAvgSD(MelFreq.extractFeature(audioFrames,samplingRate));
+        double[] pitch = Statistics.getPitchAnalysis(Pitch.extractFeature(audioFrames,samplingRate));
+        double[] rhythm = Statistics.getRhythmAnalysis(Rhythm.extractFeature(rmsFrame,samplingRate));
+        double[] rms = Statistics.getAvgSD(rmsFrame);
+        double[] spectralCentroid = Statistics.getAvgSD(SpectralCentroid.extractFeature(powerSpectrumFrame,samplingRate));
+        double[] spectralFlux = Statistics.getAvgSD(SpectralFlux.extractFeature(magnitudeSpectrumFrame,samplingRate));
+        double[] spectralRolloffPoint = Statistics.getAvgSD(SpectralRolloffPoint.extractFeature(powerSpectrumFrame,samplingRate));
+        double[] spectralVariablility = Statistics.getAvgSD(SpectralVariability.extractFeature(magnitudeSpectrumFrame,samplingRate));
+        double[] zeroCrossing = Statistics.getAvgSD(ZeroCrossings.extractFeature(audioFrames,samplingRate));
+
+        return new Song(songName,compactness,melFreq,pitch,rhythm,rms,spectralCentroid,
+                spectralFlux,spectralRolloffPoint,spectralVariablility,zeroCrossing);
+    }
 }

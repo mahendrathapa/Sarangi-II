@@ -23,7 +23,7 @@ import java.util.logging.*;
 
 public interface Classifier {
 
-        public int predict(Song song);
-        public Result test(List<Song> testSongs);
+    public int predict(Song song);
+    public Result test(List<Song> testSongs);
 
 }

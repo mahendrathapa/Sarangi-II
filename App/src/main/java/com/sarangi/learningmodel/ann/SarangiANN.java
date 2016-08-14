@@ -22,75 +22,75 @@ import java.lang.Math.*;
 
 public class SarangiANN extends SarangiClassifier {
 
-        /* FIELDS **************************************************/
+    /* FIELDS **************************************************/
 
-        /**
-         * The NeuralNetwork object.
-         *
-         */
-        public NeuralNetwork ann;
+    /**
+     * The NeuralNetwork object.
+     *
+     */
+    public NeuralNetwork ann;
 
 
-        /**
-         * Constructor.
-         *
-         */
-        public SarangiANN() {
+    /**
+     * Constructor.
+     *
+     */
+    public SarangiANN() {
 
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param trainingSongs The songs to be used for training
+     * @param labels The string labels
+     * @param featureType The type of feature to be used
+     *
+     */
+    public SarangiANN(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
+
+        super(trainingSongs,labels,featureType);
+
+    }
+
+    /**
+     * Train the model in a Neural Network.
+     *
+     * @param trainingSongs The songs to be used for training.
+     *
+     */
+
+    @Override
+    public void train(List<Song> trainingSongs) {
+        this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
+
+        ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,20,10,this.labels.length + 1);
+        int epoch = 2000;
+        for (int i=0; i<epoch; i++) {
+            ann.learn(trainingSet.dataset,trainingSet.labelIndices);
         }
+    }
 
-        /**
-         * Constructor.
-         *
-         * @param trainingSongs The songs to be used for training
-         * @param labels The string labels
-         * @param featureType The type of feature to be used
-         *
-         */
-        public SarangiANN(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
+    /**
+     * Predict the label for the given song.
+     *
+     * @param song The Song object whose label is to be predicted.
+     *
+     * @return The label index.
+     */
 
-                super(trainingSongs,labels,featureType);
+    @Override 
+    public int predict(Song song) {
+        List<Song> oneSong = new ArrayList<Song>();
+        oneSong.add(song);
 
-        }
-        
-        /**
-         * Train the model in a Neural Network.
-         *
-         * @param trainingSongs The songs to be used for training.
-         *
-         */
+        // TODO Get a better solution than this Hack
+        LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
+        return ann.predict(songDataset.dataset[0]);
+    }
 
-        @Override
-        public void train(List<Song> trainingSongs) {
-                this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
-
-                ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,20,10,this.labels.length + 1);
-                int epoch = 2000;
-                for (int i=0; i<epoch; i++) {
-                    ann.learn(trainingSet.dataset,trainingSet.labelIndices);
-                }
-        }
-
-        /**
-         * Predict the label for the given song.
-         *
-         * @param song The Song object whose label is to be predicted.
-         *
-         * @return The label index.
-         */
-
-        @Override 
-        public int predict(Song song) {
-                List<Song> oneSong = new ArrayList<Song>();
-                oneSong.add(song);
-
-                // TODO Get a better solution than this Hack
-                LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
-                return ann.predict(songDataset.dataset[0]);
-        }
-
-        public void store(String filename) {
-        }
-        public void load(String filename) {
-        }
- }
+    public void store(String filename) {
+    }
+    public void load(String filename) {
+    }
+}

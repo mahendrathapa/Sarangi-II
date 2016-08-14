@@ -26,95 +26,95 @@ import smile.math.kernel.GaussianKernel;
 
 public class ClassifierFactory {
 
-        /**
-         * Get an empty classifier instance.
-         *
-         * @param classifierType The type of classifier instance to return.
-         *
-         * @return A SarangiClassifier instance as requested.
-         *
-         */
-        public static SarangiClassifier getClassifier(ClassifierType classifierType) {
-                if (classifierType == null) {
-                        return null;
-                }
-
-                if (classifierType == ClassifierType.SARANGI_ANN){
-                        return new SarangiANN();
-                }else if (classifierType == ClassifierType.SARANGI_SVM){
-                        return new SarangiSVM();
-                }
-
-                return null;
+    /**
+     * Get an empty classifier instance.
+     *
+     * @param classifierType The type of classifier instance to return.
+     *
+     * @return A SarangiClassifier instance as requested.
+     *
+     */
+    public static SarangiClassifier getClassifier(ClassifierType classifierType) {
+        if (classifierType == null) {
+            return null;
         }
 
-        /**
-         * Get the required classifier instance.
-         *
-         * @param trainingSongs The songs to be used for training the classifier.
-         * @param labels The labels to be used for training the classifier.
-         * @param featureType The type of feature to be used for classification.
-         * @param classifierType The type of classifier instance to return.
-         *
-         * @return A SarangiClassifier instance as requested.
-         *
-         */
-        public static SarangiClassifier getClassifier(List<Song> trainingSongs, String[] labels, FeatureType featureType, ClassifierType classifierType) {
-                if (classifierType == null) {
-                        return null;
-                }
-
-                if (classifierType == ClassifierType.SARANGI_ANN){
-                        return new SarangiANN(trainingSongs,labels,featureType);
-                }else if (classifierType == ClassifierType.SARANGI_SVM){
-                        return new SarangiSVM(trainingSongs,labels,featureType);
-                }
-
-                return null;
+        if (classifierType == ClassifierType.SARANGI_ANN){
+            return new SarangiANN();
+        }else if (classifierType == ClassifierType.SARANGI_SVM){
+            return new SarangiSVM();
         }
 
-        /**
-         * Store the classifier in the specified file.
-         *
-         * @param classifier The SarangiClassifier to be stored.
-         * @param filename The file in which to store the classifier.
-         * TODO Implement a custom JsonSerializer/JsonDeserializer
-         */
-        public static void storeClassifier(SarangiClassifier classifier, String filename) {
-                classifier.store(filename);
+        return null;
+    }
+
+    /**
+     * Get the required classifier instance.
+     *
+     * @param trainingSongs The songs to be used for training the classifier.
+     * @param labels The labels to be used for training the classifier.
+     * @param featureType The type of feature to be used for classification.
+     * @param classifierType The type of classifier instance to return.
+     *
+     * @return A SarangiClassifier instance as requested.
+     *
+     */
+    public static SarangiClassifier getClassifier(List<Song> trainingSongs, String[] labels, FeatureType featureType, ClassifierType classifierType) {
+        if (classifierType == null) {
+            return null;
         }
 
-        /**
-         * Load the classifier from the specified file without labels and featureType
-         *
-         * @param filename The file from which to load the classifier.
-         * @param classifierType The type of classifier.
-         */
-        public static SarangiClassifier loadRawClassifier(String filename, ClassifierType classifierType) {
-
-                SarangiClassifier loadedClassifier = getClassifier(classifierType);
-
-                loadedClassifier.load(filename);
-
-                return loadedClassifier;
-
+        if (classifierType == ClassifierType.SARANGI_ANN){
+            return new SarangiANN(trainingSongs,labels,featureType);
+        }else if (classifierType == ClassifierType.SARANGI_SVM){
+            return new SarangiSVM(trainingSongs,labels,featureType);
         }
 
-        /**
-         * Load the classifier from the specified file.
-         *
-         * @param filename The file from which to load the classifier.
-         */
-        public static SarangiClassifier loadClassifier(String filename, ClassifierType classifierType, String[] labels, FeatureType featureType) {
+        return null;
+    }
 
-                SarangiClassifier loadedClassifier = getClassifier(classifierType);
+    /**
+     * Store the classifier in the specified file.
+     *
+     * @param classifier The SarangiClassifier to be stored.
+     * @param filename The file in which to store the classifier.
+     * TODO Implement a custom JsonSerializer/JsonDeserializer
+     */
+    public static void storeClassifier(SarangiClassifier classifier, String filename) {
+        classifier.store(filename);
+    }
 
-                loadedClassifier.setLabels(labels);
-                loadedClassifier.setFeatureType(featureType);
+    /**
+     * Load the classifier from the specified file without labels and featureType
+     *
+     * @param filename The file from which to load the classifier.
+     * @param classifierType The type of classifier.
+     */
+    public static SarangiClassifier loadRawClassifier(String filename, ClassifierType classifierType) {
 
-                loadedClassifier.load(filename);
+        SarangiClassifier loadedClassifier = getClassifier(classifierType);
 
-                return loadedClassifier;
+        loadedClassifier.load(filename);
 
-        }
+        return loadedClassifier;
+
+    }
+
+    /**
+     * Load the classifier from the specified file.
+     *
+     * @param filename The file from which to load the classifier.
+     */
+    public static SarangiClassifier loadClassifier(String filename, ClassifierType classifierType, String[] labels, FeatureType featureType) {
+
+        SarangiClassifier loadedClassifier = getClassifier(classifierType);
+
+        loadedClassifier.setLabels(labels);
+        loadedClassifier.setFeatureType(featureType);
+
+        loadedClassifier.load(filename);
+
+        return loadedClassifier;
+
+    }
 }

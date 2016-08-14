@@ -13,24 +13,24 @@ import java.util.*;
 
 public class PowerSpectrum{
 
-        public static double[][] extractFeature(List<double[]> audioFrames,double samplingRate){
+    public static double[][] extractFeature(List<double[]> audioFrames,double samplingRate){
 
-                int dimension = audioFrames.get(0).length;
+        int dimension = audioFrames.get(0).length;
 
-                double[][] feature = new double[audioFrames.size()][dimension];
+        double[][] feature = new double[audioFrames.size()][dimension];
 
-                int count = 0;
+        int count = 0;
 
 
-                for(double[] frame : audioFrames){
+        for(double[] frame : audioFrames){
 
-                        FFT fft = new FFT(frame);
-                        feature = Statistics.assign1Dto2DArray(feature,fft.getPowerSpectrum(),count);
-                        ++count;
-                }
-
-                return feature;
+            FFT fft = new FFT(frame);
+            feature = Statistics.assign1Dto2DArray(feature,fft.getPowerSpectrum(),count);
+            ++count;
         }
+
+        return feature;
+    }
 }
 
 

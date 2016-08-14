@@ -20,12 +20,12 @@ import com.beust.jcommander.Parameters;
 
 
 public class CommandLine {
-        /*
-        @Parameter
-        private List<String> parameters = new ArrayList<>();
-        */
+    /*
+       @Parameter
+       private List<String> parameters = new ArrayList<>();
+       */
 
-        @Parameter(names = "--help", help = true)
+    @Parameter(names = "--help", help = true)
         public boolean help;
 }
 

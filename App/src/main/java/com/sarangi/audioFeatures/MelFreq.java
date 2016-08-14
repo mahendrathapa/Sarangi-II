@@ -23,45 +23,45 @@ import java.util.logging.Level;
 public class MelFreq{
 
 
-        public static double[][] extractFeature(List<double[]> audioFrames,double samplingRate){
+    public static double[][] extractFeature(List<double[]> audioFrames,double samplingRate){
 
-                LoggerHandler loggerHandler = LoggerHandler.getInstance();
+        LoggerHandler loggerHandler = LoggerHandler.getInstance();
 
-                int dimension = 30;
-                int length = audioFrames.get(0).length;
+        int dimension = 30;
+        int length = audioFrames.get(0).length;
 
-                double[][] feature = new double[audioFrames.size()][dimension];
+        double[][] feature = new double[audioFrames.size()][dimension];
 
-                int count = 0;
+        int count = 0;
 
-                try{
-                        for(double[] frame : audioFrames){
+        try{
+            for(double[] frame : audioFrames){
 
-                                float[] floatFrame = Statistics.convertDoubleArrayToFloatArray(frame);
+                float[] floatFrame = Statistics.convertDoubleArrayToFloatArray(frame);
 
 
-                                AudioDispatcher audioDispatcher = AudioDispatcherFactory.fromFloatArray(floatFrame,(int)samplingRate,length,0);
-                                MFCC mfcc = new MFCC(length,(int)samplingRate);
-                                audioDispatcher.addAudioProcessor(mfcc);
-                                audioDispatcher.run();
+                AudioDispatcher audioDispatcher = AudioDispatcherFactory.fromFloatArray(floatFrame,(int)samplingRate,length,0);
+                MFCC mfcc = new MFCC(length,(int)samplingRate);
+                audioDispatcher.addAudioProcessor(mfcc);
+                audioDispatcher.run();
 
-                                feature = Statistics.assign1Dto2DArray(feature,Statistics.convertFloatArrayToDoubleArray(mfcc.getMFCC()),count);
-                                ++count;
+                feature = Statistics.assign1Dto2DArray(feature,Statistics.convertFloatArrayToDoubleArray(mfcc.getMFCC()),count);
+                ++count;
 
-                        }
+            }
 
-                        return feature;
+            return feature;
 
-                }catch(Exception ex){
+        }catch(Exception ex){
 
-                        loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
-                                                    Level.SEVERE,
-                                                    ExceptionPrint.getExceptionPrint(ex));
+            loggerHandler.loggingSystem(LoggerHandler.LogType.FEATURE_EXTRACTION,
+                    Level.SEVERE,
+                    ExceptionPrint.getExceptionPrint(ex));
 
-                        return new double[][]{};
+            return new double[][]{};
 
-                }
         }
+    }
 
 }
 
