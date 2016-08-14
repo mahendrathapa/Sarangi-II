@@ -13,13 +13,13 @@ mvn compile
 
 ## Creating a jar file
 
-In the `App` folder, run `mvn package`
+In the `App` folder, run `mvn package assembly:single`
 ```
-mvn package
+mvn package assembly:single
 ```
 
 ## Running the application
 Assuming you have all necessary jar files in `target/`
 ```
-java -cp ".:target/*" com.sarangi.app.App
+java -jar App-2.0-jar-with-dependencies.jar
 ```
