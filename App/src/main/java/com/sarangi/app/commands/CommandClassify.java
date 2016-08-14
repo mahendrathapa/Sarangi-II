@@ -31,7 +31,7 @@ public class CommandClassify {
         @Parameter(names = {"-C","--classifier-type"},description = "Type of Classifier to use.")
                 public String classifierType = "SVM";
 
-        @Parameter(names = {"-c","--classifier"}, variableArity = true, description = "Classifier File to be used.")
+        @Parameter(names = {"-c","--classifier"}, variableArity = true, description = "Classifier Files to be used.")
                 public List<String> classifierFiles = new ArrayList<String>(Arrays.asList("src/resources/classifier/svm.txt"));
 
         @Parameter(names = "--help", help = true)
