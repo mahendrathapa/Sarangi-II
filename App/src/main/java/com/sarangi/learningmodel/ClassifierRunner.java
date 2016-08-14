@@ -110,16 +110,45 @@ public class ClassifierRunner {
          * @param featureType The type of feature to be used for testing.
          * @param k The number of partitions to create.
          * @param classifierType The type of classifier to run.
+         * @param random Shuffle the songs or create 'nice' partitions
          *
          */
 
-        public void runCrossValidation(String filename, FeatureType featureType, int k, ClassifierType classifierType) throws FileNotFoundException, IOException  {
+        public void runCrossValidation(String filename, FeatureType featureType, int k, ClassifierType classifierType, boolean random) throws FileNotFoundException, IOException  {
 
                 SongHandler songHandler = new SongHandler(filename);
                 List<Song> songs = songHandler.loadSongs();
 
                 int partitionSize = songs.size()/k;
-                Collections.shuffle(songs);
+
+                if (random) {
+                    Collections.shuffle(songs);
+                } else {
+                        List<Song> tempSongs = new ArrayList<Song>();
+
+                        int numOfLabelSongsInPartition = partitionSize/this.labels.length;
+
+                        int[] songIndex = new int[this.labels.length];
+
+                        // For Every Partition
+                        for (int i=0; i<k; i++) {
+
+                                // For Every Label, get numOfLabelSongsInPartition songs.
+                                for (int j=0; j<this.labels.length; j++) {
+
+                                        int songCount = 0;
+                                        while (songCount != numOfLabelSongsInPartition) {
+                                            if (songs.get(songIndex[j]).getSongName().contains(this.labels[j])) {
+                                                    tempSongs.add(songs.get(songIndex[j]));
+                                                    songCount++;
+                                            }
+                                            songIndex[j]++;
+                                        }
+                                }
+                        }
+
+                        songs = tempSongs;
+                }
 
                 double overallAvgAccuracy = 0.0;
 
