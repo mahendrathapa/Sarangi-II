@@ -81,17 +81,37 @@ public class App
 
                 jc.parse(args);
 
+                if (cm.help || jc.getParsedCommand() == null) {
+                        jc.usage();
+                        System.exit(0);
+                }
+
                     if (jc.getParsedCommand().equals("extract")) {
+
+                        if (extract.help) {
+                                jc.usage("extract");
+                                System.exit(0);
+                        }
 
                         FeatureExtractor.extractFeature(extract.file,extract.folder);
 
                     }else if(jc.getParsedCommand().equals("train")) {
+
+                        if (train.help) {
+                                jc.usage("train");
+                                System.exit(0);
+                        }
 
                         ClassifierRunner runner = new ClassifierRunner(labelsArray.get(train.labelIndex));
 
                         runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,ClassifierType.fromString(train.classifierType));
 
                     }else if(jc.getParsedCommand().equals("test")) {
+
+                        if (test.help) {
+                                jc.usage("test");
+                                System.exit(0);
+                        }
 
                             if (test.kfoldFile != null) {
                                     ClassifierRunner runner = new ClassifierRunner(labelsArray.get(test.labelIndex));
@@ -100,11 +120,13 @@ public class App
 
                     }else if(jc.getParsedCommand().equals("classify")) {
 
-                            // Extract Song Feature to temp file
-                            SongHandler fileHandler = new SongHandler("src/resources/song/songFeatures/temp.txt");
+                        if (classify.help) {
+                                jc.usage("classify");
+                                System.exit(0);
+                        }
+
                             List<Song> oneSong = new ArrayList<Song>();
                             oneSong.add(FeatureExtractor.extractSongFeature(classify.file));
-                            fileHandler.storeSongs(oneSong);
 
                             //TODO Bind label to classifier.
                             int i = 0;
@@ -120,14 +142,9 @@ public class App
 
                 } catch (Exception e) {
                         e.printStackTrace();
-                        //jc.usage();
                         System.exit(1);
                 }
 
-                if (cm.help || jc.getParsedCommand() == null) {
-                        jc.usage();
-                        System.exit(0);
-                }
 
         }
 }
