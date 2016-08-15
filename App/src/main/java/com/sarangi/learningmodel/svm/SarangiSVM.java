@@ -98,18 +98,18 @@ public class SarangiSVM extends SarangiClassifier {
         return svm.predict(songDataset.dataset[0]);
     }
 
+    /**
+     * Store the svm object.
+     *
+     * @param filename The file where the object is to be stored.
+     *
+     */
+
     public void store(String filename) {
         try{
             FileWriter fileWriter = new FileWriter(filename);
 
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-            /*
-               final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator());
-               final Gson gson = gsonBuilder.create();
-
-               gson.toJson(svm,bufferedWriter);
-               */
 
             XStream xstream = new XStream(new StaxDriver());
             String xml = xstream.toXML(svm);
@@ -123,6 +123,13 @@ public class SarangiSVM extends SarangiClassifier {
         }
     }
 
+    /**
+     * Load the svm object.
+     *
+     * @param filename The file where the object is to be loaded from..
+     *
+     */
+
     public void load(String filename) {
         try{
 
@@ -133,13 +140,6 @@ public class SarangiSVM extends SarangiClassifier {
 
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
             String xml = bufferedReader.readLine();
-
-            /*
-               final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator());
-               final Gson gson = gsonBuilder.create();
-
-               this.svm = gson.fromJson(jsonResponse,SVM.class);
-               */
 
             XStream xstream = new XStream(new StaxDriver());
             this.svm = (SVM)xstream.fromXML(xml);

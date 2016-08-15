@@ -1,9 +1,10 @@
 package com.sarangi.learningmodel.ann; 
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 import com.sarangi.structures.*;
 import com.sarangi.json.SongHandler;
@@ -88,9 +89,58 @@ public class SarangiANN extends SarangiClassifier {
         LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
         return ann.predict(songDataset.dataset[0]);
     }
+    
+    /**
+     * Store the ann object.
+     *
+     * @param filename The file where the object is to be stored.
+     *
+     */
 
     public void store(String filename) {
+        try{
+            FileWriter fileWriter = new FileWriter(filename);
+
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+            XStream xstream = new XStream(new StaxDriver());
+            String xml = xstream.toXML(ann);
+
+            bufferedWriter.write(xml);
+
+            bufferedWriter.close();
+
+        }catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
+
+    /**
+     * Load the ann object.
+     *
+     * @param filename The file where the object is to be loaded from..
+     *
+     */
+
     public void load(String filename) {
+        try{
+
+            File file = new File(filename);
+
+            if(file.length() == 0)
+                return;
+
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+            String xml = bufferedReader.readLine();
+
+            XStream xstream = new XStream(new StaxDriver());
+            this.ann = (NeuralNetwork)xstream.fromXML(xml);
+
+            bufferedReader.close();
+
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
+
     }
 }
