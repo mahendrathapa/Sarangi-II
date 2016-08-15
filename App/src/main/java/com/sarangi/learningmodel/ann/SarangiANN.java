@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
+import com.thoughtworks.xstream.XStreamException;
 
 import com.sarangi.structures.*;
 import com.sarangi.json.SongHandler;
@@ -97,8 +98,7 @@ public class SarangiANN extends SarangiClassifier {
      *
      */
 
-    public void store(String filename) {
-        try{
+    public void store(String filename) throws IOException, XStreamException {
             FileWriter fileWriter = new FileWriter(filename);
 
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -110,10 +110,7 @@ public class SarangiANN extends SarangiClassifier {
 
             bufferedWriter.close();
 
-        }catch(Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+   }    
 
     /**
      * Load the ann object.
@@ -122,8 +119,7 @@ public class SarangiANN extends SarangiClassifier {
      *
      */
 
-    public void load(String filename) {
-        try{
+    public void load(String filename) throws IOException, XStreamException {
 
             File file = new File(filename);
 
@@ -137,10 +133,6 @@ public class SarangiANN extends SarangiClassifier {
             this.ann = (NeuralNetwork)xstream.fromXML(xml);
 
             bufferedReader.close();
-
-        } catch(Exception ex){
-            ex.printStackTrace();
-        }
 
     }
 }

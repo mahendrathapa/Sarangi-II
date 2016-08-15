@@ -14,6 +14,8 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 
+import com.thoughtworks.xstream.XStreamException;
+
 /**
  * Interface for all Sarangi Classifiers.
  *
@@ -75,8 +77,8 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
         this.featureType = featureType;
     }
 
-    public abstract void store(String filename);
-    public abstract void load(String filename);
+    public abstract void store(String filename) throws IOException, XStreamException;
+    public abstract void load(String filename) throws IOException, XStreamException;
 
     /**
      * Train the model using the given songs.
@@ -152,6 +154,7 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
 
             ex.printStackTrace();
         }
+
         return new Result(actualLabels,predictedLabels,accuracy,this.labels,labelAccuracy,confusionMatrix);
 
     }

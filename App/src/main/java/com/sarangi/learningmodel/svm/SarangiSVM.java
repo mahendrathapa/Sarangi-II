@@ -8,6 +8,7 @@ import com.sarangi.learningmodel.*;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
+import com.thoughtworks.xstream.XStreamException;
 
 import smile.classification.SVM;
 import smile.math.kernel.GaussianKernel;
@@ -105,8 +106,7 @@ public class SarangiSVM extends SarangiClassifier {
      *
      */
 
-    public void store(String filename) {
-        try{
+    public void store(String filename) throws IOException, XStreamException {
             FileWriter fileWriter = new FileWriter(filename);
 
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -118,9 +118,6 @@ public class SarangiSVM extends SarangiClassifier {
 
             bufferedWriter.close();
 
-        }catch(Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     /**
@@ -130,8 +127,7 @@ public class SarangiSVM extends SarangiClassifier {
      *
      */
 
-    public void load(String filename) {
-        try{
+    public void load(String filename) throws IOException, XStreamException {
 
             File file = new File(filename);
 
@@ -145,10 +141,6 @@ public class SarangiSVM extends SarangiClassifier {
             this.svm = (SVM)xstream.fromXML(xml);
 
             bufferedReader.close();
-
-        } catch(Exception ex){
-            ex.printStackTrace();
-        }
 
     }
 
