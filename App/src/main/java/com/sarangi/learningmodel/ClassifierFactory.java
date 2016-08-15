@@ -17,6 +17,8 @@ import com.sarangi.learningmodel.ann.*;
 import com.sarangi.learningmodel.svm.*;
 import smile.math.kernel.GaussianKernel;
 
+import com.thoughtworks.xstream.XStreamException;
+
 /**
  * Class to produce instance of required classifier.
  *
@@ -80,24 +82,8 @@ public class ClassifierFactory {
      * @param filename The file in which to store the classifier.
      * TODO Implement a custom JsonSerializer/JsonDeserializer
      */
-    public static void storeClassifier(SarangiClassifier classifier, String filename) {
+    public static void storeClassifier(SarangiClassifier classifier, String filename) throws IOException, XStreamException {
         classifier.store(filename);
-    }
-
-    /**
-     * Load the classifier from the specified file without labels and featureType
-     *
-     * @param filename The file from which to load the classifier.
-     * @param classifierType The type of classifier.
-     */
-    public static SarangiClassifier loadRawClassifier(String filename, ClassifierType classifierType) {
-
-        SarangiClassifier loadedClassifier = getClassifier(classifierType);
-
-        loadedClassifier.load(filename);
-
-        return loadedClassifier;
-
     }
 
     /**
@@ -105,7 +91,8 @@ public class ClassifierFactory {
      *
      * @param filename The file from which to load the classifier.
      */
-    public static SarangiClassifier loadClassifier(String filename, ClassifierType classifierType, String[] labels, FeatureType featureType) {
+    public static SarangiClassifier loadClassifier(String filename, ClassifierType classifierType, String[] labels, FeatureType featureType) 
+        throws IOException, XStreamException {
 
         SarangiClassifier loadedClassifier = getClassifier(classifierType);
 

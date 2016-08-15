@@ -8,6 +8,7 @@ import com.sarangi.learningmodel.*;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
+import com.thoughtworks.xstream.XStreamException;
 
 import smile.classification.SVM;
 import smile.math.kernel.GaussianKernel;
@@ -98,18 +99,17 @@ public class SarangiSVM extends SarangiClassifier {
         return svm.predict(songDataset.dataset[0]);
     }
 
-    public void store(String filename) {
-        try{
+    /**
+     * Store the svm object.
+     *
+     * @param filename The file where the object is to be stored.
+     *
+     */
+
+    public void store(String filename) throws IOException, XStreamException {
             FileWriter fileWriter = new FileWriter(filename);
 
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-            /*
-               final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator());
-               final Gson gson = gsonBuilder.create();
-
-               gson.toJson(svm,bufferedWriter);
-               */
 
             XStream xstream = new XStream(new StaxDriver());
             String xml = xstream.toXML(svm);
@@ -118,13 +118,16 @@ public class SarangiSVM extends SarangiClassifier {
 
             bufferedWriter.close();
 
-        }catch(Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
-    public void load(String filename) {
-        try{
+    /**
+     * Load the svm object.
+     *
+     * @param filename The file where the object is to be loaded from..
+     *
+     */
+
+    public void load(String filename) throws IOException, XStreamException {
 
             File file = new File(filename);
 
@@ -134,21 +137,10 @@ public class SarangiSVM extends SarangiClassifier {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
             String xml = bufferedReader.readLine();
 
-            /*
-               final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(MercerKernel.class, new MercerKernelInstanceCreator());
-               final Gson gson = gsonBuilder.create();
-
-               this.svm = gson.fromJson(jsonResponse,SVM.class);
-               */
-
             XStream xstream = new XStream(new StaxDriver());
             this.svm = (SVM)xstream.fromXML(xml);
 
             bufferedReader.close();
-
-        } catch(Exception ex){
-            ex.printStackTrace();
-        }
 
     }
 

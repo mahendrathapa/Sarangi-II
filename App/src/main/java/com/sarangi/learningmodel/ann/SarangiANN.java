@@ -1,9 +1,11 @@
 package com.sarangi.learningmodel.ann; 
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
+import com.thoughtworks.xstream.XStreamException;
 
 import com.sarangi.structures.*;
 import com.sarangi.json.SongHandler;
@@ -64,7 +66,7 @@ public class SarangiANN extends SarangiClassifier {
     public void train(List<Song> trainingSongs) {
         this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
 
-        ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,20,10,this.labels.length + 1);
+        ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,DatasetUtil.DATASET_SIZE,10,this.labels.length + 1);
         int epoch = 2000;
         for (int i=0; i<epoch; i++) {
             ann.learn(trainingSet.dataset,trainingSet.labelIndices);
@@ -88,9 +90,49 @@ public class SarangiANN extends SarangiClassifier {
         LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
         return ann.predict(songDataset.dataset[0]);
     }
+    
+    /**
+     * Store the ann object.
+     *
+     * @param filename The file where the object is to be stored.
+     *
+     */
 
-    public void store(String filename) {
-    }
-    public void load(String filename) {
+    public void store(String filename) throws IOException, XStreamException {
+            FileWriter fileWriter = new FileWriter(filename);
+
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+            XStream xstream = new XStream(new StaxDriver());
+            String xml = xstream.toXML(ann);
+
+            bufferedWriter.write(xml);
+
+            bufferedWriter.close();
+
+   }    
+
+    /**
+     * Load the ann object.
+     *
+     * @param filename The file where the object is to be loaded from..
+     *
+     */
+
+    public void load(String filename) throws IOException, XStreamException {
+
+            File file = new File(filename);
+
+            if(file.length() == 0)
+                return;
+
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+            String xml = bufferedReader.readLine();
+
+            XStream xstream = new XStream(new StaxDriver());
+            this.ann = (NeuralNetwork)xstream.fromXML(xml);
+
+            bufferedReader.close();
+
     }
 }
