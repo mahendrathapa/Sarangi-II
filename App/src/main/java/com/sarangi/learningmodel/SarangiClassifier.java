@@ -112,8 +112,12 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
         double[] labelCount = new double[this.labels.length];
         int[][] confusionMatrix = new int[this.labels.length][this.labels.length];
         double accuracy = 0.0;
+        int[] predictedLabels = new int[testSongs.size()];
+        int[] actualLabels = new int[testSongs.size()];
 
         try{
+
+            int index = 0;
 
             for (Song song: testSongs) {
 
@@ -128,6 +132,11 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
                     labelAccuracy[labelIndex-1]++;
                     correct++;
                 }
+
+                predictedLabels[index] = predictedLabel;
+                actualLabels[index] = labelIndex;
+
+                index++;
             }
 
             int numOfSongs = testSongs.size();
@@ -143,7 +152,7 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
 
             ex.printStackTrace();
         }
-        return new Result(accuracy,this.labels,labelAccuracy,confusionMatrix);
+        return new Result(actualLabels,predictedLabels,accuracy,this.labels,labelAccuracy,confusionMatrix);
 
     }
 
