@@ -25,6 +25,13 @@ import java.util.logging.*;
 
 public class DatasetUtil {
 
+    /**
+     * The size of each dataset.
+     * It is the sum of length of each feature used.
+     * 
+     */
+    public static int DATASET_SIZE = 20;
+
 
     /**
      * Get the LearningDataset object on a song by song basis.
@@ -36,6 +43,7 @@ public class DatasetUtil {
      * @return The LearningDataset object corresponding to the given input.
      *
      */
+
     public static LearningDataset getSongwiseDataset(List<Song> dataSongs, String[] labelArray, FeatureType featureType) {
 
         LearningDataset learningDataset = new LearningDataset();

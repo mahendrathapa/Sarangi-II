@@ -65,7 +65,7 @@ public class SarangiANN extends SarangiClassifier {
     public void train(List<Song> trainingSongs) {
         this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
 
-        ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,20,10,this.labels.length + 1);
+        ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,DatasetUtil.DATASET_SIZE,10,this.labels.length + 1);
         int epoch = 2000;
         for (int i=0; i<epoch; i++) {
             ann.learn(trainingSet.dataset,trainingSet.labelIndices);
