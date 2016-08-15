@@ -73,7 +73,10 @@ public class SarangiSVM extends SarangiClassifier {
         this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
 
         svm = new SVM(new GaussianKernel(SarangiSVM.SIGMA), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
-        svm.learn(trainingSet.dataset,trainingSet.labelIndices);
+        int epoch = 10;
+        for (int i=0; i<epoch; i++) {
+            svm.learn(trainingSet.dataset,trainingSet.labelIndices);
+        }
         svm.finish();
     }
 

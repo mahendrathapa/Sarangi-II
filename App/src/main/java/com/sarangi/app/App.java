@@ -115,7 +115,7 @@ public class App
 
                 if (test.kfoldFile != null) {
                     ClassifierRunner runner = new ClassifierRunner(labelsArray.get(test.labelIndex));
-                    runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,ClassifierType.fromString(test.classifierType),false);
+                    runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,ClassifierType.fromString(test.classifierType),true);
                 }
 
             }else if(jc.getParsedCommand().equals("classify")) {

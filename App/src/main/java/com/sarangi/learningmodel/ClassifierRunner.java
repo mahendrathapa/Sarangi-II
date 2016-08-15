@@ -151,6 +151,9 @@ public class ClassifierRunner {
                 }
 
                 double overallAvgAccuracy = 0.0;
+                double overallAvgFMeasure = 0.0;
+                double overallAvgPrecision = 0.0;
+                double overallAvgRecall = 0.0;
 
                 ClassifierFactory factory = new ClassifierFactory();
 
@@ -169,11 +172,18 @@ public class ClassifierRunner {
 
                         result.printData();
 
-                        overallAvgAccuracy += result.getAccuracy();
+                        overallAvgAccuracy += result.accuracy;
+                        overallAvgFMeasure += result.fMeasure;
+                        overallAvgPrecision += result.precision;
+                        overallAvgRecall += result.recall;
 
                 }
 
+                System.out.format("\n\nResults with %d-fold cross validation\n\n",k);
                 System.out.format("[====> K-fold accuracy: %.2f%% <====]\n\n", overallAvgAccuracy/k);
+                System.out.format("[====> K-fold Precision: %.2f <====]\n\n", overallAvgPrecision/k);
+                System.out.format("[====> K-fold Recall: %.2f <====]\n\n", overallAvgRecall/k);
+                System.out.format("[====> K-fold FMeasure: %.2f <====]\n\n", overallAvgFMeasure/k);
 
         }
 }
