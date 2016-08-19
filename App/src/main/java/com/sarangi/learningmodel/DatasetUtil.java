@@ -32,6 +32,32 @@ public class DatasetUtil {
      */
     public static int DATASET_SIZE = 20;
 
+    /**
+     * Get the data for the given song.
+     *
+     * @param song The song whose data is to be returned.
+     *
+     */
+    public static double[] getSongData(Song song) {
+
+                    double[] compactness = song.getCompactness();
+
+                    double[] melFreq =new double[20];
+                    System.arraycopy(song.getMelFreq(),0,melFreq,0,10);
+                    System.arraycopy(song.getMelFreq(),30,melFreq,10,10);
+
+                    double[] pitch = song.getPitch();
+                    double[] rhythm = song.getRhythm();
+                    double[] rms = song.getRMS();
+                    double[] spectralCentroid = song.getSpectralCentroid();
+                    double[] spectralFlux = song.getSpectralFlux();
+                    double[] spectralRolloffPoint = song.getSpectralRolloffPoint();
+                    double[] spectralVariablility = song.getSpectralVariablility();
+                    double[] zeroCrossing = song.getZeroCrossing();
+
+                    return Statistics.mergeArrays(melFreq);
+    }
+
 
     /**
      * Get the LearningDataset object on a song by song basis.
@@ -62,32 +88,8 @@ public class DatasetUtil {
 
                 try {
 
-                    double[] compactness = song.getCompactness();
+                    learningDataset.dataset[i] = getSongData(song);
 
-                    double[] melFreq =new double[20];
-                    System.arraycopy(song.getMelFreq(),0,melFreq,0,10);
-                    System.arraycopy(song.getMelFreq(),30,melFreq,10,10);
-
-                    double[] pitch = song.getPitch();
-                    double[] rhythm = song.getRhythm();
-                    double[] rms = song.getRMS();
-                    double[] spectralCentroid = song.getSpectralCentroid();
-                    double[] spectralFlux = song.getSpectralFlux();
-                    double[] spectralRolloffPoint = song.getSpectralRolloffPoint();
-                    double[] spectralVariablility = song.getSpectralVariablility();
-                    double[] zeroCrossing = song.getZeroCrossing();
-
-                    learningDataset.dataset[i] = Statistics.mergeArrays(melFreq);
-                    /*
-                       learningDataset.dataset[i] = Statistics.mergeArrays(compactness,
-                       melFreq,
-                       rms,
-                       spectralCentroid,
-                       spectralFlux,
-                       spectralRolloffPoint,
-                       spectralVariablility,
-                       zeroCrossing);
-                       */
                     learningDataset.labelIndices[i] = getIndexOfLabel(song.getSongName(),labelArray);
 
                     ++i;

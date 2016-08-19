@@ -83,12 +83,10 @@ public class SarangiANN extends SarangiClassifier {
 
     @Override 
     public int predict(Song song) {
-        List<Song> oneSong = new ArrayList<Song>();
-        oneSong.add(song);
 
-        // TODO Get a better solution than this Hack
-        LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
-        return ann.predict(songDataset.dataset[0]);
+        double[] dataset = DatasetUtil.getSongData(song);
+        return ann.predict(dataset);
+
     }
     
     /**
