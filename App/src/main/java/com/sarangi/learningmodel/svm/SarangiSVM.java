@@ -90,13 +90,10 @@ public class SarangiSVM extends SarangiClassifier {
      */
     @Override
     public int predict(Song song) {
-        List<Song> oneSong = new ArrayList<Song>();
-        oneSong.add(song);
 
-        // TODO Get a better solution than this Hack
-        LearningDataset songDataset = DatasetUtil.getSongwiseDataset(oneSong,this.labels,this.featureType);
+        double[] dataset = DatasetUtil.getSongData(song);
 
-        return svm.predict(songDataset.dataset[0]);
+        return svm.predict(dataset);
     }
 
     /**
