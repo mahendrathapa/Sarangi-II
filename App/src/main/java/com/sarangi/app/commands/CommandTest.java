@@ -30,8 +30,8 @@ public class CommandTest {
     @Parameter(names = {"-C","--classifier-type"},description = "Type of Classifier to use.")
         public String classifierType = "SVM";
 
-    @Parameter(names = {"-l","--label"},description = "The label to be used for training")
-        public int labelIndex = 0;
+    @Parameter(names = {"-l","--label-type"},description = "The label to be used for training")
+        public String label = "genre";
 
     @Parameter(names = "--help", help = true)
         public boolean help;

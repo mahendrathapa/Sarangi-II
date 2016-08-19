@@ -68,14 +68,16 @@ public class App
         CommandClassify classify = new CommandClassify();
         jc.addCommand("classify",classify);
 
-        String[] labels = {"classical","hiphop","jazz","pop","rock"};
+        String[] genreLabels = {"classical","hiphop","jazz","pop","rock"};
         String[] arousalLabels = {"low_arousal","high_arousal"};
         String[] valenceLabels = {"low_valence","high_valence"};
 
-        List<String[]> labelsArray = new ArrayList<String[]>();
-        labelsArray.add(labels);
-        labelsArray.add(arousalLabels);
-        labelsArray.add(valenceLabels);
+        HashMap<String,String[]> labels = new HashMap<String,String[]>();
+
+        labels.put("genre",genreLabels);
+        labels.put("arousal",arousalLabels);
+        labels.put("valence",valenceLabels);
+
 
         try {
 
@@ -102,7 +104,7 @@ public class App
                     System.exit(0);
                 }
 
-                ClassifierRunner runner = new ClassifierRunner(labelsArray.get(train.labelIndex));
+                ClassifierRunner runner = new ClassifierRunner(labels.get(train.label));
 
                 runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,ClassifierType.fromString(train.classifierType));
 
@@ -114,7 +116,7 @@ public class App
                 }
 
                 if (test.kfoldFile != null) {
-                    ClassifierRunner runner = new ClassifierRunner(labelsArray.get(test.labelIndex));
+                    ClassifierRunner runner = new ClassifierRunner(labels.get(test.label));
                     runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,ClassifierType.fromString(test.classifierType),true);
                 }
 
@@ -125,16 +127,17 @@ public class App
                     System.exit(0);
                 }
 
-                List<Song> oneSong = new ArrayList<Song>();
-                oneSong.add(FeatureExtractor.extractSongFeature(classify.file));
+                Song song = FeatureExtractor.extractSongFeature(classify.file);
+
+                System.out.println("Song: "+song.getSongName());
 
                 //TODO Bind label to classifier.
                 int i = 0;
                 for (String classifierFile: classify.classifierFiles) {
-                    System.out.println("Classifier: "+classifierFile);
-                    SarangiClassifier classifier = ClassifierFactory.loadClassifier(classifierFile,ClassifierType.fromString(classify.classifierType),labelsArray.get(i),FeatureType.SARANGI_ALL);
-                    int labelIndex = classifier.predict(oneSong.get(0));
-                    System.out.println("Classification: "+(labelsArray.get(i))[labelIndex-1]);
+                    SarangiClassifier classifier = ClassifierFactory.loadClassifier(classifierFile,
+                            ClassifierType.fromString(classify.classifierType),labels.get(classify.classifierLabels.get(i)),FeatureType.SARANGI_ALL);
+                    int labelIndex = classifier.predict(song);
+                    System.out.println(classify.classifierLabels.get(i)+": "+(labels.get(classify.classifierLabels.get(i))[labelIndex-1]));
                     i++;
                 }
 
