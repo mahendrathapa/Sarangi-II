@@ -23,17 +23,29 @@ import javax.sound.sampled.*;
 import java.util.logging.*;
 
 /**
- * A class for calculating the pitch of the given audio samples.
+ * A class that extracts the Pitch features of the song.
  *
- * <p> Include constructor in which the logger is defined and pitch is calculated.
- *
- * <p> Include method for accessing the pitch features of the given audio sample.
+ * This is calculated by using the tarsos dsp library.
  *
  * @author Ayush Shakya
  *
  */
 
 public class Pitch{
+
+    /* PUBLIC METHODS *****************************************************/
+
+    /**
+     * Extracts this feature from the given audio frames at the given sampling
+     * rate.
+     
+     * @param audioFrames       The audio frame to extract the feature from.
+     *
+     * @param samplingRate      The sampling rate that the samples are encoded with.
+     *
+     * @return                  The extracted feature values.
+     *
+     */
 
 
     public static double[][] extractFeature(List<double[]> Frames,double samplingRate){

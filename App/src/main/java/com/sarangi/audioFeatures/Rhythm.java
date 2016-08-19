@@ -17,12 +17,17 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
 /**
- * A class for calculating the rhythm features of the given audio samples.
+ * A class that extracts the  rhythm features of the song.
  *
- * <p> Include constructor in which the different methods are integrated to calcuate
- * the rhythmic features of the audio input signal.
- *
- * <p> Include method for accessing rhythmic features of the given audio sample 
+ * Algorithm
+ * <p>
+ * Extract the beat histogram of from a signal by using autocorrelation method.
+ * <p>
+ * Calculate the bin labels, in beats per minute, of a beat histogram.
+ * <p>
+ * Finds the strongest beat in a signal.
+ * <p>
+ * Calculate the strength of strongest beat from a signal.
  *
  * @author  Mahendra Thapa
  *
@@ -30,6 +35,18 @@ import javax.sound.sampled.AudioSystem;
 
 public class Rhythm{
 
+    /* PUBLIC METHODS ********************************************************/
+
+    /**
+     * Extracts this feature from the given audio frames at the given sampling
+     * rate.
+     *  
+     * @param   audioFrames     The audio frame to extract the feature from.
+     *
+     * @param   samplingRate    The sampling rate that the samples are encoded.
+     *
+     * @return                  The extracted feature values.
+     */
 
     public static double[][] extractFeature(List<double[]> audioFrames, double samplingRate){
 
@@ -40,7 +57,19 @@ public class Rhythm{
 
 
     }
-    public static double[][] extractFeature(double[][] rmsValues,double samplingRate){
+ 
+    /**
+     * Extracts this feature from the given rms value at the given sampling
+     * rate.
+     *  
+     * @param   rmsValues       The rms value to extract the feature from.
+     *
+     * @param   samplingRate    The sampling rate that the samples are encoded.
+     *
+     * @return                  The extracted feature values.
+     */
+
+   public static double[][] extractFeature(double[][] rmsValues,double samplingRate){
 
         int binSize = 1024;
 
@@ -81,6 +110,8 @@ public class Rhythm{
         return feature;
     }
 
+   /* PRIVATE METHOD *****************************************************/
+
     /**
      * Return the dominating beat of the audio signal based on the energy of that signal at that given BPM.
      *
@@ -90,6 +121,7 @@ public class Rhythm{
      *
      * @return                  Beats per minutes of the given audio signal.
      */
+
     private static double getStrongestBeat(double[] beatHistogram, double[] labels){
         int highestBin = getIndexOfLargest(beatHistogram);
         return labels[highestBin];
@@ -102,6 +134,7 @@ public class Rhythm{
      *
      * @return                  The strength of the strongest beat of the given audio signal.
      */
+
     private static double getStrengthofStrongestBeat(double[] beatHistogram){
         double beatSum = getBeatSum(beatHistogram);
         int highestBin = getIndexOfLargest(beatHistogram);
@@ -162,6 +195,7 @@ public class Rhythm{
      * @param   samplingRate        The sampling rate that was used to encode.
      *                              the signal that was auto-correlated
      * @param   minLag              The minimum lag in samples that was used in the auto-correlation.
+     *
      * @param   maxLag              The maximum lag in samples that was used in the auto-correlation.
      *
      * @return                      The labels, in Hz, for the corresponding
@@ -183,8 +217,11 @@ public class Rhythm{
      * Hz for each of the returned bins.
      *
      * @param   signal  The digital signal to auto-correlate.
+     *
      * @param   minLag  The minimum lag in samples to look for in the auto-correlation.
-     * @parm    maxLag  The maximum lag in samples to look for in the auto-correlation.
+     *
+     * @param    maxLag  The maximum lag in samples to look for in the auto-correlation.
+     *
      * @return          The auto-correlation for each lag from minLag to maxLag.
      *                  Entry 0 corresponds to minLag, and the last entry corresponds
      *                  to maxLag.
