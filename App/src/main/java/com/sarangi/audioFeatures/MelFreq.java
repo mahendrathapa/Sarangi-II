@@ -1,5 +1,5 @@
 /*
- * @(#) MFCC.java 2.0      August 8, 2016.
+ * @(#) MelFreq.java 2.0      August 8, 2016.
  *
  * Mahendra Thapa
  *
@@ -20,8 +20,29 @@ import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 import java.util.logging.Level;
 
+/**
+ * A class that extracts the MFCC features of the song. 
+ *
+ * This is calcuated by using the tarsos dsp library.
+ *
+ * @author Mahendra Thapa
+ */
+
 public class MelFreq{
 
+    /* PUBLIC METHODS *****************************************************/
+
+    /**
+     * Extracts this feature from the given audio frames at the given sampling
+     * rate.
+     
+     * @param audioFrames       The audio frame to extract the feature from.
+     *
+     * @param samplingRate      The sampling rate that the samples are encoded with.
+     *
+     * @return                  The extracted feature values.
+     *
+     */
 
     public static double[][] extractFeature(List<double[]> audioFrames,double samplingRate){
 

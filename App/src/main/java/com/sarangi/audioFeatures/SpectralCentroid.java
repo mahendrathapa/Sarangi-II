@@ -5,12 +5,37 @@
  *
  * Institue of Engineering
  */
+
 package com.sarangi.audioFeatures;
 
 import com.sarangi.audioTools.*;
 import java.util.*;
 
+/**
+ * A class that extracts the spectral centroid feature of a song.
+ * This is a measure of the "centre of mass" of the power spectrum.
+ *
+ * @author Mahendra Thapa
+ */
+
 public class SpectralCentroid{
+
+    /* PUBLIC METHODS ******************************************************/
+
+    /**
+     * Extracts this feature from the given audio frames at the given sampling
+     * rate.
+     *
+     * <p> 
+     * In the case of this feature, the sampling rate parameter is ignored.
+     * <p> 
+     *  
+     * @param   audioFrames     The audio frame to extract the feature from.
+     *
+     * @param   samplingRate    The sampling rate that the samples are encoded.
+     *
+     * @return                  The extracted feature values.
+     */
 
     public static double[][] extractFeature(List<double[]> audioFrames, double samplingRate){
 
@@ -19,6 +44,20 @@ public class SpectralCentroid{
         return extractFeature(output,samplingRate);
     }
 
+    /**
+     * Extracts this feature from the given power spectrum at the given sampling
+     * rate.
+     * <p>
+     * In the case of this feature, the sampling rate parameter is ignored.
+     * <p>
+     * @param  powerSpectrums          The power specturm of the samples to extract the feature from.
+     *
+     * @param samplingRate             The sampling rate that the samples are encoded with.
+     *
+     * @return                         The extracted feature values.
+     *
+     */
+  
     public static double[][] extractFeature(double[][] powerSpectrums,double samplingRate){
 
         int dimension = 1;
