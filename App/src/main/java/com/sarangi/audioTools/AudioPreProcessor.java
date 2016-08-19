@@ -38,7 +38,7 @@ public class AudioPreProcessor{
      *
      */
 
-    public static List<double[]> getAudioFrame(double[] audioSamples,int frameSize,int overLapSize){
+    public static List<double[]> getAudioFrame(double[] audioSamples,int frameSize,int overLapSize,boolean useWindow,boolean usePreEmphasis){
 
         List<double[]> output = new ArrayList<double[]>();  
 
@@ -46,11 +46,22 @@ public class AudioPreProcessor{
         int length = audioSamples.length - frameSize;
         int hopSize = frameSize - overLapSize;
 
+        double[] input = new double[audioSamples.length];
+
+        if(usePreEmphasis)
+            input = preEmphasis(audioSamples).clone();
+        else 
+            input = audioSamples.clone();
+
         for(int i=0; i<=length; i+= hopSize){
 
             double[] temp = new double[frameSize];
-            System.arraycopy(audioSamples,i,temp,0,frameSize);
-            output.add(temp);
+            System.arraycopy(input,i,temp,0,frameSize);
+
+            if(useWindow)
+                output.add(hammingWindow(temp));
+            else
+                output.add(temp);
         }
 
         return output;
@@ -68,6 +79,43 @@ public class AudioPreProcessor{
 
     }
 
+    public static double[] hanningWindow(double[] data){
+
+        int length = data.length;
+        double[] output = new double[length];
+
+        for(int i=0; i<length; ++i)
+            output[i] = data[i]*0.5*(1 - Math.cos(2 * Math.PI * i / (length -1)));
+
+        return output;
+
+    }
+
+    public static double[] rectangularWindow(double[] data){
+        return data;
+    }
+    
+    public static double[] bartlettWindow(double[] data){
+
+        int length = data.length;
+        double[] output = new double[length];
+
+        for(int i=0; i<length; ++i)
+            output[i] = data[i] * (1 - 2 * Math.abs(i - (length-1)/2)/(length - 1));
+
+        return output;
+    }
+
+    public static double[] blackmannWindow(double[] data){
+
+        int length = data.length;
+        double[] output = new double[length];
+
+        for(int i=0; i<length;++i)
+            output[i] = data[i] * (0.42 - 0.5 * Math.cos(2 * Math.PI * i / (length - 1)) + 0.08 * Math.cos(4 * Math.PI * i /(length -1)));
+
+        return output;
+    }
 
     public static double[] preEmphasis(double[] data){
 

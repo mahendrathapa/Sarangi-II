@@ -146,11 +146,12 @@ public class FeatureExtractor{
 
         double samplingRate = audioSample.getAudioFormat().getSampleRate();
 
-        List<double[]> audioFrames = AudioPreProcessor.getAudioFrame(samples,frameSize,overLapSize);
+        List<double[]> audioFrames = AudioPreProcessor.getAudioFrame(samples,frameSize,overLapSize,false,false);
+        List<double[]> windowAudioFrames = AudioPreProcessor.getAudioFrame(samples,frameSize,overLapSize,true,false);
 
-        double[][] powerSpectrumFrame = PowerSpectrum.extractFeature(audioFrames,samplingRate);
-        double[][] magnitudeSpectrumFrame = MagnitudeSpectrum.extractFeature(audioFrames,samplingRate);
-        double[][] rmsFrame = RMS.extractFeature(audioFrames,samplingRate);
+        double[][] powerSpectrumFrame = PowerSpectrum.extractFeature(windowAudioFrames,samplingRate);
+        double[][] magnitudeSpectrumFrame = MagnitudeSpectrum.extractFeature(windowAudioFrames,samplingRate);
+        double[][] rmsFrame = RMS.extractFeature(windowAudioFrames,samplingRate);
 
         double[] compactness = Statistics.getAvgSD(Compactness.extractFeature(magnitudeSpectrumFrame,samplingRate));
         double[] melFreq = Statistics.getAvgSD(MelFreq.extractFeature(audioFrames,samplingRate));
@@ -161,7 +162,7 @@ public class FeatureExtractor{
         double[] spectralFlux = Statistics.getAvgSD(SpectralFlux.extractFeature(magnitudeSpectrumFrame,samplingRate));
         double[] spectralRolloffPoint = Statistics.getAvgSD(SpectralRolloffPoint.extractFeature(powerSpectrumFrame,samplingRate));
         double[] spectralVariablility = Statistics.getAvgSD(SpectralVariability.extractFeature(magnitudeSpectrumFrame,samplingRate));
-        double[] zeroCrossing = Statistics.getAvgSD(ZeroCrossings.extractFeature(audioFrames,samplingRate));
+        double[] zeroCrossing = Statistics.getAvgSD(ZeroCrossings.extractFeature(windowAudioFrames,samplingRate));
 
         return new Song(songName,compactness,melFreq,pitch,rhythm,rms,spectralCentroid,
                 spectralFlux,spectralRolloffPoint,spectralVariablility,zeroCrossing);
