@@ -46,6 +46,10 @@ public class AudioPreProcessor{
         int length = audioSamples.length - frameSize;
         int hopSize = frameSize - overLapSize;
 
+        if(length/hopSize > 9030)
+            length = 9030*hopSize - frameSize;
+
+
         double[] input = new double[audioSamples.length];
 
         if(usePreEmphasis)
