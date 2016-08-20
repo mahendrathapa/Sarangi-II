@@ -146,4 +146,26 @@ public class Result {
         }
     }
 
+    /**
+     * Get Accuracy for the particular label.
+     *
+     * @param i Index of the Label.
+     *
+     */
+    public double getLabelAccuracy(int i) {
+
+        return this.labelAccuracy[i];
+
+    }
+
+    /**
+     * Get the Confusion Matrix
+     *
+     */
+    public int[][] getConfusionMatrix() {
+
+        return this.confusionMatrix;
+
+    }
+
 }

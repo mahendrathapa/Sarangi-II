@@ -73,8 +73,10 @@ public class SarangiSVM extends SarangiClassifier {
     public void train(List<Song> trainingSongs) {
         this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
 
+        // ANALYSIS: Kernel, Soft-margin penalty parameter, Strategy
         svm = new SVM(new GaussianKernel(SarangiSVM.SIGMA), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
         int epoch = 10;
+        // ANALYSIS : epoch
         for (int i=0; i<epoch; i++) {
             svm.learn(trainingSet.dataset,trainingSet.labelIndices);
         }
