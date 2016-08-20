@@ -24,16 +24,16 @@ public class Config {
      *
      */
     public static FeatureType[] features = { 
+        FeatureType.SARANGI_SPECTRALCENTROID,
         FeatureType.SARANGI_MELFREQ,
+        FeatureType.SARANGI_ZEROCROSSING, 
         //FeatureType.SARANGI_PITCH,
-        //FeatureType.SARANGI_COMPACTNESS,
-        //FeatureType.SARANGI_RHYTHM,
+        //FeatureType.SARANGI_COMPACTNESS, 
+        //FeatureType.SARANGI_RHYTHM,     
         //FeatureType.SARANGI_RMS,
-        //FeatureType.SARANGI_SPECTRALCENTROID,
         //FeatureType.SARANGI_SPECTRALFLUX,
         //FeatureType.SARANGI_SPECTRALROLLOFFPOINT,
         //FeatureType.SARANGI_SPECTRALVARIABILITY,
-        //FeatureType.SARANGI_ZEROCROSSING,
     };
 
     /**
@@ -58,7 +58,7 @@ public class Config {
 
     /*SVM PARAMETERS**********************************/
 
-    public static int SVM_EPOCH = 10;
+    public static int SVM_EPOCH = 1;
 
     public static double SVM_TOLERANCE = 1E-3;
 
