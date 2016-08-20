@@ -159,7 +159,7 @@ public class ClassifierRunner {
 
 
                 double[] overallAccuracies = new double[k];
-                double[][] labelsAccuracy = new double[k][labels.length];
+                double[][] labelsAccuracy = new double[labels.length][k];
 
                 ClassifierFactory factory = new ClassifierFactory();
 
@@ -193,7 +193,7 @@ public class ClassifierRunner {
                         }
 
                         for (int j=0; j<labels.length; j++) {
-                            labelsAccuracy[i][j] += result.getLabelAccuracy(j);
+                            labelsAccuracy[j][i] = result.getLabelAccuracy(j);
                         }
 
                 }
