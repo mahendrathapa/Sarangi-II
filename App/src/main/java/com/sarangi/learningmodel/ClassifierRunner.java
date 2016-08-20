@@ -155,6 +155,11 @@ public class ClassifierRunner {
                 double overallAvgPrecision = 0.0;
                 double overallAvgRecall = 0.0;
 
+                int[][] overallConfusionMatrix = new int[labels.length][labels.length];
+
+
+                double[] labelsAccuracy = new double[labels.length];
+
                 ClassifierFactory factory = new ClassifierFactory();
 
                 for (int i=0; i < k; i++) {
@@ -177,9 +182,38 @@ public class ClassifierRunner {
                         overallAvgPrecision += result.precision;
                         overallAvgRecall += result.recall;
 
+                        int[][] tempConfusionMatrix = result.getConfusionMatrix();
+
+                        for (int j=0; j<labels.length; j++) {
+                            for (int l=0; l<labels.length; l++) {
+                                overallConfusionMatrix[j][l] += tempConfusionMatrix[j][l];
+                            }
+                        }
+
+                        for (int j=0; j<labels.length; j++) {
+                            labelsAccuracy[j] += result.getLabelAccuracy(j);
+                        }
+
                 }
 
                 System.out.format("\n\nResults with %d-fold cross validation\n\n",k);
+
+                System.out.println("Overall Confusion Matrix");
+
+                for (int i=0; i<overallConfusionMatrix.length; i++ ){
+                    for (int j=0; j<overallConfusionMatrix[i].length; j++) {
+                        System.out.format("%2d ",overallConfusionMatrix[i][j]);
+                    }
+                    System.out.println();
+                }
+
+                System.out.println();
+
+                for (int i=0; i<labels.length; i++) {
+                    System.out.format("%10s : %.2f%%\n",labels[i],labelsAccuracy[i]/k);
+                }
+
+                System.out.println();
                 System.out.format("[====> K-fold accuracy: %.2f%% <====]\n\n", overallAvgAccuracy/k);
                 System.out.format("[====> K-fold Precision: %.2f <====]\n\n", overallAvgPrecision/k);
                 System.out.format("[====> K-fold Recall: %.2f <====]\n\n", overallAvgRecall/k);
