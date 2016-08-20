@@ -11,6 +11,7 @@ package com.sarangi.learningmodel;
 import com.sarangi.structures.*;
 import com.sarangi.audioFeatures.*;
 import com.sarangi.audioTools.*;
+import com.sarangi.app.Config;
 
 import java.io.*;
 import java.util.*;
@@ -26,13 +27,6 @@ import java.util.logging.*;
 public class DatasetUtil {
 
     /**
-     * The size of each dataset.
-     * It is the sum of length of each feature used.
-     * 
-     */
-    public static int DATASET_SIZE = 20;
-
-    /**
      * Get the data for the given song.
      *
      * @param song The song whose data is to be returned.
@@ -40,23 +34,25 @@ public class DatasetUtil {
      */
     public static double[] getSongData(Song song) {
 
-                    double[] compactness = song.getCompactness();
 
-                    
-                    double[] melFreq =new double[20];
-                    System.arraycopy(song.getMelFreq(),0,melFreq,0,10);
-                    System.arraycopy(song.getMelFreq(),30,melFreq,10,10);
+        double[] dataset = new double[Config.DATASET_SIZE];
 
-                    double[] pitch = song.getPitch();
-                    double[] rhythm = song.getRhythm();
-                    double[] rms = song.getRMS();
-                    double[] spectralCentroid = song.getSpectralCentroid();
-                    double[] spectralFlux = song.getSpectralFlux();
-                    double[] spectralRolloffPoint = song.getSpectralRolloffPoint();
-                    double[] spectralVariablility = song.getSpectralVariablility();
-                    double[] zeroCrossing = song.getZeroCrossing();
+        int i=0;
 
-                    return Statistics.mergeArrays(melFreq);
+        for (FeatureType feature: Config.features) {
+
+            double[] featureData = song.getFeature(feature);
+
+            for (int j=0; j<feature.getLength(); j++) {
+                dataset[i] = featureData[j];
+                i++;
+            }
+
+        }
+
+
+        return dataset;
+
     }
 
 
@@ -71,7 +67,7 @@ public class DatasetUtil {
      *
      */
 
-    public static LearningDataset getSongwiseDataset(List<Song> dataSongs, String[] labelArray, FeatureType featureType) {
+    public static LearningDataset getSongwiseDataset(List<Song> dataSongs, String[] labelArray) {
 
         LearningDataset learningDataset = new LearningDataset();
 
@@ -79,35 +75,32 @@ public class DatasetUtil {
 
         LoggerHandler loggerHandler = LoggerHandler.getInstance();
 
-        if (featureType == FeatureType.SARANGI_ALL) {
+        learningDataset.dataset = new double[dataSongs.size()][Config.DATASET_SIZE];
 
-            learningDataset.dataset = new double[dataSongs.size()][DATASET_SIZE];
+        int i = 0;
 
-            int i = 0;
+        for (Song song : dataSongs) {
 
-            for (Song song : dataSongs) {
+            try {
 
-                try {
+                learningDataset.dataset[i] = getSongData(song);
 
-                    learningDataset.dataset[i] = getSongData(song);
+                learningDataset.labelIndices[i] = getIndexOfLabel(song.getSongName(),labelArray);
 
-                    learningDataset.labelIndices[i] = getIndexOfLabel(song.getSongName(),labelArray);
+                ++i;
 
-                    ++i;
+            }catch (LabelNotFoundException le) {
 
-                }catch (LabelNotFoundException le) {
+                loggerHandler.loggingSystem(LoggerHandler.LogType.LEARNING_MODEL,
+                        Level.SEVERE,
+                        ExceptionPrint.getExceptionPrint(le));
 
-                    loggerHandler.loggingSystem(LoggerHandler.LogType.LEARNING_MODEL,
-                            Level.SEVERE,
-                            ExceptionPrint.getExceptionPrint(le));
-
-                    continue;
-
-                }
+                continue;
 
             }
 
         }
+
 
         return learningDataset;
 

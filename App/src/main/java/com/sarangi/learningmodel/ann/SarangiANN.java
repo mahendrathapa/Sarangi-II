@@ -7,6 +7,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.thoughtworks.xstream.XStreamException;
 
+import com.sarangi.app.Config;
 import com.sarangi.structures.*;
 import com.sarangi.json.SongHandler;
 import com.sarangi.learningmodel.*;
@@ -49,9 +50,9 @@ public class SarangiANN extends SarangiClassifier {
      * @param featureType The type of feature to be used
      *
      */
-    public SarangiANN(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
+    public SarangiANN(List<Song>trainingSongs, String[] labels) {
 
-        super(trainingSongs,labels,featureType);
+        super(trainingSongs,labels);
 
     }
 
@@ -64,16 +65,18 @@ public class SarangiANN extends SarangiClassifier {
 
     @Override
     public void train(List<Song> trainingSongs) {
-        this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
+        this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels);
 
-        // ANALYSIS ErrorFunction, ActivationFunction, NumberOfNodes
-        ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,DatasetUtil.DATASET_SIZE,10,this.labels.length + 1);
+        ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,
+                                NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,
+                                trainingSet.dataset[0].length,Config.ANN_HIDDEN_NODES,
+                                this.labels.length + 1);
 
-        // ANALYSIS LearningRate, Momentum, Weight Decay
+        ann.setLearningRate(Config.ANN_LEARNING_RATE);
+        ann.setMomentum(Config.ANN_MOMENTUM); 
+        ann.setWeightDecay(Config.ANN_WEIGHT_DECAY);
 
-        // ANALYSIS epoch
-        int epoch = 2000;
-        for (int i=0; i<epoch; i++) {
+        for (int i=0; i<Config.ANN_EPOCH; i++) {
             ann.learn(trainingSet.dataset,trainingSet.labelIndices);
         }
     }

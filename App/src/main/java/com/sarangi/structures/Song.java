@@ -42,7 +42,7 @@ public class Song{
     double[] spectralCentroid;
     double[] spectralFlux;
     double[] spectralRolloffPoint;
-    double[] spectralVariablility;
+    double[] spectralVariability;
     double[] zeroCrossing;
 
     /* CONSTRUCTORS *****************************************/
@@ -59,7 +59,7 @@ public class Song{
      * @param   pitch           A reference to the pitch features of the song.
      */
 
-    public Song(String songName,double[] compactness,double[] melFreq,double[] pitch,double[] rhythm,double[] rms,double[] spectralCentroid,double[] spectralFlux,double[] spectralRolloffPoint,double[] spectralVariablility,double[] zeroCrossing){
+    public Song(String songName,double[] compactness,double[] melFreq,double[] pitch,double[] rhythm,double[] rms,double[] spectralCentroid,double[] spectralFlux,double[] spectralRolloffPoint,double[] spectralVariability,double[] zeroCrossing){
 
         this.songName = songName;
         this.compactness = compactness.clone();
@@ -70,7 +70,7 @@ public class Song{
         this.spectralCentroid = spectralCentroid.clone();
         this.spectralFlux = spectralFlux.clone();
         this.spectralRolloffPoint = spectralRolloffPoint.clone();
-        this.spectralVariablility = spectralVariablility.clone();
+        this.spectralVariability = spectralVariability.clone();
         this.zeroCrossing = zeroCrossing.clone();
 
     }
@@ -105,9 +105,11 @@ public class Song{
     public double[] getRMS(){
         return rms;
     }
+
     public double[] getSpectralCentroid(){
         return spectralCentroid;
     }
+
     public double[] getSpectralFlux(){
         return spectralFlux;
     }
@@ -115,10 +117,64 @@ public class Song{
     public double[] getSpectralRolloffPoint(){
         return spectralRolloffPoint;
     }  
-    public double[] getSpectralVariablility(){
-        return spectralVariablility;
+
+    public double[] getSpectralVariability(){
+        return spectralVariability;
     }  
+
     public double[] getZeroCrossing(){
         return zeroCrossing;
     }       
+
+    public double[] getFeature(FeatureType featureType) {
+        if (featureType == FeatureType.SARANGI_MELFREQ) {
+
+            int melFreqLength = featureType.getLength();
+            double[] melFreq =new double[melFreqLength];
+
+            System.arraycopy(getMelFreq(),0,melFreq,0,melFreqLength/2);
+            System.arraycopy(getMelFreq(),30,melFreq,melFreqLength/2,melFreqLength/2);
+
+            return melFreq;
+
+        } else if (featureType == FeatureType.SARANGI_PITCH) {
+
+            return getPitch();
+
+        } else if (featureType == FeatureType.SARANGI_COMPACTNESS) {
+
+            return getCompactness();
+
+        } else if (featureType == FeatureType.SARANGI_RHYTHM) {
+
+            return getRhythm();
+
+        } else if (featureType == FeatureType.SARANGI_RMS) {
+
+            return getRMS();
+
+        } else if (featureType == FeatureType.SARANGI_SPECTRALCENTROID) {
+
+            return getSpectralCentroid();
+
+        } else if (featureType == FeatureType.SARANGI_SPECTRALFLUX) {
+
+            return getSpectralFlux();
+
+        } else if (featureType == FeatureType.SARANGI_SPECTRALROLLOFFPOINT) {
+
+            return getSpectralRolloffPoint();
+
+        } else if (featureType == FeatureType.SARANGI_SPECTRALVARIABILITY) {
+
+            return getSpectralVariability();
+
+        } else if (featureType == FeatureType.SARANGI_ZEROCROSSING) {
+
+            return getZeroCrossing();
+
+        }
+
+        return null;
+    }
 }

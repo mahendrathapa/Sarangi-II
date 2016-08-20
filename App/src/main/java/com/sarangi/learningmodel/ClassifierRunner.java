@@ -8,6 +8,7 @@
 
 package com.sarangi.learningmodel; 
 
+import com.sarangi.audioTools.Statistics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -63,12 +64,12 @@ public class ClassifierRunner {
                 SongHandler testSongHandler = new SongHandler(testFilename);
                 List<Song> testSongs = testSongHandler.loadSongs();
 
-                SarangiClassifier classifier = ClassifierFactory.getClassifier(trainingSongs,this.labels,featureType,classifierType);
+                SarangiClassifier classifier = ClassifierFactory.getClassifier(trainingSongs,this.labels,classifierType);
 
                 String classifierFile = new String("src/resources/song/classifier.txt");
                 ClassifierFactory.storeClassifier(classifier,classifierFile);
 
-                SarangiClassifier loadedClassifier = ClassifierFactory.loadClassifier(classifierFile,ClassifierType.SARANGI_SVM,this.labels,featureType);
+                SarangiClassifier loadedClassifier = ClassifierFactory.loadClassifier(classifierFile,ClassifierType.SARANGI_SVM,this.labels);
 
                 Result result = classifier.test(testSongs);
                 Result result2 = loadedClassifier.test(testSongs);
@@ -91,12 +92,12 @@ public class ClassifierRunner {
          *
          */
 
-        public void storeClassifier(String trainingFilename, String classifierFile, FeatureType featureType, ClassifierType classifierType) throws FileNotFoundException, IOException  {
+        public void storeClassifier(String trainingFilename, String classifierFile, ClassifierType classifierType) throws FileNotFoundException, IOException  {
 
                 SongHandler trainingSongHandler = new SongHandler(trainingFilename);
                 List<Song> trainingSongs = trainingSongHandler.loadSongs();
 
-                SarangiClassifier classifier = ClassifierFactory.getClassifier(trainingSongs,this.labels,featureType,classifierType);
+                SarangiClassifier classifier = ClassifierFactory.getClassifier(trainingSongs,this.labels,classifierType);
 
                 ClassifierFactory.storeClassifier(classifier,classifierFile);
 
@@ -114,7 +115,7 @@ public class ClassifierRunner {
          *
          */
 
-        public void runCrossValidation(String filename, FeatureType featureType, int k, ClassifierType classifierType, boolean random) throws FileNotFoundException, IOException  {
+        public void runCrossValidation(String filename, int k, ClassifierType classifierType, boolean random) throws FileNotFoundException, IOException  {
 
                 SongHandler songHandler = new SongHandler(filename);
                 List<Song> songs = songHandler.loadSongs();
@@ -150,7 +151,6 @@ public class ClassifierRunner {
                         songs = tempSongs;
                 }
 
-                double overallAvgAccuracy = 0.0;
                 double overallAvgFMeasure = 0.0;
                 double overallAvgPrecision = 0.0;
                 double overallAvgRecall = 0.0;
@@ -158,7 +158,8 @@ public class ClassifierRunner {
                 int[][] overallConfusionMatrix = new int[labels.length][labels.length];
 
 
-                double[] labelsAccuracy = new double[labels.length];
+                double[] overallAccuracies = new double[k];
+                double[][] labelsAccuracy = new double[k][labels.length];
 
                 ClassifierFactory factory = new ClassifierFactory();
 
@@ -171,13 +172,14 @@ public class ClassifierRunner {
 
                         trainingSongs.removeAll(testSongs);
 
-                        SarangiClassifier classifier = factory.getClassifier(trainingSongs,this.labels,featureType, classifierType);
+                        SarangiClassifier classifier = factory.getClassifier(trainingSongs,this.labels, classifierType);
 
                         Result result = classifier.test(testSongs);
 
                         result.printData();
 
-                        overallAvgAccuracy += result.accuracy;
+                        overallAccuracies[i] = result.accuracy;
+
                         overallAvgFMeasure += result.fMeasure;
                         overallAvgPrecision += result.precision;
                         overallAvgRecall += result.recall;
@@ -191,7 +193,7 @@ public class ClassifierRunner {
                         }
 
                         for (int j=0; j<labels.length; j++) {
-                            labelsAccuracy[j] += result.getLabelAccuracy(j);
+                            labelsAccuracy[i][j] += result.getLabelAccuracy(j);
                         }
 
                 }
@@ -210,11 +212,13 @@ public class ClassifierRunner {
                 System.out.println();
 
                 for (int i=0; i<labels.length; i++) {
-                    System.out.format("%10s : %.2f%%\n",labels[i],labelsAccuracy[i]/k);
+                    System.out.format("%10s : %.2f%% +- %.2f%%\n",labels[i],
+                            Statistics.getAverage(labelsAccuracy[i]),
+                            Statistics.getStandardDeviation(labelsAccuracy[i]));
                 }
 
                 System.out.println();
-                System.out.format("[====> K-fold accuracy: %.2f%% <====]\n\n", overallAvgAccuracy/k);
+                System.out.format("[====> K-fold accuracy: %.2f%% <====]\n\n", Statistics.getAverage(overallAccuracies));
                 System.out.format("[====> K-fold Precision: %.2f <====]\n\n", overallAvgPrecision/k);
                 System.out.format("[====> K-fold Recall: %.2f <====]\n\n", overallAvgRecall/k);
                 System.out.format("[====> K-fold FMeasure: %.2f <====]\n\n", overallAvgFMeasure/k);

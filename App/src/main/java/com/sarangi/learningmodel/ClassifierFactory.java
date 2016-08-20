@@ -61,15 +61,15 @@ public class ClassifierFactory {
      * @return A SarangiClassifier instance as requested.
      *
      */
-    public static SarangiClassifier getClassifier(List<Song> trainingSongs, String[] labels, FeatureType featureType, ClassifierType classifierType) {
+    public static SarangiClassifier getClassifier(List<Song> trainingSongs, String[] labels, ClassifierType classifierType) {
         if (classifierType == null) {
             return null;
         }
 
         if (classifierType == ClassifierType.SARANGI_ANN){
-            return new SarangiANN(trainingSongs,labels,featureType);
+            return new SarangiANN(trainingSongs,labels);
         }else if (classifierType == ClassifierType.SARANGI_SVM){
-            return new SarangiSVM(trainingSongs,labels,featureType);
+            return new SarangiSVM(trainingSongs,labels);
         }
 
         return null;
@@ -91,13 +91,12 @@ public class ClassifierFactory {
      *
      * @param filename The file from which to load the classifier.
      */
-    public static SarangiClassifier loadClassifier(String filename, ClassifierType classifierType, String[] labels, FeatureType featureType) 
+    public static SarangiClassifier loadClassifier(String filename, ClassifierType classifierType, String[] labels) 
         throws IOException, XStreamException {
 
         SarangiClassifier loadedClassifier = getClassifier(classifierType);
 
         loadedClassifier.setLabels(labels);
-        loadedClassifier.setFeatureType(featureType);
 
         loadedClassifier.load(filename);
 

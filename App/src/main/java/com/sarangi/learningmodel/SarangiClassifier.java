@@ -32,12 +32,6 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
     public String[] labels;
 
     /**
-     * The Feature Type.
-     *
-     */
-    public FeatureType featureType;
-
-    /**
      * The training dataset.
      *
      */
@@ -60,10 +54,9 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
      * @param featureType The type of feature to be used
      *
      */
-    public SarangiClassifier(List<Song> trainingSongs, String[] labels, FeatureType featureType) {
+    public SarangiClassifier(List<Song> trainingSongs, String[] labels) {
 
         this.labels = labels;
-        this.featureType = featureType;
 
         this.train(trainingSongs);
 
@@ -71,10 +64,6 @@ public abstract class SarangiClassifier implements Classifier, Serializable {
 
     public void setLabels(String[] labels) {
         this.labels = labels;
-    }
-
-    public void setFeatureType(FeatureType featureType) {
-        this.featureType = featureType;
     }
 
     public abstract void store(String filename) throws IOException, XStreamException;

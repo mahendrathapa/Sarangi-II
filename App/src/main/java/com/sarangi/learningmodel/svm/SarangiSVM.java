@@ -6,6 +6,8 @@ import com.sarangi.structures.*;
 import com.sarangi.json.*;
 import com.sarangi.learningmodel.*;
 
+import com.sarangi.app.Config;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.thoughtworks.xstream.XStreamException;
@@ -56,9 +58,9 @@ public class SarangiSVM extends SarangiClassifier {
      * @param featureType The type of feature to be used
      *
      */
-    public SarangiSVM(List<Song>trainingSongs, String[] labels, FeatureType featureType) {
+    public SarangiSVM(List<Song>trainingSongs, String[] labels) {
 
-        super(trainingSongs, labels, featureType);
+        super(trainingSongs, labels);
 
     }
 
@@ -71,13 +73,14 @@ public class SarangiSVM extends SarangiClassifier {
 
     @Override
     public void train(List<Song> trainingSongs) {
-        this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels, featureType);
+        this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels);
 
         // ANALYSIS: Kernel, Soft-margin penalty parameter, Strategy
         svm = new SVM(new GaussianKernel(SarangiSVM.SIGMA), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
-        int epoch = 10;
-        // ANALYSIS : epoch
-        for (int i=0; i<epoch; i++) {
+
+        svm.setTolerance(Config.SVM_TOLERANCE);
+
+        for (int i=0; i<Config.SVM_EPOCH; i++) {
             svm.learn(trainingSet.dataset,trainingSet.labelIndices);
         }
         svm.finish();

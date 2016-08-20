@@ -52,6 +52,9 @@ public class App
         throws FileNotFoundException, IOException
     {
 
+        // Set DATABASE_SIZE in Config.
+        Config.calculateDatasetSize();
+
         CommandLine cm = new CommandLine();
 
         JCommander jc = new JCommander(cm);
@@ -106,7 +109,7 @@ public class App
 
                 ClassifierRunner runner = new ClassifierRunner(labels.get(train.label));
 
-                runner.storeClassifier(train.file, train.classifierFile,FeatureType.SARANGI_ALL,ClassifierType.fromString(train.classifierType));
+                runner.storeClassifier(train.file, train.classifierFile,ClassifierType.fromString(train.classifierType));
 
             }else if(jc.getParsedCommand().equals("test")) {
 
@@ -117,7 +120,7 @@ public class App
 
                 if (test.kfoldFile != null) {
                     ClassifierRunner runner = new ClassifierRunner(labels.get(test.label));
-                    runner.runCrossValidation(test.kfoldFile, FeatureType.SARANGI_ALL,10,ClassifierType.fromString(test.classifierType),true);
+                    runner.runCrossValidation(test.kfoldFile,10,ClassifierType.fromString(test.classifierType),true);
                 }
 
             }else if(jc.getParsedCommand().equals("classify")) {
@@ -135,7 +138,7 @@ public class App
                 int i = 0;
                 for (String classifierFile: classify.classifierFiles) {
                     SarangiClassifier classifier = ClassifierFactory.loadClassifier(classifierFile,
-                            ClassifierType.fromString(classify.classifierType),labels.get(classify.classifierLabels.get(i)),FeatureType.SARANGI_ALL);
+                            ClassifierType.fromString(classify.classifierType),labels.get(classify.classifierLabels.get(i)));
                     int labelIndex = classifier.predict(song);
                     System.out.println(classify.classifierLabels.get(i)+": "+(labels.get(classify.classifierLabels.get(i))[labelIndex-1]));
                     i++;
