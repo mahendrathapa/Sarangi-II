@@ -39,7 +39,6 @@ public class SarangiSVM extends SarangiClassifier {
 
     public static double SIGMA = 30.0d;
 
-
     /* CONSTRUCTORS *******************************************/
 
     /**
@@ -73,6 +72,7 @@ public class SarangiSVM extends SarangiClassifier {
 
     @Override
     public void train(List<Song> trainingSongs) {
+
         this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels);
 
         // ANALYSIS: Kernel, Soft-margin penalty parameter, Strategy

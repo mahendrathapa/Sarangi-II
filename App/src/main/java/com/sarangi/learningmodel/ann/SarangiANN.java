@@ -12,6 +12,8 @@ import com.sarangi.structures.*;
 import com.sarangi.json.SongHandler;
 import com.sarangi.learningmodel.*;
 
+import com.sarangi.audioTools.Statistics;
+
 import smile.classification.NeuralNetwork;
 import smile.math.Math;
 import java.lang.Math.*;
@@ -32,7 +34,6 @@ public class SarangiANN extends SarangiClassifier {
      *
      */
     public NeuralNetwork ann;
-
 
     /**
      * Constructor.
@@ -67,6 +68,31 @@ public class SarangiANN extends SarangiClassifier {
     public void train(List<Song> trainingSongs) {
         this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels);
 
+        Config.ANN_MEANS = new double[Config.DATASET_SIZE];
+        Config.ANN_STANDARD_DEVIATIONS = new double[Config.DATASET_SIZE];
+
+        //Normalize
+        for (int j=0; j<Config.DATASET_SIZE; j++) {
+            double[] tempRow = new double[trainingSet.dataset.length];
+            for (int i=0; i<this.trainingSet.dataset.length; i++) {
+               tempRow[i] = trainingSet.dataset[i][j]; 
+            }
+            Config.ANN_MEANS[j] = Statistics.getAverage(tempRow);
+            Config.ANN_STANDARD_DEVIATIONS[j] = Statistics.getStandardDeviation(tempRow);
+
+            if (Config.ANN_STANDARD_DEVIATIONS[j] == 0) {
+                Config.ANN_STANDARD_DEVIATIONS[j] = 0.000001; 
+            }
+
+            for (int i=0; i<trainingSet.dataset.length; i++) {
+                this.trainingSet.dataset[i][j] = (trainingSet.dataset[i][j] - Config.ANN_MEANS[j])/Config.ANN_STANDARD_DEVIATIONS[j];
+            }
+
+        }
+
+        System.out.println(Arrays.toString(Config.ANN_MEANS));
+        System.out.println(Arrays.toString(Config.ANN_STANDARD_DEVIATIONS));
+
         ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,
                                 NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,
                                 trainingSet.dataset[0].length,Config.ANN_HIDDEN_NODES,
@@ -93,6 +119,12 @@ public class SarangiANN extends SarangiClassifier {
     public int predict(Song song) {
 
         double[] dataset = DatasetUtil.getSongData(song);
+
+        //Normalize 
+        for (int i=0; i<Config.DATASET_SIZE; i++) { 
+            dataset[i] = (dataset[i] - Config.ANN_MEANS[i])/Config.ANN_STANDARD_DEVIATIONS[i];
+        }
+
         return ann.predict(dataset);
 
     }
