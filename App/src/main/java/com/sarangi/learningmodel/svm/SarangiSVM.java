@@ -14,6 +14,7 @@ import com.thoughtworks.xstream.XStreamException;
 
 import smile.classification.SVM;
 import smile.math.kernel.GaussianKernel;
+import smile.math.kernel.LinearKernel;
 import smile.math.kernel.MercerKernel;
 import smile.math.Math;
 import java.lang.Math.*;
@@ -76,7 +77,7 @@ public class SarangiSVM extends SarangiClassifier {
         this.trainingSet = DatasetUtil.getSongwiseDataset(trainingSongs, labels);
 
         // ANALYSIS: Kernel, Soft-margin penalty parameter, Strategy
-        svm = new SVM(new GaussianKernel(SarangiSVM.SIGMA), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
+        svm = new SVM(new LinearKernel(), 2.0d, Math.max(trainingSet.labelIndices)+1, SVM.Multiclass.ONE_VS_ONE);
 
         svm.setTolerance(Config.SVM_TOLERANCE);
 
