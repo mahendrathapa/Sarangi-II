@@ -28,10 +28,10 @@ public class Config {
         FeatureType.SARANGI_MELFREQ,
         FeatureType.SARANGI_ZEROCROSSING, 
         //FeatureType.SARANGI_PITCH,
-        //FeatureType.SARANGI_COMPACTNESS, 
-        //FeatureType.SARANGI_RHYTHM,     
+        FeatureType.SARANGI_COMPACTNESS, 
+        FeatureType.SARANGI_RHYTHM,     
         //FeatureType.SARANGI_RMS,
-        //FeatureType.SARANGI_SPECTRALFLUX,
+        FeatureType.SARANGI_SPECTRALFLUX,
         //FeatureType.SARANGI_SPECTRALROLLOFFPOINT,
         //FeatureType.SARANGI_SPECTRALVARIABILITY,
     };
@@ -48,7 +48,7 @@ public class Config {
 
     /*NEURAL NETWORK PARAMETERS**********************************/
 
-    public static int ANN_EPOCH = 1000;
+    public static int ANN_EPOCH = 10;
 
     public static double ANN_LEARNING_RATE = 0.1;
     public static double ANN_MOMENTUM = 0.0;
