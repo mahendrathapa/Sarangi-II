@@ -37,7 +37,7 @@ public class SarangiSVM extends SarangiClassifier {
 
     public SVM svm; 
 
-    public static double SIGMA = 30.0d;
+    public static double SIGMA = 1000.0d; 
 
     /* CONSTRUCTORS *******************************************/
 

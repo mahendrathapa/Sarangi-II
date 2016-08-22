@@ -90,9 +90,6 @@ public class SarangiANN extends SarangiClassifier {
 
         }
 
-        System.out.println(Arrays.toString(Config.ANN_MEANS));
-        System.out.println(Arrays.toString(Config.ANN_STANDARD_DEVIATIONS));
-
         ann = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES,
                                 NeuralNetwork.ActivationFunction.LOGISTIC_SIGMOID,
                                 trainingSet.dataset[0].length,Config.ANN_HIDDEN_NODES,
