@@ -214,7 +214,7 @@ public class ClassifierRunner {
                 for (int i=0; i<labels.length; i++) {
                     System.out.format("%10s : %.2f%% +- %.2f%%\n",labels[i],
                             Statistics.getAverage(labelsAccuracy[i]),
-                            Statistics.getStandardDeviation(labelsAccuracy[i]));
+                            Statistics.getStandardDeviationPop(labelsAccuracy[i]));
                 }
 
                 System.out.println();

@@ -38,6 +38,20 @@ public class Statistics{
 
         }
 
+        public static double getStandardDeviationPop(double[] data){
+
+                double average = getAverage(data);
+                double sum = 0.0;
+                int length = data.length;
+
+                for(int i = 0;i < length; ++i){
+                        double diff = data[i] - average;
+                        sum += Math.pow(diff,2);
+                }
+
+                return Math.sqrt(sum / ((double) length));
+        }
+
         public static double getStandardDeviation(double[] data){
 
                 double average = getAverage(data);
