@@ -48,7 +48,7 @@ public class Config {
 
     /*NEURAL NETWORK PARAMETERS**********************************/
 
-    public static int ANN_EPOCH = 1000;
+    public static int ANN_EPOCH = 50;
 
     public static double ANN_LEARNING_RATE = 0.1;
     public static double ANN_MOMENTUM = 0.0;
